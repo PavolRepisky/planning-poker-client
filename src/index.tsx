@@ -1,3 +1,5 @@
+import Loader from 'core/components/Loader';
+import 'core/config/i18n';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -9,7 +11,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App />
+    <React.Suspense fallback={<Loader />}>
+      <App />
+    </React.Suspense>
   </React.StrictMode>
 );
 
