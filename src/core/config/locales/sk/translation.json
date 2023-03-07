@@ -30,6 +30,14 @@
       "error": "Chyba",
       "success": "Úspech"
     },
-    "update": "Aktualizovať"
+    "update": "Aktualizovať",
+    "validations": {
+      "email": "Nesprávna emailová adresa",
+      "password": "Musí mať aspoň 8 znakov, musí obsahovať malé a veľké písmeno a číslicu",
+      "passwordMatch": "Heslo sa nezhoduje",
+      "max": "Musí mať {{size}} znakov alebo menej",
+      "min": "Musí mať aspoň {{size}} znakov alebo viac",
+      "required": "Povinné"
+    }
   }
 }
