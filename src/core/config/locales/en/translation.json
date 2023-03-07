@@ -33,16 +33,15 @@
     "update": "Update",
     "validations": {
       "email": "Invalid email address",
-      "password": "Must be at least 8 characters and must contain a lower and upper case letter and a digit",
+      "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
       "passwordMatch": "Password does not match",
       "max": "Must be {{size}} characters or less",
       "min": "Must be {{size}} characters or more",
-      "required": "Field is required"
+      "required": "Required"
     }
   },
   "auth": {
     "register": {
-      "back": "Back to login",
       "form": {
         "firstName": {
           "label": "First Name"
@@ -67,6 +66,20 @@
       "title": "Register",
       "login": "Log in",
       "haveAccount": "Already have an account?"
+    },
+    "login": {
+      "form": {
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        }
+      },
+      "noAccount": "Don't have an account yet?",
+      "submit": "Log in",
+      "title": "Log in",
+      "register": "Register"
     }
   }
 }

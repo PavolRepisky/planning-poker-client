@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AuthProvider from 'auth/contexts/AuthProvider';
 import Loader from 'core/components/Loader';
 import 'core/config/i18n';
 import SettingsProvider from 'core/contexts/SettingsProvider';
@@ -30,7 +31,9 @@ root.render(
         <QueryClientProvider client={queryClient}>
           <SettingsProvider>
             <SnackbarProvider>
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </SnackbarProvider>
           </SettingsProvider>
         </QueryClientProvider>
