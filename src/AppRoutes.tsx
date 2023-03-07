@@ -1,3 +1,4 @@
+import PublicRoutes from 'core/components/PublicRoutes';
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
@@ -8,8 +9,10 @@ const Login = lazy(() => import('./auth/pages/Login'));
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<PublicRoutes />}>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
     </Routes>
   );
 };
