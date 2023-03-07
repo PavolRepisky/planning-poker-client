@@ -42,7 +42,6 @@
   },
   "auth": {
     "register": {
-      "back": "Back to login",
       "form": {
         "firstName": {
           "label": "First Name"

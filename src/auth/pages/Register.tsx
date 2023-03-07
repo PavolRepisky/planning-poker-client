@@ -184,7 +184,7 @@ const Register = () => {
           <MuiLink
             component={Link}
             to="/login"
-            sx={{ ml: 1, fontWeight: 'bold' }}
+            sx={{ ml: 1, fontWeight: 'bold', textDecoration: 'none' }}
           >
             {t('auth.register.login')}
           </MuiLink>

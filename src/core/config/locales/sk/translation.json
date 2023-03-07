@@ -38,6 +38,48 @@
       "max": "Musí mať {{size}} znakov alebo menej",
       "min": "Musí mať aspoň {{size}} znakov alebo viac",
       "required": "Povinné"
+    },
+    "auth": {
+      "register": {
+        "form": {
+          "firstName": {
+            "label": "Krstné Meno"
+          },
+          "lastName": {
+            "label": "Priezvisko"
+          },
+          "email": {
+            "label": "E-mailová Adresa"
+          },
+          "password": {
+            "label": "Heslo"
+          },
+          "confirmationPassword": {
+            "label": "Potvrdzovacie heslo"
+          }
+        },
+        "notifications": {
+          "success": "Váš účet bol úspešne vytvorený!"
+        },
+        "submit": "Registrovať",
+        "title": "Registrovať",
+        "login": "Prihlásiť sa",
+        "haveAccount": "Máte už účet?"
+      },
+      "login": {
+        "form": {
+          "email": {
+            "label": "E-mailová Adresa"
+          },
+          "password": {
+            "label": "Heslo"
+          }
+        },
+        "noAccount": "Ešte nemáte účet?",
+        "submit": "Prihlásiť sa",
+        "title": "Prihlásiť sa",
+        "register": "Registrovať"
+      }
     }
   }
 }
