@@ -1,3 +1,72 @@
 {
-  "App": "application"
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "confirmation": "Confirmation",
+    "delete": "Delete",
+    "edit": "Edit",
+    "errors": {
+      "forbidden": {
+        "subTitle": "You don't have access to view this page",
+        "title": "Oops!"
+      },
+      "notFound": {
+        "subTitle": "Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL?",
+        "title": "Oops!"
+      },
+      "unexpected": {
+        "subTitle": "Something went wrong! If the problem persists, contact us!",
+        "title": "Oops!"
+      },
+      "underConstructions": {
+        "subTitle": "We are actively working on this page.",
+        "title": "Under constructions!"
+      }
+    },
+    "reset": "Reset",
+    "retry": "Try Again",
+    "selected": "Selected",
+    "snackbar": {
+      "error": "Error",
+      "success": "Success"
+    },
+    "update": "Update",
+    "validations": {
+      "email": "Invalid email address",
+      "password": "Must be at least 8 characters and must contain a lower and upper case letter and a digit",
+      "passwordMatch": "Password does not match",
+      "max": "Must be {{size}} characters or less",
+      "min": "Must be {{size}} characters or more",
+      "required": "Field is required"
+    }
+  },
+  "auth": {
+    "register": {
+      "back": "Back to login",
+      "form": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        },
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
+        }
+      },
+      "notifications": {
+        "success": "Your account has been created successfully!"
+      },
+      "submit": "Register",
+      "title": "Register",
+      "login": "Log in",
+      "haveAccount": "Already have an account?"
+    }
+  }
 }

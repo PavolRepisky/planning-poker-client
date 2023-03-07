@@ -1,3 +1,35 @@
 {
-  "App": "aplikácia"
+  "common": {
+    "cancel": "Zrušiť",
+    "confirm": "Potvrdiť",
+    "confirmation": "Potvrdenie",
+    "delete": "Odstrániť",
+    "edit": "Upraviť",
+    "errors": {
+      "forbidden": {
+        "subTitle": "Na zobrazenie tejto stránky nemáte prístup!",
+        "title": "Oops!"
+      },
+      "notFound": {
+        "subTitle": "Ľutujeme, nepodarilo sa nám nájsť stránku, ktorú hľadáte. Možno ste zle zadali adresu URL?",
+        "title": "Oops!"
+      },
+      "unexpected": {
+        "subTitle": "Niečo sa pokazilo! Ak problém pretrváva, kontaktujte nás!",
+        "title": "Oops!"
+      },
+      "underConstructions": {
+        "subTitle": "Na tejto stránke aktívne pracujeme.",
+        "title": "Vo výstavbe!"
+      }
+    },
+    "reset": "Resetovať",
+    "retry": "Skúste znova",
+    "selected": "Vybraný",
+    "snackbar": {
+      "error": "Chyba",
+      "success": "Úspech"
+    },
+    "update": "Aktualizovať"
+  }
 }

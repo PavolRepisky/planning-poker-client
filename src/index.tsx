@@ -1,9 +1,23 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Loader from 'core/components/Loader';
 import 'core/config/i18n';
+import SettingsProvider from 'core/contexts/SettingsProvider';
+import SnackbarProvider from 'core/contexts/SnackbarProvider';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+      suspense: true,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,9 +25,17 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <React.Suspense fallback={<Loader />}>
-      <App />
-    </React.Suspense>
+    <BrowserRouter>
+      <React.Suspense fallback={<Loader />}>
+        <QueryClientProvider client={queryClient}>
+          <SettingsProvider>
+            <SnackbarProvider>
+              <App />
+            </SnackbarProvider>
+          </SettingsProvider>
+        </QueryClientProvider>
+      </React.Suspense>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
