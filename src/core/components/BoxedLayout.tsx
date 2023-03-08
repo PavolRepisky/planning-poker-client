@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import Logo from './Logo';
+import SettingsDrawer from './SettingsDrawer';
 
 type BoxedLayoutProps = {
   children: React.ReactNode;
@@ -50,6 +51,12 @@ const BoxedLayout = ({ children }: BoxedLayoutProps) => {
         >
           <Logo sx={{ mb: 2 }} />
           {children}
+          <Box>
+            <SettingsDrawer
+              onDrawerToggle={handleSettingsToggle}
+              open={settingsOpen}
+            />
+          </Box>
         </Box>
       </Container>
     </React.Fragment>

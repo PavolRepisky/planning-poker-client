@@ -192,7 +192,7 @@ export const createThemeComponents = (theme: Theme) => ({
       disablePadding: true,
     },
   },
-  MuiListItem: {
+  MuiListItemButton: {
     styleOverrides: {
       root: {
         borderRadius: 16,
