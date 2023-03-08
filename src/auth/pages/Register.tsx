@@ -22,13 +22,13 @@ const Register = () => {
     firstName: yup
       .string()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.min', { size: 3 }))
-      .max(50, t('common.validations.max', { size: 50 })),
+      .min(3, t('common.validations.minChar', { size: 3 }))
+      .max(50, t('common.validations.maxChar', { size: 50 })),
     lastName: yup
       .string()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.min', { size: 3 }))
-      .max(50, t('common.validations.max', { size: 50 })),
+      .min(3, t('common.validations.minChar', { size: 3 }))
+      .max(50, t('common.validations.maxChar', { size: 50 })),
     email: yup
       .string()
       .required(t('common.validations.required'))
@@ -90,6 +90,7 @@ const Register = () => {
           label={t('auth.register.form.firstName.label')}
           name="firstName"
           type="text"
+          autoFocus
           autoComplete="given-name"
           disabled={isRegistering}
           value={formik.values.firstName}
@@ -106,7 +107,6 @@ const Register = () => {
           name="lastName"
           type="text"
           autoComplete="family-name"
-          autoFocus
           disabled={isRegistering}
           value={formik.values.lastName}
           onChange={formik.handleChange}

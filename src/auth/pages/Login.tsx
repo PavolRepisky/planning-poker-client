@@ -89,6 +89,7 @@ const Login = () => {
               id="email"
               label={t('auth.login.form.email.label')}
               name="email"
+              type="email"
               autoComplete="email"
               autoFocus
               disabled={isLoggingIn}

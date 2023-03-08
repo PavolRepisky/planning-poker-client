@@ -35,9 +35,10 @@
       "email": "Invalid email address",
       "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
       "passwordMatch": "Password does not match",
-      "max": "Must be {{size}} characters or less",
-      "min": "Must be {{size}} characters or more",
-      "required": "Required"
+      "maxChar": "Must be {{size}} characters or less",
+      "minChar": "Must be {{size}} characters or more",
+      "minNum": "Must be at least {{num}} or bigger",
+      "required": "Required field"
     }
   },
   "auth": {

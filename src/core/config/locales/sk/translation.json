@@ -35,9 +35,10 @@
       "email": "Nesprávna emailová adresa",
       "password": "Musí mať aspoň 8 znakov, musí obsahovať malé a veľké písmeno a číslicu",
       "passwordMatch": "Heslo sa nezhoduje",
-      "max": "Musí mať {{size}} znakov alebo menej",
-      "min": "Musí mať aspoň {{size}} znakov alebo viac",
-      "required": "Povinné"
+      "maxChar": "Musí mať {{size}} znakov alebo menej",
+      "minChar": "Musí mať aspoň {{size}} znakov alebo viac",
+      "minNum": "Musí byť aspoň {{num}} alebo väčšie",
+      "required": "Povinné pole"
     },
     "auth": {
       "register": {
