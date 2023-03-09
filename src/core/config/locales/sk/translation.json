@@ -39,48 +39,48 @@
       "minChar": "Musí mať aspoň {{size}} znakov alebo viac",
       "minNum": "Musí byť aspoň {{num}} alebo väčšie",
       "required": "Povinné pole"
-    },
-    "auth": {
-      "register": {
-        "form": {
-          "firstName": {
-            "label": "Krstné Meno"
-          },
-          "lastName": {
-            "label": "Priezvisko"
-          },
-          "email": {
-            "label": "E-mailová Adresa"
-          },
-          "password": {
-            "label": "Heslo"
-          },
-          "confirmationPassword": {
-            "label": "Potvrdzovacie heslo"
-          }
+    }
+  },
+  "auth": {
+    "register": {
+      "form": {
+        "firstName": {
+          "label": "Krstné Meno"
         },
-        "notifications": {
-          "success": "Váš účet bol úspešne vytvorený!"
+        "lastName": {
+          "label": "Priezvisko"
         },
-        "submit": "Registrovať",
-        "title": "Registrovať",
-        "login": "Prihlásiť sa",
-        "haveAccount": "Máte už účet?"
+        "email": {
+          "label": "E-mailová Adresa"
+        },
+        "password": {
+          "label": "Heslo"
+        },
+        "confirmationPassword": {
+          "label": "Potvrdzovacie heslo"
+        }
       },
-      "login": {
-        "form": {
-          "email": {
-            "label": "E-mailová Adresa"
-          },
-          "password": {
-            "label": "Heslo"
-          }
+      "notifications": {
+        "success": "Váš účet bol úspešne vytvorený!"
+      },
+      "submit": "Registrovať",
+      "title": "Registrovať",
+      "login": "Prihlásiť sa",
+      "haveAccount": "Máte už účet?"
+    },
+    "login": {
+      "form": {
+        "email": {
+          "label": "E-mailová Adresa"
         },
-        "noAccount": "Ešte nemáte účet?",
-        "submit": "Prihlásiť sa",
-        "title": "Prihlásiť sa",
-        "register": "Registrovať"
-      }
+        "password": {
+          "label": "Heslo"
+        }
+      },
+      "noAccount": "Ešte nemáte účet?",
+      "submit": "Prihlásiť sa",
+      "title": "Prihlásiť sa",
+      "register": "Registrovať"
     }
   }
 }

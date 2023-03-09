@@ -44,9 +44,8 @@ const Login = () => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const data = await login(email, password);
-      snackbar.success(t('auth.register.notifications.success'));
-      navigate('/register');
+      await login(email, password);
+      navigate('/dashboard');
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         const validationErrors = err.response.data.errors as ValidationError[];
