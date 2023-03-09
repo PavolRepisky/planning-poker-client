@@ -84,8 +84,8 @@ const SettingsProvider = ({ children }: SettingsProviderProps) => {
   );
 };
 
-export function useSettings() {
+export const useSettings = () => {
   return useContext(SettingsContext);
-}
+};
 
 export default SettingsProvider;

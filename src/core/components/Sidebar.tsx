@@ -58,7 +58,7 @@ const Sidebar = ({
   onDrawerToggle,
   onSettingsToggle,
 }: SidebarProps) => {
-  const { userData } = useAuth();
+  const { userInfo } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
   const theme = useTheme();
@@ -117,9 +117,9 @@ const Sidebar = ({
               <PersonIcon />
             </Avatar>
           </ListItemAvatar>
-          {userData && (
+          {userInfo && (
             <ListItemText
-              primary={`${userData.firstName} ${userData.lastName}`}
+              primary={`${userInfo.firstName} ${userInfo.lastName}`}
               sx={{
                 display: collapsed ? 'none' : 'block',
               }}

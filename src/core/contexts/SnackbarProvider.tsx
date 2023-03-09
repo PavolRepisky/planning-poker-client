@@ -67,8 +67,8 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
   );
 };
 
-export function useSnackbar() {
+export const useSnackbar = () => {
   return useContext(SnackbarContext);
-}
+};
 
 export default SnackbarProvider;

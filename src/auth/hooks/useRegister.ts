@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import RegisterSuccessResponse from 'auth/types/registerSuccessResponse';
 import axios from 'core/config/axios';
 
 const register = async ({
@@ -14,8 +13,8 @@ const register = async ({
   email: string;
   password: string;
   confirmationPassword: string;
-}): Promise<RegisterSuccessResponse> => {
-  const { data } = await axios.post('/users/register', {
+}): Promise<{ message: string }> => {
+  const { data } = await axios.post('/register', {
     firstName,
     lastName,
     email,
@@ -25,7 +24,7 @@ const register = async ({
   return data;
 };
 
-export function useRegister() {
+export const useRegister = () => {
   const { isLoading, mutateAsync } = useMutation(register);
   return { isRegistering: isLoading, register: mutateAsync };
-}
+};

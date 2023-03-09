@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import LoginSuccessResponse from 'auth/types/loginSuccessResponse';
 import axios from 'core/config/axios';
 
 const login = async ({
@@ -8,12 +7,12 @@ const login = async ({
 }: {
   email: string;
   password: string;
-}): Promise<LoginSuccessResponse> => {
-  const { data } = await axios.post('/users/login', { email, password });
+}): Promise<{ message: string; data: { token: string } }> => {
+  const { data } = await axios.post('/login', { email, password });
   return data;
 };
 
-export function useLogin() {
+export const useLogin = () => {
   const { isLoading, mutateAsync } = useMutation(login);
   return { isLoggingIn: isLoading, login: mutateAsync };
-}
+};

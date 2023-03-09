@@ -59,7 +59,7 @@ const Register = () => {
 
   const handleRegister = async (values: FormData) => {
     try {
-      const data = await register(values);
+      await register(values);
       snackbar.success(t('auth.register.notifications.success'));
       navigate('/login');
     } catch (err: any) {
