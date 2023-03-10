@@ -32,22 +32,22 @@ type SidebarProps = {
 export const menuItems = [
   {
     icon: HomeIcon,
-    key: 'admin.drawer.menu.home',
+    key: 'sidebar.menu.home',
     path: '/home',
   },
   {
     icon: StyleIcon,
-    key: 'admin.drawer.menu.matrixManagement',
+    key: 'sidebar.menu.matrixManagement',
     path: '/matrices',
   },
   {
     icon: GroupsIcon,
-    key: 'admin.drawer.menu.sessionManagement',
+    key: 'sidebar.menu.sessionManagement',
     path: '/sessions',
   },
   {
     icon: HelpCenterIcon,
-    key: 'admin.drawer.menu.help',
+    key: 'sidebar.menu.help',
     path: '/help',
   },
 ];
@@ -102,9 +102,10 @@ const Sidebar = ({
       <List component="nav" sx={{ p: 2 }}>
         <ListItemButton
           component={NavLink}
-          to={`/admin/profile`}
+          to={`/profile`}
           sx={
-            location.pathname === '/admin/profile'
+            location.pathname === '/profile' ||
+            location.pathname === '/profile/password'
               ? {
                   backgroundColor: theme.palette.background.default,
                   color: theme.palette.text.primary,
@@ -133,7 +134,7 @@ const Sidebar = ({
             </Avatar>
           </ListItemAvatar>
           <ListItemText
-            primary={t('admin.drawer.menu.settings')}
+            primary={t('sidebar.menu.settings')}
             sx={{
               display: collapsed ? 'none' : 'block',
             }}
@@ -145,7 +146,7 @@ const Sidebar = ({
 
   return (
     <Box
-      aria-label="Admin drawer"
+      aria-label="Sidebar"
       component="nav"
       sx={{
         width: { lg: width },

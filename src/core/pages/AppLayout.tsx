@@ -3,7 +3,7 @@ import QueryWrapper from 'core/components/QueryWrapper';
 import SettingsDrawer from 'core/components/SettingsDrawer';
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import AdminDrawer from '../components/Sidebar';
+import Sidebar from '../components/Sidebar';
 import { useSettings } from '../contexts/SettingsProvider';
 
 const AppLayout = () => {
@@ -17,7 +17,7 @@ const AppLayout = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AdminDrawer
+      <Sidebar
         collapsed={collapsed}
         mobileOpen={open}
         onDrawerToggle={toggleDrawer}

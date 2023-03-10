@@ -9,6 +9,7 @@ interface AuthContextInterface {
   login: (email: string, password: string) => Promise<any>;
   logout: () => void;
   userInfo?: UserInfo;
+  authToken: string;
 }
 
 export const AuthContext = createContext({} as AuthContextInterface);
@@ -47,6 +48,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         login: handleLogin,
         logout: handleLogout,
         userInfo,
+        authToken,
       }}
     >
       {children}

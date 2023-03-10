@@ -2,22 +2,26 @@ import { useQuery } from '@tanstack/react-query';
 import UserInfo from 'auth/types/userInfo';
 import axios from 'core/config/axios';
 
-const fetchUserInfo = async (authToken?: string): Promise<UserInfo> => {
-  const { data } = await axios.get('/me', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
-  return data;
+const fetchUserInfo = async (authToken?: string): Promise<UserInfo | null> => {
+  try {
+    const { data } = await axios.get('/me', {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return data.data.user;
+  } catch {
+    return null;
+  }
 };
 
 export const useGetUser = (authToken?: string) => {
-  try {
-    return useQuery(['user-info', authToken], () => fetchUserInfo(authToken), {
+  const { data } = useQuery(
+    ['user-info', authToken],
+    () => fetchUserInfo(authToken),
+    {
       enabled: !!authToken,
-      onError: () => undefined,
-    });
-  } catch {
-    return { data: undefined };
-  }
+    }
+  );
+  return { data: data ?? undefined };
 };
