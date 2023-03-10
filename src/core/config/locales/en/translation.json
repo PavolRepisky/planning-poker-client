@@ -83,16 +83,14 @@
       "register": "Register"
     }
   },
-  "admin": {
-    "drawer": {
-      "menu": {
-        "dashboard": "Dashboard",
-        "help": "Help",
-        "home": "Home",
-        "settings": "Settings",
-        "matrixManagement": "Matrices",
-        "sessionManagement": "Sessions"
-      }
+  "sidebar": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "help": "Help",
+      "home": "Home",
+      "settings": "Settings",
+      "matrixManagement": "Matrices",
+      "sessionManagement": "Sessions"
     }
   },
   "settings": {
@@ -129,19 +127,6 @@
     }
   },
   "profile": {
-    "activity": {
-      "empty": "Logs of your activity will show up here!",
-      "logs": {
-        "eventAdded": "<bold>You</bold> added a new event: <bold>{{resource}}</bold>",
-        "eventUpdated": "<bold>You</bold> updated event: <bold>{{resource}}</bold>",
-        "userAdded": "<bold>You</bold> added a new user: <bold>{{resource}}</bold>",
-        "userDeleted": "<bold>You</bold> deleted user: <bold>{{resource}}</bold>",
-        "userUpdated": "<bold>You</bold> updated user: <bold>{{resource}}</bold>"
-      }
-    },
-    "completion": {
-      "title": "Profile Completion"
-    },
     "info": {
       "form": {
         "email": {
@@ -165,13 +150,13 @@
       "title": "Update profile"
     },
     "menu": {
-      "activity": "Activity",
       "info": "Information",
       "password": "Password"
     },
     "notifications": {
       "informationUpdated": "Information updated!",
-      "passwordChanged": "Password changed!"
+      "passwordChanged": "Password changed!",
+      "userUnauthorized": "Incorrect email or password!"
     },
     "password": {
       "form": {
