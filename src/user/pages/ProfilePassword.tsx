@@ -9,6 +9,8 @@ import {
 import { useAuth } from 'auth/contexts/AuthProvider';
 import passwordRegex from 'auth/types/passwordRegex';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
+import { transformToFormikErrorsObj } from 'core/utils/transform';
+import { ValidationError } from 'express-validator';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useUpdatePassword } from 'user/hooks/useUpdatePassword';
@@ -51,7 +53,11 @@ const ProfilePassword = () => {
       formik.resetForm();
       snackbar.success(t('profile.notifications.passwordChanged'));
     } catch (err: any) {
-      if (err.response && err.response.status === 401) {
+      if (err.response && err.response.status === 400) {
+        const validationErrors = err.response.data.errors as ValidationError[];
+        formik.setErrors(transformToFormikErrorsObj(validationErrors));
+        return;
+      } else if (err.response && err.response.status === 401) {
         snackbar.error(t('profile.notifications.userUnauthorized'));
         return;
       }
