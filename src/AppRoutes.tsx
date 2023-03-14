@@ -17,6 +17,9 @@ const ProfileInformation = lazy(
 );
 const ProfilePassword = lazy(() => import('./user/pages/ProfilePassword'));
 
+// Matrix
+const MatrixManagement = lazy(() => import('./matrix/pages/MatrixManagement'));
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -27,6 +30,7 @@ const AppRoutes = () => {
 
       <Route element={<PrivateRoutes />}>
         <Route path="/" element={<AppLayout />}>
+          <Route path="matrices" element={<MatrixManagement />} />
           <Route path="profile" element={<Profile />}>
             <Route path="" element={<ProfileInformation />} />
             <Route path="password" element={<ProfilePassword />} />

@@ -38,7 +38,9 @@
       "maxChar": "Must be {{size}} characters or less",
       "minChar": "Must be {{size}} characters or more",
       "minNum": "Must be at least {{num}} or bigger",
-      "required": "Required field"
+      "required": "Required field",
+      "nonEmptyValues": "Must contain non-empty values",
+      "format": "Must have correct format"
     }
   },
   "auth": {
@@ -171,6 +173,53 @@
         }
       },
       "title": "Change your password"
+    }
+  },
+  "matrixManagement": {
+    "confirmations": {
+      "delete": "Are you sure you want to delete this matrix?"
+    },
+    "form": {
+      "name": {
+        "label": "Name"
+      },
+      "rows": {
+        "label": "Rows"
+      },
+      "columns": {
+        "label": "Columns"
+      },
+      "values": {
+        "label": "Values"
+      }
+    },
+    "modal": {
+      "add": {
+        "action": "Add",
+        "title": "Add Matrix"
+      },
+      "edit": {
+        "action": "Edit",
+        "title": "Edit Matrix"
+      }
+    },
+    "notifications": {
+      "addSuccess": "{{matrix}} has been added!",
+      "deleteSuccess": "{{matrix}} have been deleted!",
+      "updateSuccess": "{{matrix}} has been updated!"
+    },
+    "table": {
+      "headers": {
+        "actions": "Actions",
+        "id": "ID",
+        "name": "Name",
+        "rows": "Rows",
+        "columns": "Columns",
+        "values": "Values"
+      }
+    },
+    "toolbar": {
+      "title": "Matrices"
     }
   }
 }
