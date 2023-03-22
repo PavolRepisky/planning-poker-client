@@ -28,7 +28,8 @@
     "selected": "Selected",
     "snackbar": {
       "error": "Error",
-      "success": "Success"
+      "success": "Success",
+      "warning": "Warning"
     },
     "update": "Update",
     "validations": {
@@ -40,7 +41,8 @@
       "minNum": "Must be at least {{num}} or bigger",
       "required": "Required field",
       "nonEmptyValues": "Must contain non-empty values",
-      "format": "Must have correct format"
+      "format": "Must have correct format",
+      "integer": "Must be an integer"
     }
   },
   "auth": {
@@ -80,7 +82,7 @@
         }
       },
       "notifications": {
-        "fail": "Invalid login credentials. Please check your e-mail address and password and try again"
+        "fail": "Invalid login credentials. Please check your e-mail address and password and try again."
       },
       "noAccount": "Don't have an account yet?",
       "submit": "Log in",
@@ -218,11 +220,41 @@
         "name": "Name",
         "rows": "Rows",
         "columns": "Columns",
-        "values": "Values"
+        "values": "Values",
+        "createdAt": "Created At"
       }
     },
     "toolbar": {
       "title": "Matrices"
+    }
+  },
+  "session": {
+    "title": "Voting Session",
+    "create": {
+      "title": "Create Voting Session",
+      "form": {
+        "name": {
+          "label": "Name"
+        },
+        "matrixId": {
+          "label": "Matrix ID"
+        },
+        "submit": "Create"
+      }
+    },
+    "join": {
+      "title": "Join Voting Session",
+      "form": {
+        "hashId": {
+          "label": "Session id"
+        },
+        "submit": "Join"
+      }
+    },
+    "notifications": {
+      "created": "Voting session has been created successfully!",
+      "joined": "Voting session has been joined successfully!",
+      "notFound": "Voting session was not found!"
     }
   }
 }

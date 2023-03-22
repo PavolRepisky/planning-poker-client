@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 interface SnackbarContextInterface {
   error: (newMessage: string) => void;
   success: (newMessage: string) => void;
+  warning: (newMessage: string) => void;
 }
 
 export const SnackbarContext = createContext({} as SnackbarContextInterface);
@@ -45,8 +46,15 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     setOpen(true);
   };
 
+  const warning = (newMessage: string) => {
+    setTitle(t('common.snackbar.warning'));
+    setMessage(newMessage);
+    setSeverity('warning');
+    setOpen(true);
+  };
+
   return (
-    <SnackbarContext.Provider value={{ error, success }}>
+    <SnackbarContext.Provider value={{ error, success, warning }}>
       {children}
       <Snackbar
         key={message}
