@@ -11,9 +11,9 @@ const updatePassword = async ({
   newPassword: string;
   confirmationPassword: string;
   authToken: string;
-}) => {
-  const { data } = await axios.patch(
-    '/user/password',
+}): Promise<void> => {
+  await axios.patch(
+    '/users/password',
     {
       password,
       newPassword,
@@ -23,7 +23,6 @@ const updatePassword = async ({
       headers: { Authorization: `Bearer ${authToken}` },
     }
   );
-  return data;
 };
 
 export function useUpdatePassword() {

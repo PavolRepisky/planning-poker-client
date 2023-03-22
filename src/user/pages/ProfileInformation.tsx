@@ -22,43 +22,36 @@ const ProfileInformation = () => {
   const { authToken, userData } = useAuth();
   const { isUpdating, updateName } = useUpdateName(authToken);
 
+  const validationSchema = yup.object({
+    firstName: yup
+      .string()
+      .required(t('common.validations.required'))
+      .min(3, t('common.validations.minChar', { size: 3 }))
+      .max(50, t('common.validations.maxChar', { size: 50 })),
+    lastName: yup
+      .string()
+      .required(t('common.validations.required'))
+      .min(3, t('common.validations.minChar', { size: 3 }))
+      .max(50, t('common.validations.maxChar', { size: 50 })),
+  });
+
+  type FormData = yup.InferType<typeof validationSchema>;
+
   const formik = useFormik({
     initialValues: {
       firstName: userData ? userData.firstName : '',
       lastName: userData ? userData.lastName : '',
-      email: userData ? userData.email : '',
     },
-    validationSchema: yup.object({
-      firstName: yup
-        .string()
-        .required(t('common.validations.required'))
-        .min(3, t('common.validations.minChar', { size: 3 }))
-        .max(50, t('common.validations.maxChar', { size: 50 })),
-      lastName: yup
-        .string()
-        .required(t('common.validations.required'))
-        .min(3, t('common.validations.minChar', { size: 3 }))
-        .max(50, t('common.validations.maxChar', { size: 50 })),
-      email: yup
-        .string()
-        .required(t('common.validations.required'))
-        .email(t('common.validations.email')),
-    }),
+    validationSchema: validationSchema,
     onSubmit: (values) => handleSubmit(values),
   });
 
-  const handleSubmit = async ({
-    firstName,
-    lastName,
-    email,
-  }: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }) => {
+  const handleSubmit = async (values: FormData) => {
+    const { firstName, lastName } = values;
+
     try {
       await updateName({ firstName, lastName, authToken });
-      snackbar.success(t('profile.notifications.informationUpdated'));
+      snackbar.success(t('profile.notifications.profileUpdated'));
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         const validationErrors = err.response.data.errors as ValidationError[];
@@ -88,7 +81,6 @@ const ProfileInformation = () => {
             onChange={formik.handleChange}
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             helperText={formik.touched.firstName && formik.errors.firstName}
-            size="small"
           />
           <TextField
             required
@@ -97,28 +89,12 @@ const ProfileInformation = () => {
             label={t('profile.info.form.lastName.label')}
             name="lastName"
             type="text"
-            autoComplete="given-name"
+            autoComplete="family-name"
             disabled={isUpdating}
             value={formik.values.lastName}
             onChange={formik.handleChange}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
-            size="small"
-          />
-          <TextField
-            required
-            fullWidth
-            id="email"
-            label={t('profile.info.form.email.label')}
-            name="email"
-            type="email"
-            autoComplete="email"
-            disabled={true}
-            value={userData?.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            size="small"
           />
         </CardContent>
         <CardActions>

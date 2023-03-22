@@ -10,7 +10,7 @@ import Toolbar from 'core/components/Toolbar';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const profileMenuItems = [
   {
@@ -28,6 +28,11 @@ const Profile = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [currentTab, setCurrentTab] = React.useState(
+    !location.pathname.includes('/password') ? 0 : 1
+  );
 
   const handleLogout = () => {
     try {
@@ -36,6 +41,10 @@ const Profile = () => {
     } catch {
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
   };
 
   return (
@@ -54,7 +63,6 @@ const Profile = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
               textAlign: 'center',
               height: '100%',
             }}
@@ -63,6 +71,7 @@ const Profile = () => {
               sx={{
                 bgcolor: 'background.paper',
                 mb: 3,
+                mt: { xs: 0, md: 14 },
                 height: 160,
                 width: 160,
               }}
@@ -73,14 +82,23 @@ const Profile = () => {
               component="div"
               variant="h4"
             >{`${userData?.firstName} ${userData?.lastName}`}</Typography>
+            <Typography component="p">{`${userData?.email}`}</Typography>
           </Box>
         </Grid>
         <Grid item xs={12} md={8} marginTop={3}>
           <Box sx={{ mb: 4 }}>
-            <Tabs aria-label="profile nav tabs" value={false}>
-              {profileMenuItems.map((item) => (
+            <Tabs
+              aria-label="profile nav tabs"
+              value={currentTab}
+              onChange={handleTabChange}
+              TabIndicatorProps={{
+                style: { display: 'none' },
+              }}
+            >
+              {profileMenuItems.map((item, index) => (
                 <Tab
                   key={item.key}
+                  value={index}
                   end={true}
                   component={NavLink}
                   label={t(item.key)}

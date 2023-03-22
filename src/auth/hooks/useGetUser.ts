@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import UserData from 'auth/types/userData';
 import axios from 'core/config/axios';
+import UserData from 'user/types/userData';
 
 const fetchUser = async (authToken?: string): Promise<UserData | null> => {
   try {

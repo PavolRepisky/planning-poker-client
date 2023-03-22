@@ -1,7 +1,7 @@
 import { useGetUser } from 'auth/hooks/useGetUser';
 import { useLogin } from 'auth/hooks/useLogin';
-import UserData from 'auth/types/userData';
 import React, { createContext, useContext } from 'react';
+import UserData from 'user/types/userData';
 import { useLocalStorage } from '../../core/hooks/useLocalStorage';
 
 interface AuthContextInterface {

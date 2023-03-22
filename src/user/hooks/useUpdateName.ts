@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import UserData from 'auth/types/userData';
 import axios from 'core/config/axios';
+import UserData from 'user/types/userData';
 
 const updateName = async ({
   firstName,
@@ -12,7 +12,7 @@ const updateName = async ({
   authToken: string;
 }): Promise<UserData> => {
   const { data } = await axios.patch(
-    '/user/name',
+    '/users/name',
     { firstName, lastName },
     {
       headers: { Authorization: `Bearer ${authToken}` },

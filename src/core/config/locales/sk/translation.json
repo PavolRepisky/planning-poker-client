@@ -85,5 +85,41 @@
       "noAccount": "Ešte nemáte účet?",
       "register": "Registrujte sa"
     }
+  },
+  "profile": {
+    "menu": {
+      "info": "Informácie",
+      "password": "Heslo"
+    },
+    "info": {
+      "title": "Aktualizovať informácie",
+      "form": {
+        "firstName": {
+          "label": "Krstné Meno"
+        },
+        "lastName": {
+          "label": "Priezvisko"
+        }
+      }
+    },
+    "password": {
+      "title": "Zmeniť heslo",
+      "form": {
+        "password": {
+          "label": "Heslo"
+        },
+        "newPassword": {
+          "label": "Nové Heslo"
+        },
+        "confirmationPassword": {
+          "label": "Potvrdzovacie Heslo"
+        }
+      }
+    },
+    "notifications": {
+      "informationUpdated": "Informácie boli úspešne aktualizované!",
+      "passwordChanged": "Heslo bolo úspešne zmenené!",
+      "wrongPassword": "Zadané heslo je nesprávne!"
+    }
   }
 }

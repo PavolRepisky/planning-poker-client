@@ -23,7 +23,7 @@ const ProfilePassword = () => {
 
   const { isUpdating, updatePassword } = useUpdatePassword();
 
-  const schema = yup.object({
+  const validationSchema = yup.object({
     password: yup.string().required(t('common.validations.required')),
     newPassword: yup
       .string()
@@ -35,7 +35,7 @@ const ProfilePassword = () => {
       .oneOf([yup.ref('newPassword')], t('common.validations.passwordMatch')),
   });
 
-  type FormData = yup.InferType<typeof schema>;
+  type FormData = yup.InferType<typeof validationSchema>;
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +43,7 @@ const ProfilePassword = () => {
       newPassword: '',
       confirmationPassword: '',
     },
-    validationSchema: schema,
+    validationSchema: validationSchema,
     onSubmit: (values) => handleUpdatePassword(values),
   });
 
@@ -58,7 +58,7 @@ const ProfilePassword = () => {
         formik.setErrors(transformToFormikErrorsObj(validationErrors));
         return;
       } else if (err.response && err.response.status === 401) {
-        snackbar.error(t('profile.notifications.userUnauthorized'));
+        snackbar.warning(t('profile.notifications.wrongPassword'));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
@@ -74,7 +74,7 @@ const ProfilePassword = () => {
             required
             fullWidth
             name="password"
-            label={t('profile.password.form.current.label')}
+            label={t('profile.password.form.password.label')}
             type="password"
             id="password"
             autoFocus
@@ -89,9 +89,10 @@ const ProfilePassword = () => {
             required
             fullWidth
             name="newPassword"
-            label={t('profile.password.form.new.label')}
+            label={t('profile.password.form.newPassword.label')}
             type="password"
             id="newPassword"
+            autoComplete="new-password"
             disabled={isUpdating}
             value={formik.values.newPassword}
             onChange={formik.handleChange}
@@ -104,7 +105,7 @@ const ProfilePassword = () => {
             required
             fullWidth
             name="confirmationPassword"
-            label={t('profile.password.form.confirm.label')}
+            label={t('profile.password.form.confirmationPassword.label')}
             type="password"
             id="confirmationPassword"
             disabled={isUpdating}
@@ -118,7 +119,6 @@ const ProfilePassword = () => {
               formik.touched.confirmationPassword &&
               formik.errors.confirmationPassword
             }
-            size="small"
           />
         </CardContent>
         <CardActions>

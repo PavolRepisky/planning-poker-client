@@ -60,17 +60,16 @@ const Login = () => {
   };
 
   return (
-    <Grid container component="main">
+    <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
         item
         xs={false}
         sm={false}
         md={7}
         sx={{
-          backgroundImage: 'url(./images/startup.svg)',
+          backgroundImage: 'url(./images/login.svg)',
           backgroundRepeat: 'no-repeat',
-          bgcolor: 'background.default',
-          backgroundSize: 'cover',
+          backgroundSize: '60%',
           backgroundPosition: 'center',
         }}
       />

@@ -45,6 +45,49 @@
       "integer": "Must be an integer"
     }
   },
+  "sidebar": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "help": "Help",
+      "home": "Home",
+      "settings": "Settings",
+      "matrixManagement": "Matrices",
+      "sessionManagement": "Sessions"
+    }
+  },
+  "settings": {
+    "drawer": {
+      "direction": {
+        "label": "Direction",
+        "options": {
+          "ltr": "LTR",
+          "rtl": "RTL"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "options": {
+          "en": "English",
+          "sk": "Slovak"
+        }
+      },
+      "mode": {
+        "label": "Mode",
+        "options": {
+          "dark": "Dark",
+          "light": "Light"
+        }
+      },
+      "sidebar": {
+        "label": "Sidebar",
+        "options": {
+          "collapsed": "Collapsed",
+          "full": "Full"
+        }
+      },
+      "title": "Settings"
+    }
+  },
   "auth": {
     "register": {
       "title": "Register",
@@ -90,94 +133,40 @@
       "register": "Register"
     }
   },
-  "sidebar": {
-    "menu": {
-      "dashboard": "Dashboard",
-      "help": "Help",
-      "home": "Home",
-      "settings": "Settings",
-      "matrixManagement": "Matrices",
-      "sessionManagement": "Sessions"
-    }
-  },
-  "settings": {
-    "drawer": {
-      "direction": {
-        "label": "Direction",
-        "options": {
-          "ltr": "LTR",
-          "rtl": "RTL"
-        }
-      },
-      "language": {
-        "label": "Language",
-        "options": {
-          "en": "English",
-          "sk": "Slovak"
-        }
-      },
-      "mode": {
-        "label": "Mode",
-        "options": {
-          "dark": "Dark",
-          "light": "Light"
-        }
-      },
-      "sidebar": {
-        "label": "Sidebar",
-        "options": {
-          "collapsed": "Collapsed",
-          "full": "Full"
-        }
-      },
-      "title": "Settings"
-    }
-  },
   "profile": {
-    "info": {
-      "form": {
-        "email": {
-          "label": "Email Address"
-        },
-        "firstName": {
-          "label": "First Name"
-        },
-        "gender": {
-          "label": "Gender",
-          "options": {
-            "f": "Female",
-            "m": "Male",
-            "n": "NC"
-          }
-        },
-        "lastName": {
-          "label": "Last Name"
-        }
-      },
-      "title": "Update profile"
-    },
     "menu": {
       "info": "Information",
       "password": "Password"
     },
-    "notifications": {
-      "informationUpdated": "Information updated!",
-      "passwordChanged": "Password changed!",
-      "userUnauthorized": "Incorrect email or password!"
+    "info": {
+      "title": "Update information",
+      "form": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        }
+      }
     },
     "password": {
+      "title": "Change password",
       "form": {
-        "current": {
+        "password": {
           "label": "Password"
         },
-        "confirm": {
-          "label": "Confirmation Password"
-        },
-        "new": {
+        "newPassword": {
           "label": "New Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
         }
-      },
-      "title": "Change your password"
+      }
+    },
+    "notifications": {
+      "informationUpdated": "Information has been updated successfully!",
+      "passwordChanged": "The password has been changed successfully!",
+      "wrongPassword": "Entered password is incorrect!"
     }
   },
   "matrixManagement": {
