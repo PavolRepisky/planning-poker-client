@@ -15,7 +15,7 @@ const VotingSession = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const [users, setUsers] = useState([]);
-  const { authToken, userInfo } = useAuth();
+  const { authToken, userData } = useAuth();
   const navigate = useNavigate();
 
   const { hashId } = useParams();
@@ -35,7 +35,7 @@ const VotingSession = () => {
     socket.emit('joinSession', {
       sessionId: data?.hashId,
       sessionName: data?.name,
-      user: { firstName: userInfo?.firstName, lastName: userInfo?.lastName },
+      user: { firstName: userData?.firstName, lastName: userData?.lastName },
     });
 
     socket.on('users', (users) => {

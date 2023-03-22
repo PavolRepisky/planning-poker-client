@@ -23,7 +23,7 @@ const Login = () => {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
 
-  const schema = yup.object({
+  const validationSchema = yup.object({
     email: yup
       .string()
       .required(t('common.validations.required'))
@@ -31,14 +31,14 @@ const Login = () => {
     password: yup.string().required(t('common.validations.required')),
   });
 
-  type FormData = yup.InferType<typeof schema>;
+  type FormData = yup.InferType<typeof validationSchema>;
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: schema,
+    validationSchema: validationSchema,
     onSubmit: (values: FormData) => handleLogin(values.email, values.password),
   });
 
@@ -60,7 +60,7 @@ const Login = () => {
   };
 
   return (
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main">
       <Grid
         item
         xs={false}
@@ -76,7 +76,7 @@ const Login = () => {
       />
       <Grid item xs={12} sm={12} md={5} component={Paper} square>
         <BoxedLayout>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             {t('auth.login.title')}
           </Typography>
           <Box
@@ -99,7 +99,6 @@ const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              size="small"
             />
             <TextField
               required
@@ -114,7 +113,6 @@ const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              size="small"
             />
             <LoadingButton
               type="submit"
@@ -122,7 +120,7 @@ const Login = () => {
               loading={isLoggingIn}
               variant="contained"
             >
-              {t('auth.login.submit')}
+              {t('auth.login.form.submit')}
             </LoadingButton>
             <Typography
               component="h1"

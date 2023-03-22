@@ -18,7 +18,7 @@ const Register = () => {
   const { t } = useTranslation();
   const { isRegistering, register } = useRegister();
 
-  const schema = yup.object({
+  const validationSchema = yup.object({
     firstName: yup
       .string()
       .required(t('common.validations.required'))
@@ -43,7 +43,7 @@ const Register = () => {
       .oneOf([yup.ref('password')], t('common.validations.passwordMatch')),
   });
 
-  type FormData = yup.InferType<typeof schema>;
+  type FormData = yup.InferType<typeof validationSchema>;
 
   const formik = useFormik({
     initialValues: {
@@ -53,14 +53,14 @@ const Register = () => {
       password: '',
       confirmationPassword: '',
     },
-    validationSchema: schema,
+    validationSchema: validationSchema,
     onSubmit: (values) => handleRegister(values),
   });
 
   const handleRegister = async (values: FormData) => {
     try {
       await register(values);
-      snackbar.success(t('auth.register.notifications.success'));
+      snackbar.success(t('auth.register.notifications.accountCreated'));
       navigate('/login');
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
@@ -74,7 +74,7 @@ const Register = () => {
 
   return (
     <BoxedLayout>
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4">
         {t('auth.register.title')}
       </Typography>
       <Box
@@ -97,7 +97,7 @@ const Register = () => {
           onChange={formik.handleChange}
           error={formik.touched.firstName && Boolean(formik.errors.firstName)}
           helperText={formik.touched.firstName && formik.errors.firstName}
-          size="small"
+        
         />
         <TextField
           required
@@ -112,7 +112,7 @@ const Register = () => {
           onChange={formik.handleChange}
           error={formik.touched.lastName && Boolean(formik.errors.lastName)}
           helperText={formik.touched.lastName && formik.errors.lastName}
-          size="small"
+         
         />
         <TextField
           required
@@ -127,7 +127,6 @@ const Register = () => {
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
-          size="small"
         />
         <TextField
           required
@@ -142,7 +141,7 @@ const Register = () => {
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
-          size="small"
+    
         />
         <TextField
           required
@@ -162,7 +161,7 @@ const Register = () => {
             formik.touched.confirmationPassword &&
             formik.errors.confirmationPassword
           }
-          size="small"
+     
         />
         <LoadingButton
           type="submit"
@@ -172,13 +171,13 @@ const Register = () => {
           disabled={isRegistering}
           loading={isRegistering}
         >
-          {t('auth.register.submit')}
+          {t('auth.register.form.submit')}
         </LoadingButton>
         <Typography
           component="h1"
           variant="body1"
           textAlign="center"
-          sx={{ mt: 3 }}
+          sx={{ my: 3,  }}
         >
           {t('auth.register.haveAccount')}
           <MuiLink

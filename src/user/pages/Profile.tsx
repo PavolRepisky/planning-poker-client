@@ -24,7 +24,7 @@ const profileMenuItems = [
 ];
 
 const Profile = () => {
-  const { logout, userInfo } = useAuth();
+  const { logout, userData } = useAuth();
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ const Profile = () => {
             <Typography
               component="div"
               variant="h4"
-            >{`${userInfo?.firstName} ${userInfo?.lastName}`}</Typography>
+            >{`${userData?.firstName} ${userData?.lastName}`}</Typography>
           </Box>
         </Grid>
         <Grid item xs={12} md={8} marginTop={3}>

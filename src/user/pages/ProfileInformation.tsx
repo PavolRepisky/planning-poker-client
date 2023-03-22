@@ -19,14 +19,14 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 const ProfileInformation = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const { authToken, userInfo } = useAuth();
+  const { authToken, userData } = useAuth();
   const { isUpdating, updateName } = useUpdateName(authToken);
 
   const formik = useFormik({
     initialValues: {
-      firstName: userInfo ? userInfo.firstName : '',
-      lastName: userInfo ? userInfo.lastName : '',
-      email: userInfo ? userInfo.email : '',
+      firstName: userData ? userData.firstName : '',
+      lastName: userData ? userData.lastName : '',
+      email: userData ? userData.email : '',
     },
     validationSchema: yup.object({
       firstName: yup
@@ -114,7 +114,7 @@ const ProfileInformation = () => {
             type="email"
             autoComplete="email"
             disabled={true}
-            value={userInfo?.email}
+            value={userData?.email}
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}

@@ -43,6 +43,7 @@
   },
   "auth": {
     "register": {
+      "title": "Registrovať",
       "form": {
         "firstName": {
           "label": "Krstné Meno"
@@ -51,36 +52,38 @@
           "label": "Priezvisko"
         },
         "email": {
-          "label": "E-mailová Adresa"
+          "label": "E-mailová adresa"
         },
         "password": {
           "label": "Heslo"
         },
         "confirmationPassword": {
           "label": "Potvrdzovacie heslo"
-        }
+        },
+        "submit": "Registrovať"
       },
       "notifications": {
-        "success": "Váš účet bol úspešne vytvorený!"
+        "accountCreated": "Váš účet bol úspešne vytvorený!"
       },
-      "submit": "Registrovať",
-      "title": "Registrovať",
-      "login": "Prihlásiť sa",
-      "haveAccount": "Máte už účet?"
+      "haveAccount": "Máte už účet?",
+      "login": "Prihláste sa"
     },
     "login": {
+      "title": "Prihlásiť sa",
       "form": {
         "email": {
-          "label": "E-mailová Adresa"
+          "label": "E-mailová adresa"
         },
         "password": {
           "label": "Heslo"
-        }
+        },
+        "submit": "Prihlásiť sa"
+      },
+      "notifications": {
+        "invalidCredentials": "Neplatné prihlasovacie údaje. Skontrolujte svoju e-mailovú adresu a heslo a skúste to znova."
       },
       "noAccount": "Ešte nemáte účet?",
-      "submit": "Prihlásiť sa",
-      "title": "Prihlásiť sa",
-      "register": "Registrovať"
+      "register": "Registrujte sa"
     }
   }
 }

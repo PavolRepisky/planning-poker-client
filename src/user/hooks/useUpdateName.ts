@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import UserInfo from 'auth/types/userInfo';
+import UserData from 'auth/types/userData';
 import axios from 'core/config/axios';
 
 const updateName = async ({
@@ -10,7 +10,7 @@ const updateName = async ({
   firstName: string;
   lastName: string;
   authToken: string;
-}): Promise<UserInfo> => {
+}): Promise<UserData> => {
   const { data } = await axios.patch(
     '/user/name',
     { firstName, lastName },
@@ -25,8 +25,8 @@ export function useUpdateName(authToken: string) {
   const queryClient = useQueryClient();
 
   const { isLoading, mutateAsync } = useMutation(updateName, {
-    onSuccess: (userInfo: UserInfo) => {
-      queryClient.setQueryData(['user-info', authToken], userInfo);
+    onSuccess: (userData: UserData) => {
+      queryClient.setQueryData(['user-info', authToken], userData);
     },
   });
 

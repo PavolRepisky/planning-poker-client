@@ -2,9 +2,9 @@ import { useAuth } from 'auth/contexts/AuthProvider';
 import { Navigate, Outlet } from 'react-router';
 
 const PublicRoutes = () => {
-  const { userInfo } = useAuth();
+  const { userData } = useAuth();
 
-  return userInfo ? <Navigate to="/dashboard" /> : <Outlet />;
+  return userData ? <Navigate to="/dashboard" /> : <Outlet />;
 };
 
 export default PublicRoutes;

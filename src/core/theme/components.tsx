@@ -64,7 +64,7 @@ export const createThemeComponents = (theme: Theme) => ({
     },
     styleOverrides: {
       root: {
-        padding: '9px 24px',
+        padding: '14px 24px',
         textTransform: 'none' as any,
       },
       label: {
