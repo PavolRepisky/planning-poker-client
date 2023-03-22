@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 
+// TODO: change function return type to created user
 const register = async ({
   firstName,
   lastName,
