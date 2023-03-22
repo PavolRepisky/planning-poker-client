@@ -1,7 +1,7 @@
 import {
-  Groups as GroupsIcon,
   HelpCenter as HelpCenterIcon,
   Home as HomeIcon,
+  HowToVote as HowToVoteIcon,
   Person as PersonIcon,
   Settings as SettingsIcon,
   Style as StyleIcon,
@@ -41,7 +41,7 @@ export const menuItems = [
     path: '/matrices',
   },
   {
-    icon: GroupsIcon,
+    icon: HowToVoteIcon,
     key: 'sidebar.menu.sessionManagement',
     path: '/sessions',
   },

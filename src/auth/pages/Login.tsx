@@ -52,7 +52,7 @@ const Login = () => {
         formik.setErrors(transformToFormikErrorsObj(validationErrors));
         return;
       } else if (err.response && err.response.status === 401) {
-        snackbar.error(t('auth.login.notifications.fail'));
+        snackbar.warning(t('auth.login.notifications.fail'));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));

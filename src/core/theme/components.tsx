@@ -127,9 +127,7 @@ export const createThemeComponents = (theme: Theme) => ({
     styleOverrides: {
       root: {
         padding: 24,
-        '& .MuiTypography-root': {
-          fontSize: '1.25rem',
-        },
+        fontSize: '1.25rem',
       },
     },
   },
