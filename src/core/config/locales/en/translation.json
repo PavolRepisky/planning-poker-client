@@ -79,6 +79,9 @@
           "label": "Password"
         }
       },
+      "notifications": {
+        "fail": "Invalid login credentials. Please check your e-mail address and password and try again"
+      },
       "noAccount": "Don't have an account yet?",
       "submit": "Log in",
       "title": "Log in",
