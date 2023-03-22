@@ -51,6 +51,9 @@ const Login = () => {
         const validationErrors = err.response.data.errors as ValidationError[];
         formik.setErrors(transformToFormikErrorsObj(validationErrors));
         return;
+      } else if (err.response && err.response.status === 401) {
+        snackbar.warning(t('auth.login.notifications.fail'));
+        return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }

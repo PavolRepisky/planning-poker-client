@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 import { updateOne } from 'core/utils/crudUtils';
-import Matrix from 'matrix/types/Matrix';
+import Matrix from 'matrix/types/MatrixData';
 
 const updateMatrix = async ({
   matrix,

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 import { removeOne } from 'core/utils/crudUtils';
-import Matrix from 'matrix/types/Matrix';
+import Matrix from 'matrix/types/MatrixData';
 
 const deleteMatrix = async ({
   id,

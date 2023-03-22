@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import Empty from 'core/components/Empty';
-import Matrix from 'matrix/types/Matrix';
+import MatrixData from 'matrix/types/MatrixData';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -64,7 +64,7 @@ function stableSort<T>(
 }
 
 interface HeadCell {
-  id: keyof Matrix;
+  id: keyof MatrixData;
   label: string;
   align: 'center' | 'left' | 'right';
 }
@@ -90,12 +90,17 @@ const headCells: HeadCell[] = [
     align: 'center',
     label: 'matrixManagement.table.headers.columns',
   },
+  {
+    id: 'createdAt',
+    align: 'center',
+    label: 'matrixManagement.table.headers.createdAt',
+  },
 ];
 
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Matrix
+    property: keyof MatrixData
   ) => void;
   order: Order;
   orderBy: string;
@@ -109,10 +114,11 @@ const EnhancedTableHead = ({
   const { t } = useTranslation();
 
   const createSortHandler =
-    (property: keyof Matrix) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof MatrixData) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
+  console.log(orderBy, order);
   return (
     <TableHead>
       <TableRow sx={{ '& th': { border: 0 } }}>
@@ -138,9 +144,6 @@ const EnhancedTableHead = ({
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell align="center" sx={{ py: 0 }}>
-          {t('matrixManagement.table.headers.values')}
-        </TableCell>
         <TableCell align="right" sx={{ py: 0 }}>
           {t('matrixManagement.table.headers.actions')}
         </TableCell>
@@ -151,10 +154,10 @@ const EnhancedTableHead = ({
 
 type MatrixRowProps = {
   index: number;
-  onDelete: (matrix: Matrix) => void;
-  onEdit: (matrix: Matrix) => void;
+  onDelete: (matrix: MatrixData) => void;
+  onEdit: (matrix: MatrixData) => void;
   processing: boolean;
-  matrix: Matrix;
+  matrix: MatrixData;
 };
 
 const MatrixRow = ({
@@ -201,7 +204,7 @@ const MatrixRow = ({
       <TableCell align="center">{matrix.name}</TableCell>
       <TableCell align="center">{matrix.rows}</TableCell>
       <TableCell align="center">{matrix.columns}</TableCell>
-      <TableCell align="center">{JSON.stringify(matrix.values)}</TableCell>
+      <TableCell align="center">{matrix.createdAt.toString()}</TableCell>
 
       <TableCell
         align="right"
@@ -253,9 +256,9 @@ const MatrixRow = ({
 
 type MatrixTableProps = {
   processing: boolean;
-  onDelete: (matrix: Matrix) => void;
-  onEdit: (matrix: Matrix) => void;
-  matrices?: Matrix[];
+  onDelete: (matrix: MatrixData) => void;
+  onEdit: (matrix: MatrixData) => void;
+  matrices?: MatrixData[];
 };
 
 const MatrixTable = ({
@@ -265,7 +268,7 @@ const MatrixTable = ({
   matrices = [],
 }: MatrixTableProps) => {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Matrix>('name');
+  const [orderBy, setOrderBy] = React.useState<keyof MatrixData>('name');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -282,7 +285,7 @@ const MatrixTable = ({
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Matrix
+    property: keyof MatrixData
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -293,8 +296,12 @@ const MatrixTable = ({
     return <Empty title="No user yet" />;
   }
 
-  const stringifiedMatrices = matrices.map((matrix) => {
-    return { ...matrix, values: JSON.stringify(matrix.values) };
+  const parsedMatrices = matrices.map((matrix) => {
+    return {
+      ...matrix,
+      values: JSON.stringify(matrix.values),
+      createdAt: JSON.stringify(matrix.createdAt),
+    };
   });
 
   return (
@@ -314,13 +321,14 @@ const MatrixTable = ({
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {stableSort(stringifiedMatrices, getComparator(order, orderBy))
+            {stableSort(parsedMatrices, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((matrix, index) => {
-                const parsedMatrix = {
+                const matrixObj = {
                   ...matrix,
                   values: JSON.parse(matrix.values),
-                } as Matrix;
+                  createdAt: JSON.parse(matrix.createdAt),
+                };
                 return (
                   <MatrixRow
                     index={index}
@@ -328,7 +336,7 @@ const MatrixTable = ({
                     onDelete={onDelete}
                     onEdit={onEdit}
                     processing={processing}
-                    matrix={parsedMatrix}
+                    matrix={matrixObj}
                   />
                 );
               })}

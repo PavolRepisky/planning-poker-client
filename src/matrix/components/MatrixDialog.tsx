@@ -8,18 +8,18 @@ import {
   TextField,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import Matrix from 'matrix/types/Matrix';
+import MatrixData from 'matrix/types/MatrixData';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import ValuesGrid from './ValuesGrid';
 
 type MatrixDialogProps = {
-  onCreate: (matrix: Partial<Matrix>) => void;
+  onCreate: (matrix: Partial<MatrixData>) => void;
   onClose: () => void;
-  onUpdate: (matrix: Matrix) => void;
+  onUpdate: (matrix: MatrixData) => void;
   open: boolean;
   processing: boolean;
-  matrix?: Matrix;
+  matrix?: MatrixData;
 };
 
 const MatrixDialog = ({
@@ -33,11 +33,15 @@ const MatrixDialog = ({
   const { t } = useTranslation();
   const editMode = Boolean(matrix && matrix.id);
 
-  const handleSubmit = (values: Partial<Matrix>) => {
+  const handleSubmit = (values: Partial<MatrixData>) => {
+    const matrixValues = values.values;
+    const rows = matrixValues ? matrixValues.length : 0;
+    const columns = matrixValues ? matrixValues[0].length : 0;
+
     if (matrix && matrix.id) {
-      onUpdate({ ...values, id: matrix.id } as Matrix);
+      onUpdate({ ...values, id: matrix.id, rows, columns } as MatrixData);
     } else {
-      onCreate(values);
+      onCreate({ ...values, rows, columns });
     }
   };
 

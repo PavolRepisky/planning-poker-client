@@ -10,7 +10,7 @@ import { useCreateMatrix } from 'matrix/hooks/useCreateMatrix';
 import { useDeleteMatrix } from 'matrix/hooks/useDeleteMatrix';
 import { useGetMatrices } from 'matrix/hooks/useGetMatrices';
 import { useUpdateMatrix } from 'matrix/hooks/useUpdateMatrix';
-import Matrix from 'matrix/types/Matrix';
+import Matrix from 'matrix/types/MatrixData';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
