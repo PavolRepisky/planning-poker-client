@@ -4,7 +4,7 @@ interface MatrixData {
   rows: number;
   columns: number;
   values: string[][];
-  createdAt: Date;
+  createdAt: number;
 }
 
 export default MatrixData;

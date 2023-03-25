@@ -8,17 +8,19 @@ const fetchMatrix = async ({
 }: {
   matrixId: number;
   authToken: string;
-}): Promise<Matrix> => {
-  const { data } = await axios.get(`/matrices/${matrixId}`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
-  return data.data.matrix;
+}): Promise<Matrix | null> => {
+  try {
+    const { data } = await axios.get(`/matrices/${matrixId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return data.data.matrix;
+  } catch {
+    return null;
+  }
 };
 
 export const useGetMatrix = (matrixId: number, authToken: string) => {
-  return useQuery(['session-matrix'], () =>
-    fetchMatrix({ matrixId, authToken })
-  );
+  return useQuery(['matrix'], () => fetchMatrix({ matrixId, authToken }));
 };

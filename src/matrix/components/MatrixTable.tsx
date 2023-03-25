@@ -1,257 +1,29 @@
 import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  MoreVert as MoreVertIcon,
-} from '@mui/icons-material';
-import {
-  Box,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
-  TableHead,
   TablePagination,
-  TableRow,
-  TableSortLabel,
 } from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
 import Empty from 'core/components/Empty';
 import MatrixData from 'matrix/types/MatrixData';
+import { descendingComparator } from 'matrix/utils/descendingComparator';
+import { stableSort } from 'matrix/utils/stableSort';
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+import MatrixTableHead from './MatrixTableHead';
+import MatrixTableRow from './MatrixTableRow';
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
+const getComparator = <Key extends keyof any>(
   order: Order,
   orderBy: Key
-): (
+): ((
   a: { [key in Key]: number | string },
   b: { [key in Key]: number | string }
-) => number {
+) => number) => {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-interface HeadCell {
-  id: keyof MatrixData;
-  label: string;
-  align: 'center' | 'left' | 'right';
-}
-
-const headCells: HeadCell[] = [
-  {
-    id: 'id',
-    align: 'center',
-    label: 'matrixManagement.table.headers.id',
-  },
-  {
-    id: 'name',
-    align: 'center',
-    label: 'matrixManagement.table.headers.name',
-  },
-  {
-    id: 'rows',
-    align: 'center',
-    label: 'matrixManagement.table.headers.rows',
-  },
-  {
-    id: 'columns',
-    align: 'center',
-    label: 'matrixManagement.table.headers.columns',
-  },
-  {
-    id: 'createdAt',
-    align: 'center',
-    label: 'matrixManagement.table.headers.createdAt',
-  },
-];
-
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof MatrixData
-  ) => void;
-  order: Order;
-  orderBy: string;
-}
-
-const EnhancedTableHead = ({
-  onRequestSort,
-  order,
-  orderBy,
-}: EnhancedTableProps) => {
-  const { t } = useTranslation();
-
-  const createSortHandler =
-    (property: keyof MatrixData) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  console.log(orderBy, order);
-  return (
-    <TableHead>
-      <TableRow sx={{ '& th': { border: 0 } }}>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
-            align={headCell.align}
-            sx={{ py: 0 }}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-              sx={{ py: 0, ml: '1.25rem' }}
-            >
-              {t(headCell.label)}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell align="right" sx={{ py: 0 }}>
-          {t('matrixManagement.table.headers.actions')}
-        </TableCell>
-      </TableRow>
-    </TableHead>
-  );
-};
-
-type MatrixRowProps = {
-  index: number;
-  onDelete: (matrix: MatrixData) => void;
-  onEdit: (matrix: MatrixData) => void;
-  processing: boolean;
-  matrix: MatrixData;
-};
-
-const MatrixRow = ({
-  index,
-  onDelete,
-  onEdit,
-  processing,
-  matrix,
-}: MatrixRowProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { t } = useTranslation();
-  const openActions = Boolean(anchorEl);
-
-  const handleOpenActions = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseActions = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = () => {
-    handleCloseActions();
-    onDelete(matrix);
-  };
-
-  const handleEdit = () => {
-    handleCloseActions();
-    onEdit(matrix);
-  };
-
-  return (
-    <TableRow
-      tabIndex={-1}
-      key={matrix.id}
-      sx={{ '& td': { bgcolor: 'background.paper', border: 0 } }}
-    >
-      <TableCell
-        align="center"
-        sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
-      >
-        {matrix.id}
-      </TableCell>
-      <TableCell align="center">{matrix.name}</TableCell>
-      <TableCell align="center">{matrix.rows}</TableCell>
-      <TableCell align="center">{matrix.columns}</TableCell>
-      <TableCell align="center">{matrix.createdAt.toString()}</TableCell>
-
-      <TableCell
-        align="right"
-        sx={{ borderTopRightRadius: '1rem', borderBottomRightRadius: '1rem' }}
-      >
-        <IconButton
-          id="matrix-row-menu-button"
-          aria-label="matrix actions"
-          aria-controls="matrix-row-menu"
-          aria-haspopup="true"
-          aria-expanded={openActions ? 'true' : 'false'}
-          disabled={processing}
-          onClick={handleOpenActions}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="matrix-row-menu"
-          anchorEl={anchorEl}
-          aria-labelledby="matrix-row-menu-button"
-          open={openActions}
-          onClose={handleCloseActions}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem onClick={handleEdit}>
-            <ListItemIcon>
-              <EditIcon />
-            </ListItemIcon>{' '}
-            {t('common.edit')}
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>{' '}
-            {t('common.delete')}
-          </MenuItem>
-        </Menu>
-      </TableCell>
-    </TableRow>
-  );
 };
 
 type MatrixTableProps = {
@@ -296,11 +68,10 @@ const MatrixTable = ({
     return <Empty title="No user yet" />;
   }
 
-  const parsedMatrices = matrices.map((matrix) => {
+  const stringifiedMatrices = matrices.map((matrix) => {
     return {
       ...matrix,
       values: JSON.stringify(matrix.values),
-      createdAt: JSON.stringify(matrix.createdAt),
     };
   });
 
@@ -315,28 +86,26 @@ const MatrixTable = ({
             borderSpacing: '0 1rem',
           }}
         >
-          <EnhancedTableHead
+          <MatrixTableHead
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {stableSort(parsedMatrices, getComparator(order, orderBy))
+            {stableSort(stringifiedMatrices, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((matrix, index) => {
-                const matrixObj = {
-                  ...matrix,
-                  values: JSON.parse(matrix.values),
-                  createdAt: JSON.parse(matrix.createdAt),
-                };
+                const originalMatrix = matrices.find(
+                  (matrixObj) => matrixObj.id === matrix.id
+                );
                 return (
-                  <MatrixRow
+                  <MatrixTableRow
                     index={index}
                     key={matrix.id}
                     onDelete={onDelete}
                     onEdit={onEdit}
                     processing={processing}
-                    matrix={matrixObj}
+                    matrix={originalMatrix!}
                   />
                 );
               })}

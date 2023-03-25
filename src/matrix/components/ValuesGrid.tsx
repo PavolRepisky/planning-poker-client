@@ -31,6 +31,12 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
   };
 
   const handleAddRow = () => {
+    if (
+      formik.values.values.length >=
+      (process.env.REACT_APP_MATRIX_MAX_ROWS ?? 6)
+    ) {
+      return;
+    }
     const newValues = formik.values.values;
     const columns = newValues ? newValues[0].length : 0;
     const rows = newValues.length;
@@ -40,6 +46,9 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
   };
 
   const handleRemoveRow = () => {
+    if (formik.values.values.length <= 1) {
+      return;
+    }
     const newValues = formik.values.values;
     const rows = newValues.length;
     newValues.pop();
@@ -48,6 +57,12 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
   };
 
   const handleAddColumn = () => {
+    if (
+      formik.values.values[0].length >=
+      (process.env.REACT_APP_MATRIX_MAX_COLUMNS ?? 6)
+    ) {
+      return;
+    }
     const newValues = formik.values.values.map((row: string[]) => {
       const newRow = row;
       newRow.push('');
@@ -59,6 +74,9 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
   };
 
   const handleRemoveColumn = () => {
+    if (formik.values.values[0].length <= 1) {
+      return;
+    }
     const newValues = formik.values.values.map((row: string[]) => {
       const newRow = row;
       newRow.pop();
@@ -82,7 +100,6 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
           type="text"
           disabled={processing}
           onChange={handleValueChange}
-          size="small"
         />
       </Grid>
     ));
@@ -115,6 +132,12 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
             size="small"
             variant="outlined"
             onClick={handleAddRow}
+            disabled={
+              formik.values.values
+                ? formik.values.values.length >=
+                  (process.env.REACT_APP_MATRIX_MAX_ROWS ?? 6)
+                : false
+            }
             sx={{
               borderBottom: 'none',
               borderBottomRightRadius: 0,
@@ -133,7 +156,7 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
             }
             sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
           >
-            -fromik.values
+            -
           </Button>
         </Grid>
         <Grid
@@ -147,7 +170,17 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
           }}
         >
           <ButtonGroup size="small" aria-label="small outlined button group">
-            <Button onClick={handleAddColumn}>+</Button>
+            <Button
+              onClick={handleAddColumn}
+              disabled={
+                formik.values.values
+                  ? formik.values.values[0].length >=
+                    (process.env.REACT_APP_MATRIX_MAX_COLUMNS ?? 6)
+                  : false
+              }
+            >
+              +
+            </Button>
             <Button
               onClick={handleRemoveColumn}
               disabled={

@@ -41,8 +41,8 @@ const MatrixManagement = () => {
         authToken,
       });
       snackbar.success(
-        t('matrixManagement.notifications.addSuccess', {
-          matrix: matrix.name,
+        t('matrix.notifications.created', {
+          matrixName: matrix.name,
         })
       );
       setOpenMatrixDialog(false);
@@ -60,8 +60,8 @@ const MatrixManagement = () => {
       setMatrixDeleted(undefined);
       setOpenConfirmDeleteDialog(false);
       snackbar.success(
-        t('matrixManagement.notifications.deleteSuccess', {
-          matrix: matrixDeleted.name,
+        t('matrix.notifications.deleted', {
+          matrixName: matrixDeleted.name,
         })
       );
     } catch {
@@ -74,8 +74,8 @@ const MatrixManagement = () => {
       await updateMatrix({ matrix, authToken });
       setOpenMatrixDialog(false);
       snackbar.success(
-        t('userManagement.notifications.updateSuccess', {
-          matrix: matrix.name,
+        t('matrix.notifications.updated', {
+          matrixName: matrix.name,
         })
       );
     } catch {
@@ -105,7 +105,7 @@ const MatrixManagement = () => {
   return (
     <React.Fragment>
       <AppBar>
-        <Toolbar title={t('matrixManagement.toolbar.title')}>
+        <Toolbar title={t('matrix.toolbar.title')}>
           <Fab
             aria-label="logout"
             color="primary"
@@ -124,7 +124,7 @@ const MatrixManagement = () => {
         matrices={data}
       />
       <ConfirmDialog
-        description={t('matrixManagement.confirmations.delete')}
+        description={t('matrix.confirmations.delete')}
         pending={processing}
         onClose={handleCloseConfirmDeleteDialog}
         onConfirm={handleDeleteMatrix}

@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'core/config/axios';
-import Matrix from 'matrix/types/MatrixData';
+import {
+  default as Matrix,
+  default as MatrixData,
+} from 'matrix/types/MatrixData';
 
 const fetchMatrices = async (authToken: string): Promise<Matrix[]> => {
   const { data } = await axios.get('/matrices', {
@@ -8,7 +11,13 @@ const fetchMatrices = async (authToken: string): Promise<Matrix[]> => {
       Authorization: `Bearer ${authToken}`,
     },
   });
-  return data.data.matrices;
+
+  return data.data.matrices.map((matrix: MatrixData) => {
+    return {
+      ...matrix,
+      createdAt: Date.parse(matrix.createdAt.toString()),
+    };
+  });
 };
 
 export const useGetMatrices = (authToken: string) => {

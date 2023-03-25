@@ -63,19 +63,36 @@ const MatrixDialog = ({
         .max(50, t('common.validations.maxChar', { size: 50 })),
       values: yup
         .array()
-        .of(
-          yup
-            .array()
-            .of(
-              yup
-                .string()
-                .trim()
-                .strict(true)
-                .required(t('common.validations.nonEmptyValues'))
+        .typeError(t('common.validations.invalid'))
+        .test(
+          'is-2d-non-empty',
+          t('common.validations.nonEmptyValues'),
+          (value) =>
+            Array.isArray(value) &&
+            value.every(
+              (row) =>
+                Array.isArray(row) &&
+                row.length >= 1 &&
+                row.length <= 6 &&
+                row.every(
+                  (item: string | undefined) => item && item.trim().length > 0
+                )
             )
-            .min(1, t('common.validations.required'))
         )
-        .min(1, t('common.validations.required')),
+        .test(
+          'has-unique-values',
+          t('common.validations.uniqueValues'),
+          (value) => {
+            if (
+              Array.isArray(value) &&
+              value.every((row) => Array.isArray(row))
+            ) {
+              const flattenValues = value.flat();
+              return new Set(flattenValues).size === flattenValues.length;
+            }
+            return true;
+          }
+        ),
     }),
     onSubmit: handleSubmit,
   });
@@ -90,8 +107,8 @@ const MatrixDialog = ({
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="matrix-dialog-title">
           {editMode
-            ? t('matrixManagement.modal.edit.title')
-            : t('matrixManagement.modal.add.title')}
+            ? t('matrix.modal.edit.title')
+            : t('matrix.modal.add.title')}
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -99,7 +116,7 @@ const MatrixDialog = ({
             required
             fullWidth
             id="name"
-            label={t('matrixManagement.form.name.label')}
+            label={t('matrix.form.name.label')}
             name="name"
             type="text"
             autoFocus
@@ -108,7 +125,6 @@ const MatrixDialog = ({
             onChange={formik.handleChange}
             error={formik.touched.name && Boolean(formik.errors.name)}
             helperText={formik.touched.name && formik.errors.name}
-            size="small"
           />
           <ValuesGrid formik={formik} processing={processing} />
         </DialogContent>
@@ -116,8 +132,8 @@ const MatrixDialog = ({
           <Button onClick={onClose}>{t('common.cancel')}</Button>
           <LoadingButton loading={processing} type="submit" variant="contained">
             {editMode
-              ? t('matrixManagement.modal.edit.action')
-              : t('matrixManagement.modal.add.action')}
+              ? t('matrix.modal.edit.action')
+              : t('matrix.modal.add.action')}
           </LoadingButton>
         </DialogActions>
       </form>

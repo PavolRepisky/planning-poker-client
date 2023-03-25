@@ -20,7 +20,7 @@ const ResultImage = ({ customImage, status }: ResultImageProps) => {
     }
   }
 
-  return image ? <Box marginBottom={3}>{image}</Box> : null;
+  return image ? <Box marginBottom={3} width='80%'>{image}</Box> : null;
 };
 
 type ResultProps = {
