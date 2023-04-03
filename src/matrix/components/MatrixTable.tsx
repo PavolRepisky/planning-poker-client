@@ -9,6 +9,7 @@ import MatrixData from 'matrix/types/MatrixData';
 import { descendingComparator } from 'matrix/utils/descendingComparator';
 import { stableSort } from 'matrix/utils/stableSort';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import MatrixTableHead from './MatrixTableHead';
 import MatrixTableRow from './MatrixTableRow';
 
@@ -30,12 +31,14 @@ type MatrixTableProps = {
   processing: boolean;
   onDelete: (matrix: MatrixData) => void;
   onEdit: (matrix: MatrixData) => void;
+  onView: (matrix: MatrixData) => void;
   matrices?: MatrixData[];
 };
 
 const MatrixTable = ({
   onDelete,
   onEdit,
+  onView,
   processing,
   matrices = [],
 }: MatrixTableProps) => {
@@ -43,6 +46,7 @@ const MatrixTable = ({
   const [orderBy, setOrderBy] = React.useState<keyof MatrixData>('name');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { t } = useTranslation();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -65,7 +69,7 @@ const MatrixTable = ({
   };
 
   if (matrices.length === 0) {
-    return <Empty title="No user yet" />;
+    return <Empty title={t('matrix.table.empty')} />;
   }
 
   const stringifiedMatrices = matrices.map((matrix) => {
@@ -104,6 +108,7 @@ const MatrixTable = ({
                     key={matrix.id}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    onView={onView}
                     processing={processing}
                     matrix={originalMatrix!}
                   />

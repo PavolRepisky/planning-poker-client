@@ -6,6 +6,7 @@
     "confirmation": "Confirmation",
     "delete": "Delete",
     "edit": "Edit",
+    "view": "View",
     "errors": {
       "forbidden": {
         "subTitle": "You don't have access to view this page",
@@ -213,7 +214,8 @@
         "rows": "Rows",
         "columns": "Columns",
         "createdAt": "Created At"
-      }
+      },
+      "empty": "No card decks yet"
     },
     "toolbar": {
       "title": "Card Decks"

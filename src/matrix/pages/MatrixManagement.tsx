@@ -13,12 +13,14 @@ import { useUpdateMatrix } from 'matrix/hooks/useUpdateMatrix';
 import Matrix from 'matrix/types/MatrixData';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 
 const MatrixManagement = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const { authToken } = useAuth();
+  const navigate = useNavigate();
 
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openMatrixDialog, setOpenMatrixDialog] = useState(false);
@@ -97,6 +99,10 @@ const MatrixManagement = () => {
     setOpenConfirmDeleteDialog(true);
   };
 
+  const handleViewMatrix = (matrix: Matrix) => {
+    navigate(`/matrices/${matrix.id}`);
+  };
+
   const handleOpenMatrixDialog = (matrix?: Matrix) => {
     setMatrixUpdated(matrix);
     setOpenMatrixDialog(true);
@@ -121,6 +127,7 @@ const MatrixManagement = () => {
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}
         onEdit={handleOpenMatrixDialog}
+        onView={handleViewMatrix}
         matrices={data}
       />
       <ConfirmDialog

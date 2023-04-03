@@ -19,6 +19,7 @@ type MatrixTableRowProps = {
   index: number;
   onDelete: (matrix: MatrixData) => void;
   onEdit: (matrix: MatrixData) => void;
+  onView: (matrix: MatrixData) => void;
   processing: boolean;
   matrix: MatrixData;
 };
@@ -27,6 +28,7 @@ const MatrixTableRow = ({
   index,
   onDelete,
   onEdit,
+  onView,
   processing,
   matrix,
 }: MatrixTableRowProps) => {
@@ -50,6 +52,11 @@ const MatrixTableRow = ({
   const handleEdit = () => {
     handleCloseActions();
     onEdit(matrix);
+  };
+
+  const handleView = () => {
+    handleCloseActions();
+    onView(matrix);
   };
 
   const formatDate = (dateInMillis: number) => {
@@ -115,6 +122,12 @@ const MatrixTableRow = ({
               <DeleteIcon />
             </ListItemIcon>{' '}
             {t('common.delete')}
+          </MenuItem>
+          <MenuItem onClick={handleView}>
+            <ListItemIcon>
+              <DeleteIcon />
+            </ListItemIcon>{' '}
+            {t('common.view')}
           </MenuItem>
         </Menu>
       </TableCell>
