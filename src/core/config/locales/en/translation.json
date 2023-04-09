@@ -244,6 +244,21 @@
         "submit": "Join"
       }
     },
+    "voting": {
+      "players": "Players",
+      "newVoting": "New Voting",
+      "showVotes": "Show Votes",
+      "createNewVoting": "Create New Voting",
+      "create": "Create",
+      "form": {
+        "name": {
+          "label": "Name"
+        },
+        "description": {
+          "label": "Description"
+        }
+      }
+    },
     "notifications": {
       "created": "Voting session has been created successfully!",
       "joined": "Voting session has been joined successfully!",

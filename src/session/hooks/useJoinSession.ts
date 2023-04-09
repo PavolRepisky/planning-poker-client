@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'core/config/axios';
+import MatrixData from 'matrix/types/MatrixData';
 import Session from 'session/types/Session';
 
 const joinSession = async ({
@@ -8,13 +9,13 @@ const joinSession = async ({
 }: {
   hashId: string;
   authToken?: string;
-}): Promise<Session> => {
+}): Promise<{ session: Session; matrix: MatrixData }> => {
   const { data } = await axios.get(`/sessions/${hashId}`, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
   });
-  return data.data.session;
+  return data.data;
 };
 
 export const useJoinSession = ({

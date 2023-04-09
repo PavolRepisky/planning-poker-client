@@ -36,7 +36,8 @@ const VotingSessionManagement = () => {
       });
       snackbar.success(t('session.notifications.created'));
       setOpenCreateDialog(false);
-      console.log(createdSession.hashId);
+
+      navigate(`/sessions/${createdSession.hashId}`);
       return [];
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
