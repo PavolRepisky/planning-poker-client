@@ -7,27 +7,42 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import { useAuth } from 'auth/contexts/AuthProvider';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { useJoinSession } from 'session/hooks/useJoinSession';
 import * as yup from 'yup';
 
-type JoinSessionDialogProps = {
-  onJoin: (hashId: string) => void;
+type JoinSessionModalProps = {
   onClose: () => void;
   open: boolean;
-  processing: boolean;
 };
 
-const JoinSessionDialog = ({
-  onJoin,
-  onClose,
-  open,
-  processing,
-}: JoinSessionDialogProps) => {
+const JoinSessionModal = ({ onClose, open }: JoinSessionModalProps) => {
   const { t } = useTranslation();
+  const snackbar = useSnackbar();
+  const { authToken } = useAuth();
+  const navigate = useNavigate();
+  const { isJoining, joinSession } = useJoinSession();
 
-  const handleSubmit = ({ hashId }: { hashId: string }) => {
-    onJoin(hashId);
+  const handleSubmit = async ({
+    hashId,
+  }: {
+    hashId: string;
+  }): Promise<void> => {
+    try {
+      const data = await joinSession({ hashId, authToken });
+      navigate(`/sessions/${data.session.hashId}`);
+    } catch (err: any) {
+      if (err.response?.status === 404) {
+        formik.setFieldError('hashId', t('common.validations.hashId'));
+        return;
+      }
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+      onClose();
+    }
   };
 
   const formik = useFormik({
@@ -50,29 +65,31 @@ const JoinSessionDialog = ({
     >
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="join-session-dialog-title">
-          {t('session.join.title')}
+          {t('session.modal.join.title')}
         </DialogTitle>
+
         <DialogContent>
           <TextField
             margin="normal"
             required
             fullWidth
             id="hashId"
-            label={t('session.join.form.hashId.label')}
+            label={t('session.modal.join.form.hashId.label')}
             name="hashId"
             type="text"
             autoFocus
-            disabled={processing}
+            disabled={false}
             value={formik.values.hashId}
             onChange={formik.handleChange}
             error={formik.touched.hashId && Boolean(formik.errors.hashId)}
             helperText={formik.touched.hashId && formik.errors.hashId}
           />
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
-          <LoadingButton loading={processing} type="submit" variant="contained">
-            {t('session.join.form.submit')}
+          <LoadingButton loading={isJoining} type="submit" variant="contained">
+            {t('session.modal.join.form.submit')}
           </LoadingButton>
         </DialogActions>
       </form>
@@ -80,4 +97,4 @@ const JoinSessionDialog = ({
   );
 };
 
-export default JoinSessionDialog;
+export default JoinSessionModal;

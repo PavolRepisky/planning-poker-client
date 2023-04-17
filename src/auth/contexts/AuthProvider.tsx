@@ -20,6 +20,10 @@ type AuthProviderProps = {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authToken, setAuthToken] = useLocalStorage<string>('authToken', '');
+  const [socketConnectionId, setSocketConnectionId] = useLocalStorage<
+    string | null
+  >('connectionId', null);
+
   const { isLoggingIn, login } = useLogin();
   const { data: userData } = useGetUser(authToken);
 
@@ -36,6 +40,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogout = async () => {
     try {
       setAuthToken('');
+      setSocketConnectionId(null);
     } catch (err) {
       throw err;
     }

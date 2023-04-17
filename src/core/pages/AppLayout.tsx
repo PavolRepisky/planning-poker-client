@@ -1,4 +1,5 @@
 import { Box, Toolbar } from '@mui/material';
+import { useAuth } from 'auth/contexts/AuthProvider';
 import QueryWrapper from 'core/components/QueryWrapper';
 import SettingsDrawer from 'core/components/SettingsDrawer';
 import { useState } from 'react';
@@ -8,12 +9,21 @@ import { useSettings } from '../contexts/SettingsProvider';
 
 const AppLayout = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { userData } = useAuth();
 
   const { collapsed, open, toggleDrawer } = useSettings();
 
   const handleSettingsToggle = () => {
     setSettingsOpen(!settingsOpen);
   };
+
+  if (!userData) {
+    return (
+      <Box>
+        <Outlet />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>

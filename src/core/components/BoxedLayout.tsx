@@ -2,22 +2,22 @@ import { Settings as SettingsIcon } from '@mui/icons-material';
 import {
   AppBar,
   Box,
+  Breakpoint,
   Container,
-  GlobalStyles,
   IconButton,
   Toolbar,
-  useTheme,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import Logo from './Logo';
 import SettingsDrawer from './SettingsDrawer';
 
 type BoxedLayoutProps = {
+  title?: string;
   children: React.ReactNode;
+  maxWidth?: Breakpoint;
 };
 
-const BoxedLayout = ({ children }: BoxedLayoutProps) => {
-  const theme = useTheme();
+const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleSettingsToggle = () => {
@@ -26,11 +26,11 @@ const BoxedLayout = ({ children }: BoxedLayoutProps) => {
 
   return (
     <React.Fragment>
-      <GlobalStyles
-        styles={{ body: { backgroundColor: theme.palette.background.paper } }}
-      />
       <AppBar color="transparent" position="relative">
         <Toolbar>
+          <Typography component="h1" variant="h4">
+            {title}
+          </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             aria-label="settings"
@@ -41,17 +41,17 @@ const BoxedLayout = ({ children }: BoxedLayoutProps) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth={maxWidth ?? false}>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '100%'
+            height: '100%',
+            width: '100%',
           }}
         >
-          <Logo sx={{ mb: 2 }} />
           {children}
           <Box>
             <SettingsDrawer

@@ -8,40 +8,60 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
+import { useAuth } from 'auth/contexts/AuthProvider';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import { transformToFormikErrorsObj } from 'core/utils/transform';
 import { ValidationError } from 'express-validator';
 import { useFormik } from 'formik';
 import Matrix from 'matrix/types/MatrixData';
 import { useTranslation } from 'react-i18next';
-import Session from 'session/types/Session';
+import { useNavigate } from 'react-router';
+import { useCreateSession } from 'session/hooks/useCreateSession';
+import SessionData from 'session/types/SessionData';
 import * as yup from 'yup';
 
-type CreateSessionDialogProps = {
-  onCreate: (session: Partial<Session>) => Promise<ValidationError[]>;
+type CreateSessionModalProps = {
   onClose: () => void;
   open: boolean;
-  processing: boolean;
   matrices: Matrix[];
 };
 
-const CreateSessionDialog = ({
-  onCreate,
+const CreateSessionModal = ({
   onClose,
   open,
-  processing,
   matrices,
-}: CreateSessionDialogProps) => {
+}: CreateSessionModalProps) => {
   const { t } = useTranslation();
+  const { authToken } = useAuth();
+  const snackbar = useSnackbar();
+  const { createSession, isCreating } = useCreateSession();
+  const navigate = useNavigate();
 
-  const handleSubmit = async (values: Partial<Session>) => {
-    const serverErrors = await onCreate(values);
-    formik.setErrors(transformToFormikErrorsObj(serverErrors));
+  const handleSubmit = async (session: Partial<SessionData>) => {
+    try {
+      const createdSession = await createSession({
+        session,
+        authToken,
+      });
+      snackbar.success(t('session.notifications.sessionCreated'));
+      onClose();
+      navigate(`/sessions/${createdSession.hashId}`);
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        const serverValidationErrors = err.response.data
+          .errors as ValidationError[];
+        formik.setErrors(transformToFormikErrorsObj(serverValidationErrors));
+        return;
+      }
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+      onClose();
+    }
   };
 
   const formik = useFormik({
     initialValues: {
       name: '',
-      matrixId: matrices ? matrices[0].id : undefined,
+      matrixId: -1,
     },
     validationSchema: yup.object({
       name: yup
@@ -52,7 +72,8 @@ const CreateSessionDialog = ({
       matrixId: yup
         .number()
         .typeError(t('common.validations.integer'))
-        .required(t('common.validations.required')),
+        .required(t('common.validations.required'))
+        .min(1, t('common.validations.required')),
     }),
     onSubmit: handleSubmit,
   });
@@ -67,19 +88,20 @@ const CreateSessionDialog = ({
     >
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="create-session-dialog-title">
-          {t('session.create.title')}
+          {t('session.modal.create.title')}
         </DialogTitle>
+
         <DialogContent>
           <TextField
             margin="normal"
             required
             fullWidth
             id="name"
-            label={t('session.create.form.name.label')}
+            label={t('session.modal.create.form.name.label')}
             name="name"
             type="text"
             autoFocus
-            disabled={processing}
+            disabled={isCreating}
             value={formik.values.name}
             onChange={formik.handleChange}
             error={formik.touched.name && Boolean(formik.errors.name)}
@@ -89,10 +111,10 @@ const CreateSessionDialog = ({
             margin="normal"
             required
             id="matrixId"
-            disabled={processing}
+            disabled={isCreating}
             fullWidth
             select
-            label={t('session.create.form.matrixId.label')}
+            label={t('session.modal.create.form.matrixId.label')}
             name="matrixId"
             value={formik.values.matrixId}
             onChange={formik.handleChange}
@@ -106,10 +128,11 @@ const CreateSessionDialog = ({
             ))}
           </TextField>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
-          <LoadingButton loading={processing} type="submit" variant="contained">
-            {t('session.create.form.submit')}
+          <LoadingButton loading={isCreating} type="submit" variant="contained">
+            {t('session.modal.create.form.submit')}
           </LoadingButton>
         </DialogActions>
       </form>
@@ -117,4 +140,4 @@ const CreateSessionDialog = ({
   );
 };
 
-export default CreateSessionDialog;
+export default CreateSessionModal;

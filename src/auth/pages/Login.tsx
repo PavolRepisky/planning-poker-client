@@ -74,7 +74,7 @@ const Login = () => {
         }}
       />
       <Grid item xs={12} sm={12} md={5} component={Paper} square>
-        <BoxedLayout>
+        <BoxedLayout maxWidth='xs'>
           <Typography component="h1" variant="h4">
             {t('auth.login.title')}
           </Typography>
@@ -83,6 +83,7 @@ const Login = () => {
             marginTop={3}
             noValidate
             onSubmit={formik.handleSubmit}
+            maxWidth='xs'
           >
             <TextField
               required

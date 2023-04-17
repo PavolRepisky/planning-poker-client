@@ -73,7 +73,7 @@ const Register = () => {
   };
 
   return (
-    <BoxedLayout>
+    <BoxedLayout maxWidth="xs">
       <Typography component="h1" variant="h4">
         {t('auth.register.title')}
       </Typography>

@@ -1,8 +1,9 @@
-interface Session {
+interface SessionData {
   id: number;
   hashId: string;
   name: string;
   matrixId: number;
+  ownerId: string;
 }
 
-export default Session;
+export default SessionData;

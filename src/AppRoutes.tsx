@@ -2,11 +2,10 @@ import PrivateRoutes from 'core/components/PrivateRoutes';
 import PublicRoutes from 'core/components/PublicRoutes';
 import { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import VotingSession from 'session/pages/VotingSession';
-import VotingSessionManagement from 'session/pages/VotingSessionManagment';
 
 // Core
 const AppLayout = lazy(() => import('./core/pages/AppLayout'));
+const NotFound = lazy(() => import('core/pages/NotFound'));
 
 // Auth
 const Register = lazy(() => import('./auth/pages/Register'));
@@ -23,15 +22,17 @@ const ProfilePassword = lazy(() => import('./user/pages/ProfilePassword'));
 const MatrixManagement = lazy(() => import('./matrix/pages/MatrixManagement'));
 const MatrixView = lazy(() => import('./matrix/pages/MatrixView'));
 
-// Core
-const NotFound = lazy(() => import('core/pages/NotFound'));
+// Session
+const SessionHomepage = lazy(() => import('./session/pages/SessionHomepage'));
+const SessionJoinManager = lazy(
+  () => import('./session/pages/SessionJoinManager')
+);
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route element={<PublicRoutes />}>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+      <Route path="/" element={<AppLayout />}>
+        <Route path="sessions/:hashId" element={<SessionJoinManager />} />
       </Route>
 
       <Route element={<PrivateRoutes />}>
@@ -39,14 +40,18 @@ const AppRoutes = () => {
           <Route path="matrices" element={<MatrixManagement />} />
           <Route path="matrices/:matrixId" element={<MatrixView />} />
 
-          <Route path="sessions" element={<VotingSessionManagement />} />
-          <Route path="sessions/:hashId" element={<VotingSession />} />
+          <Route path="sessions" element={<SessionHomepage />} />
 
           <Route path="profile" element={<Profile />}>
             <Route path="" element={<ProfileInformation />} />
             <Route path="password" element={<ProfilePassword />} />
           </Route>
         </Route>
+      </Route>
+
+      <Route element={<PublicRoutes />}>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Route>
 
       <Route path="404" element={<NotFound />} />

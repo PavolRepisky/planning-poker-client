@@ -7,40 +7,50 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import { transformToFormikErrorsObj } from 'core/utils/transform';
+import { ValidationError } from 'express-validator';
 import { useFormik } from 'formik';
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-type NewVotingDialogProps = {
+type CreateVotingModalProps = {
+  onCreate: (votingData: {
+    name: string;
+    description?: string;
+  }) => Promise<ValidationError[]>;
   onClose: () => void;
   open: boolean;
   processing: boolean;
 };
 
-const NewVotingDialog = ({
-  open,
+const CreateVotingModal = ({
+  onCreate,
   onClose,
+  open,
   processing,
-}: NewVotingDialogProps) => {
-  const validationSchema = yup.object({
-    name: yup
-      .string()
-      .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
-    description: yup.string(),
-  });
+}: CreateVotingModalProps) => {
+  const { t } = useTranslation();
 
-  type FormData = yup.InferType<typeof validationSchema>;
-
-  const handleSubmit = (values: FormData) => {};
+  const handleSubmit = async (votingData: {
+    name: string;
+    description?: string;
+  }) => {
+    const serverErrors = await onCreate(votingData);
+    formik.setErrors(transformToFormikErrorsObj(serverErrors));
+  };
 
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: yup.object({
+      name: yup
+        .string()
+        .required(t('common.validations.required'))
+        .min(3, t('common.validations.minChar', { size: 3 }))
+        .max(50, t('common.validations.maxChar', { size: 50 })),
+    }),
     onSubmit: handleSubmit,
   });
 
@@ -48,12 +58,13 @@ const NewVotingDialog = ({
     <Dialog
       open={open}
       onClose={onClose}
-      aria-labelledby="matrix-dialog-title"
-      maxWidth="lg"
+      aria-labelledby="create-voting-dialog-title"
+      maxWidth="md"
+      fullWidth
     >
       <form onSubmit={formik.handleSubmit} noValidate>
-        <DialogTitle id="matrix-dialog-title">
-          {t('session.voting.createNewVoting')}
+        <DialogTitle id="create-voting-dialog-title">
+          {t('session.modal.createVoting.title')}
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -61,7 +72,7 @@ const NewVotingDialog = ({
             required
             fullWidth
             id="name"
-            label={t('session.voting.form.name.label')}
+            label={t('session.modal.createVoting.form.name.label')}
             name="name"
             type="text"
             autoFocus
@@ -72,10 +83,11 @@ const NewVotingDialog = ({
             helperText={formik.touched.name && formik.errors.name}
           />
           <TextField
+            margin="normal"
             required
             fullWidth
             id="description"
-            label={t('session.voting.form.description.label')}
+            label={t('session.modal.createVoting.form.description.label')}
             name="description"
             type="text"
             autoFocus
@@ -91,7 +103,7 @@ const NewVotingDialog = ({
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
           <LoadingButton loading={processing} type="submit" variant="contained">
-            {t('session.voting.create')}
+            {t('session.modal.createVoting.form.submit')}
           </LoadingButton>
         </DialogActions>
       </form>
@@ -99,4 +111,4 @@ const NewVotingDialog = ({
   );
 };
 
-export default NewVotingDialog;
+export default CreateVotingModal;

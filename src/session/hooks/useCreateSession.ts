@@ -1,14 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'core/config/axios';
-import Session from 'session/types/Session';
+import SessionData from 'session/types/SessionData';
 
 const createSession = async ({
   session,
   authToken,
 }: {
-  session: Partial<Session>;
+  session: Partial<SessionData>;
   authToken: string;
-}): Promise<Session> => {
+}): Promise<SessionData> => {
   const { data } = await axios.post('/sessions', session, {
     headers: {
       Authorization: `Bearer ${authToken}`,

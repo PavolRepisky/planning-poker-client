@@ -25,21 +25,19 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <React.Suspense fallback={<Loader />}>
-        <QueryClientProvider client={queryClient}>
-          <SettingsProvider>
-            <SnackbarProvider>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </SnackbarProvider>
-          </SettingsProvider>
-        </QueryClientProvider>
-      </React.Suspense>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <React.Suspense fallback={<Loader />}>
+      <QueryClientProvider client={queryClient}>
+        <SettingsProvider>
+          <SnackbarProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </SnackbarProvider>
+        </SettingsProvider>
+      </QueryClientProvider>
+    </React.Suspense>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 import MatrixData from 'matrix/types/MatrixData';
-import Session from 'session/types/Session';
+import SessionData from 'session/types/SessionData';
 
 const joinSession = async ({
   hashId,
@@ -9,7 +9,7 @@ const joinSession = async ({
 }: {
   hashId: string;
   authToken?: string;
-}): Promise<{ session: Session; matrix: MatrixData }> => {
+}): Promise<{ session: SessionData; matrix: MatrixData }> => {
   const { data } = await axios.get(`/sessions/${hashId}`, {
     headers: {
       Authorization: `Bearer ${authToken}`,
@@ -18,12 +18,7 @@ const joinSession = async ({
   return data.data;
 };
 
-export const useJoinSession = ({
-  hashId,
-  authToken,
-}: {
-  hashId: string;
-  authToken?: string;
-}) => {
-  return useQuery(['session'], () => joinSession({ hashId, authToken }));
+export const useJoinSession = () => {
+  const { isLoading, mutateAsync } = useMutation(joinSession);
+  return { isJoining: isLoading, joinSession: mutateAsync };
 };

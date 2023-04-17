@@ -6,13 +6,14 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import SocketSessionUserVoteData from 'session/types/SocketSessionUserVoteData';
 
 interface VoteCardProps {
   value: string;
   row: number;
   column: number;
   selected: boolean;
-  onClick: (row: number, column: number) => void;
+  onClick: (vote: SocketSessionUserVoteData) => void;
 }
 
 const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
@@ -21,7 +22,7 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
   return (
     <Tooltip title={value}>
       <Card
-        onClick={() => onClick(row, column)}
+        onClick={() => onClick({ row, column })}
         component={Button}
         sx={{
           minWidth: 'none',
@@ -43,7 +44,7 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
             alignSelf: 'start',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            width: '20%',
+            width: '25%',
           }}
         >
           <Typography
@@ -103,7 +104,7 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
             ml: 'auto',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            width: '20%',
+            width: '25%',
             fontWeight: 'bold',
             fontSize: {
               xs: '0.75rem',
