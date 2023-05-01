@@ -7,8 +7,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import { ReactComponent as ConfirmSvg } from 'assets/confirm.svg';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as ConfirmSvg } from '../assets/confirm.svg';
 import SvgContainer from './SvgContainer';
 
 type ConfirmDialogProps = {

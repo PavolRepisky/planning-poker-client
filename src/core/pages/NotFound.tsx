@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { ReactComponent as NotFoundSvg } from 'core/assets/404.svg';
+import { ReactComponent as NotFoundSvg } from 'assets/404.svg';
 import Result from 'core/components/Result';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';

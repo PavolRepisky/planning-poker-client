@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from '@mui/material';
+import { ReactComponent as ErrorSvg } from 'assets/error.svg';
+import { ReactComponent as SuccessSvg } from 'assets/success.svg';
 import React from 'react';
-import { ReactComponent as ErrorSvg } from '../assets/error.svg';
-import { ReactComponent as SuccessSvg } from '../assets/success.svg';
 import SvgContainer from './SvgContainer';
 
 type ResultImageProps = {
@@ -20,7 +20,11 @@ const ResultImage = ({ customImage, status }: ResultImageProps) => {
     }
   }
 
-  return image ? <Box marginBottom={3} width='80%'>{image}</Box> : null;
+  return image ? (
+    <Box marginBottom={3} width="80%">
+      {image}
+    </Box>
+  ) : null;
 };
 
 type ResultProps = {
