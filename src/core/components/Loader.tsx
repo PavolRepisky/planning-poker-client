@@ -1,8 +1,9 @@
 import { useTheme } from '@mui/material';
-import Logo from './Logo';
+import Logo from 'core/components/Logo';
 
 const Loader = () => {
   const theme = useTheme();
+
   return (
     <Logo
       size={100}

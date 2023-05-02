@@ -7,6 +7,7 @@ type SvgContainerProps = {
 
 const SvgContainer = ({ children }: SvgContainerProps) => {
   const theme = useTheme();
+
   return (
     <Box
       sx={{

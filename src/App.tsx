@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppRoutes from 'AppRoutes';
 import AuthProvider from 'auth/contexts/AuthProvider';
 import Loader from 'core/components/Loader';
+import QueryWrapper from 'core/components/QueryWrapper';
 import 'core/config/i18n';
 import SettingsProvider from 'core/contexts/SettingsProvider';
 import SnackbarProvider from 'core/contexts/SnackbarProvider';
@@ -22,11 +23,13 @@ const App = () => {
     <React.Suspense fallback={<Loader />}>
       <QueryClientProvider client={queryClient}>
         <SettingsProvider>
-          <SnackbarProvider>
-            <AuthProvider>
-              <AppRoutes />
-            </AuthProvider>
-          </SnackbarProvider>
+          <QueryWrapper>
+            <SnackbarProvider>
+              <AuthProvider>
+                <AppRoutes />
+              </AuthProvider>
+            </SnackbarProvider>
+          </QueryWrapper>
         </SettingsProvider>
       </QueryClientProvider>
     </React.Suspense>

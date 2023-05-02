@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { ReactComponent as ConfirmSvg } from 'assets/confirm.svg';
+import SvgContainer from 'core/components/SvgContainer';
 import { useTranslation } from 'react-i18next';
-import SvgContainer from './SvgContainer';
 
 type ConfirmDialogProps = {
   description?: string;
@@ -31,25 +31,17 @@ const ConfirmDialog = ({
   const { t } = useTranslation();
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby="confirm-dialog-title"
-      aria-describedby="confirm-dialog-description"
-    >
+    <Dialog open={open} onClose={onClose}>
       <DialogContent sx={{ textAlign: 'center' }}>
         <SvgContainer>
           <ConfirmSvg style={{ maxWidth: 280, width: '100%' }} />
         </SvgContainer>
-        <DialogTitle id="confirm-dialog-title" sx={{ pb: 1, pt: 0 }}>
-          {title}
-        </DialogTitle>
-        {description && (
-          <DialogContentText id="confirm-dialog-description">
-            {description}
-          </DialogContentText>
-        )}
+
+        <DialogTitle sx={{ p: 0, mb: 1 }}>{title}</DialogTitle>
+
+        {description && <DialogContentText>{description}</DialogContentText>}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>{t('common.cancel')}</Button>
         <LoadingButton

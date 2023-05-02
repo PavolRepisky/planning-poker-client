@@ -14,7 +14,6 @@ const Toolbar = ({ children, title }: ToolbarProps) => {
     <MuiToolbar sx={{ px: { xs: 3, sm: 6 } }}>
       <IconButton
         color="inherit"
-        aria-label="open drawer"
         edge="start"
         onClick={toggleDrawer}
         sx={{
@@ -24,9 +23,11 @@ const Toolbar = ({ children, title }: ToolbarProps) => {
       >
         <MenuIcon />
       </IconButton>
+
       <Typography variant="h2" component="h1" sx={{ flexGrow: 1 }}>
         {title}
       </Typography>
+
       {children}
     </MuiToolbar>
   );

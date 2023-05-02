@@ -28,7 +28,6 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 

@@ -8,8 +8,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import SettingsDrawer from 'core/components/SettingsDrawer';
 import React, { useState } from 'react';
-import SettingsDrawer from './SettingsDrawer';
 
 type BoxedLayoutProps = {
   title?: string;
@@ -31,7 +31,9 @@ const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
           <Typography component="h1" variant="h4">
             {title}
           </Typography>
+
           <Box sx={{ flexGrow: 1 }} />
+
           <IconButton
             aria-label="settings"
             component="span"
@@ -41,6 +43,7 @@ const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
           </IconButton>
         </Toolbar>
       </AppBar>
+
       <Container component="main" maxWidth={maxWidth ?? false}>
         <Box
           sx={{

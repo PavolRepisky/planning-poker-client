@@ -1,5 +1,4 @@
 import {
-  HelpCenter as HelpCenterIcon,
   Home as HomeIcon,
   HowToVote as HowToVoteIcon,
   Person as PersonIcon,
@@ -45,11 +44,6 @@ export const menuItems = [
     key: 'sidebar.menu.sessionManagement',
     path: '/sessions',
   },
-  {
-    icon: HelpCenterIcon,
-    key: 'sidebar.menu.help',
-    path: '/help',
-  },
 ];
 
 const Sidebar = ({
@@ -68,6 +62,7 @@ const Sidebar = ({
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
       <Logo sx={{ display: 'flex', p: 4 }} />
+
       <List component="nav" sx={{ px: 2 }}>
         {menuItems.map((item) => (
           <ListItemButton
@@ -89,6 +84,7 @@ const Sidebar = ({
                 <item.icon />
               </Avatar>
             </ListItemAvatar>
+
             <ListItemText
               primary={t(item.key)}
               sx={{
@@ -98,7 +94,9 @@ const Sidebar = ({
           </ListItemButton>
         ))}
       </List>
+
       <Box sx={{ flexGrow: 1 }} />
+
       <List component="nav" sx={{ p: 2 }}>
         <ListItemButton
           component={NavLink}
@@ -118,6 +116,7 @@ const Sidebar = ({
               <PersonIcon />
             </Avatar>
           </ListItemAvatar>
+
           {userData && (
             <ListItemText
               primary={`${userData.firstName} ${userData.lastName}`}
@@ -127,12 +126,14 @@ const Sidebar = ({
             />
           )}
         </ListItemButton>
+
         <ListItemButton onClick={onSettingsToggle}>
           <ListItemAvatar>
             <Avatar>
               <SettingsIcon />
             </Avatar>
           </ListItemAvatar>
+
           <ListItemText
             primary={t('sidebar.menu.settings')}
             sx={{
@@ -146,7 +147,6 @@ const Sidebar = ({
 
   return (
     <Box
-      aria-label="Sidebar"
       component="nav"
       sx={{
         width: { lg: width },
@@ -170,6 +170,7 @@ const Sidebar = ({
       >
         {drawer}
       </Drawer>
+
       <Drawer
         variant="permanent"
         open
