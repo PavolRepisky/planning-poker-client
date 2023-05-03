@@ -11,6 +11,9 @@ const Landing = lazy(() => import('core/pages/Landing'));
 // Auth
 const Register = lazy(() => import('./auth/pages/Register'));
 const Login = lazy(() => import('./auth/pages/Login'));
+const ForgotPassword = lazy(() => import('./auth/pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./auth/pages/ResetPassword'));
+const VerifyEmail = lazy(() => import('./auth/pages/VerifyEmail'));
 
 // User
 const Profile = lazy(() => import('./user/pages/Profile'));
@@ -36,6 +39,9 @@ const AppRoutes = () => {
         <Route path="sessions/:hashId" element={<SessionJoinManager />} />
       </Route>
 
+      <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+      <Route path="/verify-email/:verificationCode" element={<VerifyEmail />} />
+
       <Route element={<PrivateRoutes />}>
         <Route element={<AppLayout />}>
           <Route path="/matrices" element={<MatrixManagement />} />
@@ -54,6 +60,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       <Route path="404" element={<NotFound />} />

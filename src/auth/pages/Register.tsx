@@ -29,26 +29,26 @@ const Register = () => {
     firstName: yup
       .string()
       .trim()
-      .required('common.validations.required')
+      .required(t('common.validations.required'))
       .max(config.maxNameLength, t('common.validations.string.max')),
     lastName: yup
       .string()
       .trim()
-      .required('common.validations.required')
+      .required(t('common.validations.required'))
       .max(config.maxNameLength, t('common.validations.string.max')),
     email: yup
       .string()
       .trim()
-      .required('common.validations.required')
-      .email('common.validations.email.invalid'),
+      .required(t('common.validations.required'))
+      .email(t('common.validations.email.invalid')),
     password: yup
       .string()
-      .required('common.validations.required')
-      .matches(passwordRegex, 'common.validations.password.weak'),
+      .required(t('common.validations.required'))
+      .matches(passwordRegex, t('common.validations.password.weak')),
     confirmationPassword: yup
       .string()
-      .required('common.validations.required')
-      .oneOf([yup.ref('password')], 'common.validations.password.match'),
+      .required(t('common.validations.required'))
+      .oneOf([yup.ref('password')], t('common.validations.password.match')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
@@ -77,12 +77,12 @@ const Register = () => {
       password: '',
       confirmationPassword: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: handleRegister,
   });
 
   return (
-    <BoxedLayout maxWidth="xs" showLogo={true}>
+    <BoxedLayout maxWidth="xs">
       <Typography component="h1" variant="h4">
         {t('auth.register.title')}
       </Typography>

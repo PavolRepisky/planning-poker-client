@@ -34,9 +34,9 @@ const Profile = () => {
     !location.pathname.includes('/password') ? 0 : 1
   );
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      logout();
+      await logout();
       navigate('/login');
     } catch {
       snackbar.error(t('common.errors.unexpected.subTitle'));

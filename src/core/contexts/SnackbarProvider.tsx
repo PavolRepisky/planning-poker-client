@@ -64,6 +64,7 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
+        sx={{ maxWidth: 600 }}
       >
         <Alert onClose={handleClose} severity={severity}>
           <AlertTitle sx={{ mb: 0 }}>{title}</AlertTitle>

@@ -31,9 +31,9 @@ const Login = () => {
     email: yup
       .string()
       .trim()
-      .required('common.validations.required')
-      .email('common.validations.email.invalid'),
-    password: yup.string().required('common.validations.required'),
+      .required(t('common.validations.required'))
+      .email(t('common.validations.email.invalid')),
+    password: yup.string().required(t('common.validations.required')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
@@ -63,7 +63,7 @@ const Login = () => {
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: handleLogin,
   });
 
@@ -82,7 +82,7 @@ const Login = () => {
       />
 
       <Grid item xs={12} md={5} component={Paper} square>
-        <BoxedLayout maxWidth="xs" showLogo={true}>
+        <BoxedLayout maxWidth="xs" >
           <Typography component="h1" variant="h4">
             {t('auth.login.title')}
           </Typography>
@@ -159,7 +159,7 @@ const Login = () => {
               {t('auth.login.forgottenPassword')}
               <Link
                 component={RouterLink}
-                to="/forgottenPassword"
+                to="/forgot-password"
                 sx={{ ml: 1, fontWeight: 'bold', textDecoration: 'none' }}
               >
                 {t('auth.login.resetPassword')}

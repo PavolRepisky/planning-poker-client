@@ -1,13 +1,15 @@
 import { useGetUser } from 'auth/hooks/useGetUser';
 import { useLogin } from 'auth/hooks/useLogin';
+import { useLogout } from 'auth/hooks/useLogout';
 import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import React, { createContext, useContext } from 'react';
 import UserData from 'user/types/userData';
 
 interface AuthContextInterface {
   isLoggingIn: boolean;
+  isLoggingOut: boolean;
   login: (email: string, password: string) => Promise<any>;
-  logout: () => void;
+  logout: () => Promise<void>;
   userData?: UserData;
   authToken: string;
 }
@@ -26,6 +28,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   const { isLoggingIn, login } = useLogin();
+  const { isLoggingOut, logout } = useLogout();
   const { data: userData } = useGetUser(authToken);
 
   const handleLogin = async (email: string, password: string) => {
@@ -39,6 +42,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const handleLogout = async () => {
     try {
+      await logout({ authToken });
       setAuthToken('');
       setSocketConnectionId(null);
     } catch (err) {
@@ -50,6 +54,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         isLoggingIn,
+        isLoggingOut,
         login: handleLogin,
         logout: handleLogout,
         userData,

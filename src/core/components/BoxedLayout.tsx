@@ -17,10 +17,9 @@ import { Link as RouterLink } from 'react-router-dom';
 type BoxedLayoutProps = {
   children: React.ReactNode;
   maxWidth?: Breakpoint;
-  showLogo?: boolean;
 };
 
-const BoxedLayout = ({ children, maxWidth, showLogo }: BoxedLayoutProps) => {
+const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleSettingsToggle = () => {
@@ -31,18 +30,16 @@ const BoxedLayout = ({ children, maxWidth, showLogo }: BoxedLayoutProps) => {
     <Box component={Paper} height={'100vh'}>
       <AppBar color="transparent" position="relative">
         <Toolbar>
-          {showLogo && (
-            <IconButton
-              component={RouterLink}
-              to={'/login'}
-              sx={{ '&:hover': { background: 'transparent' } }}
-            >
-              <Logo size={24} sx={{ mr: 1 }} />
-              <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>
-                {process.env.REACT_APP_NAME}
-              </Typography>
-            </IconButton>
-          )}
+          <IconButton
+            component={RouterLink}
+            to={'/'}
+            sx={{ '&:hover': { background: 'transparent' } }}
+          >
+            <Logo size={24} sx={{ mr: 1 }} />
+            <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>
+              {process.env.REACT_APP_NAME}
+            </Typography>
+          </IconButton>
 
           <Box sx={{ flexGrow: 1 }} />
 
