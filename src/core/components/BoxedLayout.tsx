@@ -8,6 +8,7 @@ import {
   Paper,
   Toolbar,
   Typography,
+  useTheme,
 } from '@mui/material';
 import Logo from 'core/components/Logo';
 import SettingsDrawer from 'core/components/SettingsDrawer';
@@ -21,6 +22,7 @@ type BoxedLayoutProps = {
 
 const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const theme = useTheme();
 
   const handleSettingsToggle = () => {
     setSettingsOpen(!settingsOpen);
@@ -33,7 +35,10 @@ const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
           <IconButton
             component={RouterLink}
             to={'/'}
-            sx={{ '&:hover': { background: 'transparent' } }}
+            sx={{
+              '&:hover': { background: 'transparent' },
+              color: theme.palette.text.primary,
+            }}
           >
             <Logo size={24} sx={{ mr: 1 }} />
             <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>

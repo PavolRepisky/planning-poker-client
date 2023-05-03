@@ -4,14 +4,17 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  FormHelperText,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
 import passwordRegex from 'auth/types/passwordRegex';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
-import { transformToFormikErrorsObj } from 'core/utils/transform';
-import { ValidationError } from 'express-validator';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUpdatePassword } from 'user/hooks/useUpdatePassword';
 import * as yup from 'yup';
@@ -20,22 +23,41 @@ const ProfilePassword = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const { authToken } = useAuth();
-
   const { isUpdating, updatePassword } = useUpdatePassword();
+  const [passwordChangeStatus, setPasswordChangeStatus] = useState('');
 
   const validationSchema = yup.object({
     password: yup.string().required(t('common.validations.required')),
     newPassword: yup
       .string()
       .required(t('common.validations.required'))
-      .matches(passwordRegex, t('common.validations.password')),
+      .matches(passwordRegex, t('common.validations.password.weak')),
     confirmationPassword: yup
       .string()
       .required(t('common.validations.required'))
-      .oneOf([yup.ref('newPassword')], t('common.validations.passwordMatch')),
+      .oneOf([yup.ref('newPassword')], t('common.validations.password.match')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
+
+  const handleUpdatePassword = async (formData: FormData) => {
+    try {
+      await updatePassword({ ...formData, authToken });
+      formik.resetForm();
+      snackbar.success(t('profile.password.notifications.success'));
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        const validationErrors = err.response.data
+          .errors as ServerValidationError[];
+        formik.setErrors(parseValidationErrors(validationErrors));
+        return;
+      } else if (err.response && err.response.status === 401) {
+        setPasswordChangeStatus(t('auth.login.invalidCredentials'));
+        return;
+      }
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -43,32 +65,32 @@ const ProfilePassword = () => {
       newPassword: '',
       confirmationPassword: '',
     },
-    validationSchema: validationSchema,
-    onSubmit: (values) => handleUpdatePassword(values),
+    validationSchema,
+    onSubmit: handleUpdatePassword,
   });
 
-  const handleUpdatePassword = async (values: FormData) => {
-    try {
-      await updatePassword({ ...values, authToken });
-      formik.resetForm();
-      snackbar.success(t('profile.notifications.passwordChanged'));
-    } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        const validationErrors = err.response.data.errors as ValidationError[];
-        formik.setErrors(transformToFormikErrorsObj(validationErrors));
-        return;
-      } else if (err.response && err.response.status === 401) {
-        snackbar.warning(t('profile.notifications.wrongPassword'));
-        return;
-      }
-      snackbar.error(t('common.errors.unexpected.subTitle'));
-    }
-  };
-
   return (
-    <form onSubmit={formik.handleSubmit} noValidate>
+    <form
+      onSubmit={formik.handleSubmit}
+      onChange={() => setPasswordChangeStatus('')}
+      noValidate
+    >
       <Card>
         <CardHeader title={t('profile.password.title')} />
+
+        <CardContent sx={{ py: 0 }}>
+          {' '}
+          <FormHelperText
+            error={Boolean(passwordChangeStatus)}
+            component="h1"
+            sx={{ pt: 0 }}
+          >
+            <Typography variant="body1" sx={{ pt: 0 }}>
+              {passwordChangeStatus}
+            </Typography>
+          </FormHelperText>
+        </CardContent>
+
         <CardContent>
           <TextField
             required
@@ -121,6 +143,7 @@ const ProfilePassword = () => {
             }
           />
         </CardContent>
+
         <CardActions>
           <LoadingButton type="submit" loading={isUpdating} variant="contained">
             {t('common.update')}

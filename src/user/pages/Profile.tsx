@@ -56,6 +56,7 @@ const Profile = () => {
           </Fab>
         </Toolbar>
       </AppBar>
+
       <Grid container spacing={6}>
         <Grid item xs={12} md={4} marginTop={3}>
           <Box
@@ -78,6 +79,7 @@ const Profile = () => {
             >
               <PersonIcon sx={{ fontSize: 120 }} />
             </Avatar>
+
             <Typography
               component="div"
               variant="h4"
@@ -85,6 +87,7 @@ const Profile = () => {
             <Typography component="p">{`${userData?.email}`}</Typography>
           </Box>
         </Grid>
+
         <Grid item xs={12} md={8} marginTop={3}>
           <Box sx={{ mb: 4 }}>
             <Tabs

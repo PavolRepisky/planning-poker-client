@@ -225,6 +225,9 @@
         "lastName": {
           "label": "Last Name"
         }
+      },
+      "notifications": {
+        "success": "Information has been updated successfully!"
       }
     },
     "password": {
@@ -239,12 +242,10 @@
         "confirmationPassword": {
           "label": "Confirmation Password"
         }
+      },
+      "notifications": {
+        "success": "The password has been changed successfully!"
       }
-    },
-    "notifications": {
-      "informationUpdated": "Information has been updated successfully!",
-      "passwordChanged": "The password has been changed successfully!",
-      "wrongPassword": "Entered password is incorrect!"
     }
   },
   "matrix": {

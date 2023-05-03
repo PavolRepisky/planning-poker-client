@@ -9,17 +9,19 @@ import {
   Avatar,
   Box,
   Drawer,
+  IconButton,
   List,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Typography,
   useTheme,
 } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
 import Logo from 'core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from 'core/config/layout';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, Link as RouterLink, useLocation } from 'react-router-dom';
 
 type SidebarProps = {
   collapsed: boolean;
@@ -61,7 +63,28 @@ const Sidebar = ({
 
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
-      <Logo sx={{ display: 'flex', p: 4 }} />
+      <IconButton
+        component={RouterLink}
+        to={'/'}
+        sx={{
+          '&:hover': { background: 'transparent' },
+          p: 4,
+          display: 'flex',
+          justifyContent: 'left',
+          alignItems: 'center',
+          color: theme.palette.text.primary,
+        }}
+      >
+        <Logo size={24} sx={{ mr: 1 }} />
+        <Typography
+          variant="h5"
+          color="inherit"
+          noWrap
+          sx={{ mb: 1, display: collapsed ? 'none' : 'block' }}
+        >
+          {process.env.REACT_APP_NAME}
+        </Typography>
+      </IconButton>
 
       <List component="nav" sx={{ px: 2 }}>
         {menuItems.map((item) => (
