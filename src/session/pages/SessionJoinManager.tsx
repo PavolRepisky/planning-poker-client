@@ -63,7 +63,7 @@ const SessionJoinManager = () => {
       );
     }
     return (
-      <BoxedLayout title={data.session.name}>
+      <BoxedLayout>
         <Box sx={{ width: '100%' }}>
           <VotingSession
             session={data.session}

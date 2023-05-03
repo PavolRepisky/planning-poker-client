@@ -4,7 +4,7 @@ import UserData from 'user/types/userData';
 
 const fetchUser = async (authToken?: string): Promise<UserData | null> => {
   try {
-    const { data } = await axios.get('/me', {
+    const { data } = await axios.get('/users', {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -17,7 +17,7 @@ const fetchUser = async (authToken?: string): Promise<UserData | null> => {
 
 export const useGetUser = (authToken?: string) => {
   const { data } = useQuery(
-    ['user-info', authToken],
+    ['user-data', authToken],
     () => fetchUser(authToken),
     {
       enabled: !!authToken,

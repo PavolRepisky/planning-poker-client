@@ -1,6 +1,5 @@
 import PrivateRoutes from 'core/components/PrivateRoutes';
 import PublicRoutes from 'core/components/PublicRoutes';
-import QueryWrapper from 'core/components/QueryWrapper';
 import { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -33,16 +32,14 @@ const SessionJoinManager = lazy(
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-
-      <Route path="/" element={<AppLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="sessions/:hashId" element={<SessionJoinManager />} />
       </Route>
 
       <Route element={<PrivateRoutes />}>
-        <Route path="/" element={<AppLayout />}>
-          <Route path="matrices" element={<MatrixManagement />} />
-          <Route path="matrices/:matrixId" element={<MatrixView />} />
+        <Route element={<AppLayout />}>
+          <Route path="/matrices" element={<MatrixManagement />} />
+          <Route path="/matrices/:matrixId" element={<MatrixView />} />
 
           <Route path="sessions" element={<SessionHomepage />} />
 
@@ -54,18 +51,10 @@ const AppRoutes = () => {
       </Route>
 
       <Route element={<PublicRoutes />}>
+        <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Route>
-
-      <Route
-        path="test"
-        element={
-          <QueryWrapper>
-            <div>Test</div>
-          </QueryWrapper>
-        }
-      />
 
       <Route path="404" element={<NotFound />} />
       <Route path="*" element={<Navigate to={`/404`} replace />} />

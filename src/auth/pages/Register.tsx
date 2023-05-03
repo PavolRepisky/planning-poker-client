@@ -1,16 +1,23 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Link as MuiLink, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Link as MuiLink,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useRegister } from 'auth/hooks/useRegister';
 import passwordRegex from 'auth/types/passwordRegex';
 import BoxedLayout from 'core/components/BoxedLayout';
-import { transformToFormikErrorsObj } from 'core/utils/transform';
-import { ValidationError } from 'express-validator';
+import config from 'core/config/config';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import * as yup from 'yup';
-import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -21,29 +28,46 @@ const Register = () => {
   const validationSchema = yup.object({
     firstName: yup
       .string()
-      .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .trim()
+      .required('common.validations.required')
+      .max(config.maxNameLength, t('common.validations.string.max')),
     lastName: yup
       .string()
-      .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .trim()
+      .required('common.validations.required')
+      .max(config.maxNameLength, t('common.validations.string.max')),
     email: yup
       .string()
-      .required(t('common.validations.required'))
-      .email(t('common.validations.email')),
+      .trim()
+      .required('common.validations.required')
+      .email('common.validations.email.invalid'),
     password: yup
       .string()
-      .required(t('common.validations.required'))
-      .matches(passwordRegex, t('common.validations.password')),
+      .required('common.validations.required')
+      .matches(passwordRegex, 'common.validations.password.weak'),
     confirmationPassword: yup
       .string()
-      .required(t('common.validations.required'))
-      .oneOf([yup.ref('password')], t('common.validations.passwordMatch')),
+      .required('common.validations.required')
+      .oneOf([yup.ref('password')], 'common.validations.password.match'),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
+
+  const handleRegister = async (formData: FormData) => {
+    try {
+      await register(formData);
+      snackbar.success(t('auth.register.notifications.accountCreated'));
+      navigate('/login');
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        const validationErrors = err.response.data
+          .errors as ServerValidationError[];
+        formik.setErrors(parseValidationErrors(validationErrors));
+        return;
+      }
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -54,29 +78,15 @@ const Register = () => {
       confirmationPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => handleRegister(values),
+    onSubmit: handleRegister,
   });
 
-  const handleRegister = async (values: FormData) => {
-    try {
-      await register(values);
-      snackbar.success(t('auth.register.notifications.accountCreated'));
-      navigate('/login');
-    } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        const validationErrors = err.response.data.errors as ValidationError[];
-        formik.setErrors(transformToFormikErrorsObj(validationErrors));
-        return;
-      }
-      snackbar.error(t('common.errors.unexpected.subTitle'));
-    }
-  };
-
   return (
-    <BoxedLayout maxWidth="xs">
+    <BoxedLayout maxWidth="xs" showLogo={true}>
       <Typography component="h1" variant="h4">
         {t('auth.register.title')}
       </Typography>
+
       <Box
         component="form"
         marginTop={3}
@@ -159,6 +169,7 @@ const Register = () => {
             formik.errors.confirmationPassword
           }
         />
+
         <LoadingButton
           type="submit"
           fullWidth
@@ -169,11 +180,12 @@ const Register = () => {
         >
           {t('auth.register.form.submit')}
         </LoadingButton>
+
         <Typography
           component="h1"
           variant="body1"
           textAlign="center"
-          sx={{ my: 3 }}
+          sx={{ mt: 3 }}
         >
           {t('auth.register.haveAccount')}
           <MuiLink
@@ -181,10 +193,14 @@ const Register = () => {
             to="/login"
             sx={{ ml: 1, fontWeight: 'bold', textDecoration: 'none' }}
           >
-            {t('auth.register.login')}
+            {t('common.login')}
           </MuiLink>
         </Typography>
       </Box>
+
+      <Button component={RouterLink} to={'/'} variant="outlined" sx={{ mt: 5 }}>
+        {t('common.backHome')}
+      </Button>
     </BoxedLayout>
   );
 };

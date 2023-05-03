@@ -1,8 +1,8 @@
 import { useGetUser } from 'auth/hooks/useGetUser';
 import { useLogin } from 'auth/hooks/useLogin';
+import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import React, { createContext, useContext } from 'react';
 import UserData from 'user/types/userData';
-import { useLocalStorage } from '../../core/hooks/useLocalStorage';
 
 interface AuthContextInterface {
   isLoggingIn: boolean;
@@ -30,9 +30,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const data = await login({ email, password });
-      setAuthToken(data.data.token);
-      return data;
+      const accessToken = await login({ email, password });
+      setAuthToken(accessToken);
     } catch (err) {
       throw err;
     }

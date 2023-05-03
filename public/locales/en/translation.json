@@ -9,6 +9,15 @@
     "view": "View",
     "login": "Login",
     "register": "Register",
+    "reset": "Reset",
+    "retry": "Try Again",
+    "selected": "Selected",
+    "update": "Update",
+    "snackbar": {
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning"
+    },
     "errors": {
       "forbidden": {
         "subTitle": "You don't have access to view this page",
@@ -21,45 +30,34 @@
       "unexpected": {
         "subTitle": "Something went wrong! If the problem persists, contact us!",
         "title": "Oops!"
-      },
-      "underConstructions": {
-        "subTitle": "We are actively working on this page.",
-        "title": "Under constructions!"
       }
     },
-    "reset": "Reset",
-    "retry": "Try Again",
-    "selected": "Selected",
-    "snackbar": {
-      "error": "Error",
-      "success": "Success",
-      "warning": "Warning"
-    },
-    "update": "Update",
     "validations": {
-      "email": "Invalid email address",
-      "password": "Must be at least 8 characters, must contain a lower and upper case letter and a digit",
-      "passwordMatch": "Password does not match",
-      "maxChar": "Must be {{size}} characters or less",
-      "minChar": "Must be {{size}} characters or more",
-      "minNum": "Must be at least {{num}} or bigger",
-      "required": "Required field",
-      "nonEmptyValues": "Must contain non-empty values",
-      "uniqueValues": "All values must be unique",
-      "format": "Must have correct format",
-      "integer": "Must be an integer",
-      "invalid": "Invalid value",
-      "hashId": "Session with given id does not exist"
-    }
-  },
-  "sidebar": {
-    "menu": {
-      "dashboard": "Dashboard",
-      "help": "Help",
-      "home": "Home",
-      "settings": "Settings",
-      "matrixManagement": "Card Decks",
-      "sessionManagement": "Sessions"
+      "required": "The field is required",
+      "type": "Invalid value type",
+      "string": {
+        "max": "Value is too long",
+        "min": "Value is too short"
+      },
+      "integer": {
+        "max": "Value is too big",
+        "min": "Value is too low"
+      },
+      "email": {
+        "invalid": "E-mail address is invalid",
+        "taken": "E-mail address is already in use"
+      },
+      "password": {
+        "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
+        "match": "Passwords must match"
+      },
+      "matrix": {
+        "uniqueValues": "All values must be different",
+        "taken": "Name is already taken"
+      },
+      "session": {
+        "matrixId": "Matrix with given id does not exist"
+      }
     }
   },
   "landing": {
@@ -93,6 +91,59 @@
       "noPersonalDetails": "No unnecessary personal details needed"
     }
   },
+  "sidebar": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "help": "Help",
+      "home": "Home",
+      "settings": "Settings",
+      "matrixManagement": "Card Decks",
+      "sessionManagement": "Sessions"
+    }
+  },
+  "auth": {
+    "register": {
+      "title": "Register",
+      "form": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        },
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
+        },
+        "submit": "Register"
+      },
+      "notifications": {
+        "accountCreated": "Your account has been created successfully!"
+      },
+      "haveAccount": "Already have an account?"
+    },
+    "login": {
+      "title": "Log in",
+      "form": {
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        },
+        "submit": "Log In"
+      },
+      "invalidCredentials": "Incorrect e-mail address or password",
+      "noAccount": "Don't have an account yet?",
+      "forgottenPassword": "Forgotten password?",
+      "resetPassword": "Reset Password"
+    }
+  },
   "settings": {
     "drawer": {
       "direction": {
@@ -124,51 +175,6 @@
         }
       },
       "title": "Settings"
-    }
-  },
-  "auth": {
-    "register": {
-      "title": "Register",
-      "form": {
-        "firstName": {
-          "label": "First Name"
-        },
-        "lastName": {
-          "label": "Last Name"
-        },
-        "email": {
-          "label": "E-mail Address"
-        },
-        "password": {
-          "label": "Password"
-        },
-        "confirmationPassword": {
-          "label": "Confirmation Password"
-        },
-        "submit": "Register"
-      },
-      "notifications": {
-        "accountCreated": "Your account has been created successfully!"
-      },
-      "login": "Log in",
-      "haveAccount": "Already have an account?"
-    },
-    "login": {
-      "title": "Log in",
-      "form": {
-        "email": {
-          "label": "E-mail Address"
-        },
-        "password": {
-          "label": "Password"
-        },
-        "submit": "Log In"
-      },
-      "notifications": {
-        "invalidCredentials": "Invalid login credentials. Please check your e-mail address and password and try again."
-      },
-      "noAccount": "Don't have an account yet?",
-      "register": "Register"
     }
   },
   "profile": {

@@ -1,37 +1,62 @@
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
+  Button,
+  FormHelperText,
   Grid,
-  Link as MuiLink,
+  Link,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
-import { transformToFormikErrorsObj } from 'core/utils/transform';
-import { ValidationError } from 'express-validator';
+import { useAuth } from 'auth/contexts/AuthProvider';
+import BoxedLayout from 'core/components/BoxedLayout';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import BoxedLayout from '../../core/components/BoxedLayout';
-import { useSnackbar } from '../../core/contexts/SnackbarProvider';
-import { useAuth } from '../contexts/AuthProvider';
 
 const Login = () => {
   const { isLoggingIn, login } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const snackbar = useSnackbar();
+  const [loginStatus, setLoginStatus] = useState('');
 
   const validationSchema = yup.object({
     email: yup
       .string()
-      .required(t('common.validations.required'))
-      .email(t('common.validations.email')),
-    password: yup.string().required(t('common.validations.required')),
+      .trim()
+      .required('common.validations.required')
+      .email('common.validations.email.invalid'),
+    password: yup.string().required('common.validations.required'),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
+
+  const handleLogin = async (formData: FormData) => {
+    try {
+      const { email, password } = formData;
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        const validationErrors = err.response.data
+          .errors as ServerValidationError[];
+        formik.setErrors(parseValidationErrors(validationErrors));
+        return;
+      }
+      if (err.response && err.response.status === 401) {
+        setLoginStatus(t('auth.login.invalidCredentials'));
+        return;
+      }
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -39,51 +64,40 @@ const Login = () => {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values: FormData) => handleLogin(values.email, values.password),
+    onSubmit: handleLogin,
   });
-
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      await login(email, password);
-      navigate('/dashboard');
-    } catch (err: any) {
-      if (err.response && err.response.status === 400) {
-        const validationErrors = err.response.data.errors as ValidationError[];
-        formik.setErrors(transformToFormikErrorsObj(validationErrors));
-        return;
-      } else if (err.response && err.response.status === 401) {
-        snackbar.warning(t('auth.login.notifications.fail'));
-        return;
-      }
-      snackbar.error(t('common.errors.unexpected.subTitle'));
-    }
-  };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
         item
         xs={false}
-        sm={false}
         md={7}
         sx={{
           backgroundImage: 'url(./images/login.svg)',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '60%',
+          backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       />
-      <Grid item xs={12} sm={12} md={5} component={Paper} square>
-        <BoxedLayout maxWidth='xs'>
+
+      <Grid item xs={12} md={5} component={Paper} square>
+        <BoxedLayout maxWidth="xs" showLogo={true}>
           <Typography component="h1" variant="h4">
             {t('auth.login.title')}
           </Typography>
+
+          <FormHelperText error={Boolean(loginStatus)} component="h1">
+            <Typography variant="body1">{loginStatus}</Typography>
+          </FormHelperText>
+
           <Box
             component="form"
             marginTop={3}
             noValidate
             onSubmit={formik.handleSubmit}
-            maxWidth='xs'
+            maxWidth="xs"
+            onChange={() => setLoginStatus('')}
           >
             <TextField
               required
@@ -100,6 +114,7 @@ const Login = () => {
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
             />
+
             <TextField
               required
               fullWidth
@@ -114,6 +129,7 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
+
             <LoadingButton
               type="submit"
               fullWidth
@@ -122,22 +138,43 @@ const Login = () => {
             >
               {t('auth.login.form.submit')}
             </LoadingButton>
+
             <Typography
               component="h1"
               variant="body1"
               textAlign="center"
-              sx={{ mt: 3 }}
+              sx={{ mt: 5, mb: 2 }}
             >
               {t('auth.login.noAccount')}
-              <MuiLink
-                component={Link}
+              <Link
+                component={RouterLink}
                 to="/register"
                 sx={{ ml: 1, fontWeight: 'bold', textDecoration: 'none' }}
               >
-                {t('auth.login.register')}
-              </MuiLink>
+                {t('common.register')}
+              </Link>
+            </Typography>
+
+            <Typography component="h1" variant="body1" textAlign="center">
+              {t('auth.login.forgottenPassword')}
+              <Link
+                component={RouterLink}
+                to="/forgottenPassword"
+                sx={{ ml: 1, fontWeight: 'bold', textDecoration: 'none' }}
+              >
+                {t('auth.login.resetPassword')}
+              </Link>
             </Typography>
           </Box>
+
+          <Button
+            component={RouterLink}
+            to={'/'}
+            variant="outlined"
+            sx={{ mt: 5 }}
+          >
+            {t('common.backHome')}
+          </Button>
         </BoxedLayout>
       </Grid>
     </Grid>

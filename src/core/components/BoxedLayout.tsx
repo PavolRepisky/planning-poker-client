@@ -5,19 +5,22 @@ import {
   Breakpoint,
   Container,
   IconButton,
+  Paper,
   Toolbar,
   Typography,
 } from '@mui/material';
+import Logo from 'core/components/Logo';
 import SettingsDrawer from 'core/components/SettingsDrawer';
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 type BoxedLayoutProps = {
-  title?: string;
   children: React.ReactNode;
   maxWidth?: Breakpoint;
+  showLogo?: boolean;
 };
 
-const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
+const BoxedLayout = ({ children, maxWidth, showLogo }: BoxedLayoutProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleSettingsToggle = () => {
@@ -25,12 +28,21 @@ const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
   };
 
   return (
-    <React.Fragment>
+    <Box component={Paper} height={'100vh'}>
       <AppBar color="transparent" position="relative">
         <Toolbar>
-          <Typography component="h1" variant="h4">
-            {title}
-          </Typography>
+          {showLogo && (
+            <IconButton
+              component={RouterLink}
+              to={'/login'}
+              sx={{ '&:hover': { background: 'transparent' } }}
+            >
+              <Logo size={24} sx={{ mr: 1 }} />
+              <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>
+                {process.env.REACT_APP_NAME}
+              </Typography>
+            </IconButton>
+          )}
 
           <Box sx={{ flexGrow: 1 }} />
 
@@ -44,15 +56,12 @@ const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
         </Toolbar>
       </AppBar>
 
-      <Container component="main" maxWidth={maxWidth ?? false}>
+      <Container maxWidth={maxWidth ?? false}>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            width: '100%',
           }}
         >
           {children}
@@ -64,7 +73,7 @@ const BoxedLayout = ({ title, children, maxWidth }: BoxedLayoutProps) => {
           </Box>
         </Box>
       </Container>
-    </React.Fragment>
+    </Box>
   );
 };
 
