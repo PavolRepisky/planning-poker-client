@@ -4,19 +4,19 @@ import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import MatrixDialog from 'matrix/components/MatrixDialog';
 import MatrixTable from 'matrix/components/MatrixTable';
 import { useCreateMatrix } from 'matrix/hooks/useCreateMatrix';
 import { useDeleteMatrix } from 'matrix/hooks/useDeleteMatrix';
 import { useGetMatrices } from 'matrix/hooks/useGetMatrices';
 import { useUpdateMatrix } from 'matrix/hooks/useUpdateMatrix';
-import Matrix from 'matrix/types/MatrixData';
+import MatrixData from 'matrix/types/MatrixData';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 
-const MatrixManagement = () => {
+const MatrixHomepage = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const { authToken } = useAuth();
@@ -24,19 +24,19 @@ const MatrixManagement = () => {
 
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openMatrixDialog, setOpenMatrixDialog] = useState(false);
-  const [matrixDeleted, setMatrixDeleted] = useState<Matrix | undefined>();
-  const [matrixUpdated, setMatrixUpdated] = useState<Matrix | undefined>(
+  const [matrixDeleted, setMatrixDeleted] = useState<MatrixData | undefined>();
+  const [matrixUpdated, setMatrixUpdated] = useState<MatrixData | undefined>(
     undefined
   );
 
-  const { createMatrix, isCreating } = useCreateMatrix();
-  const { deleteMatrix, isDeleting } = useDeleteMatrix();
+  const { isCreating, createMatrix } = useCreateMatrix();
+  const { isDeleting, deleteMatrix } = useDeleteMatrix();
   const { isUpdating, updateMatrix } = useUpdateMatrix();
   const { data } = useGetMatrices(authToken);
 
   const processing = isCreating || isUpdating || isDeleting;
 
-  const handleCreateMatrix = async (matrix: Partial<Matrix>) => {
+  const handleCreateMatrix = async (matrix: Partial<MatrixData>) => {
     try {
       await createMatrix({
         matrix,
@@ -71,7 +71,7 @@ const MatrixManagement = () => {
     }
   };
 
-  const handleUpdateMatrix = async (matrix: Matrix) => {
+  const handleUpdateMatrix = async (matrix: MatrixData) => {
     try {
       await updateMatrix({ matrix, authToken });
       setOpenMatrixDialog(false);
@@ -85,25 +85,21 @@ const MatrixManagement = () => {
     }
   };
 
-  const handleCloseConfirmDeleteDialog = () => {
-    setOpenConfirmDeleteDialog(false);
-  };
-
   const handleCloseMatrixDialog = () => {
     setMatrixUpdated(undefined);
     setOpenMatrixDialog(false);
   };
 
-  const handleOpenConfirmDeleteDialog = (matrix: Matrix) => {
+  const handleOpenConfirmDeleteDialog = (matrix: MatrixData) => {
     setMatrixDeleted(matrix);
     setOpenConfirmDeleteDialog(true);
   };
 
-  const handleViewMatrix = (matrix: Matrix) => {
+  const handleViewMatrix = (matrix: MatrixData) => {
     navigate(`/matrices/${matrix.id}`);
   };
 
-  const handleOpenMatrixDialog = (matrix?: Matrix) => {
+  const handleOpenMatrixDialog = (matrix?: MatrixData) => {
     setMatrixUpdated(matrix);
     setOpenMatrixDialog(true);
   };
@@ -123,6 +119,7 @@ const MatrixManagement = () => {
           </Fab>
         </Toolbar>
       </AppBar>
+
       <MatrixTable
         processing={processing}
         onDelete={handleOpenConfirmDeleteDialog}
@@ -130,14 +127,16 @@ const MatrixManagement = () => {
         onView={handleViewMatrix}
         matrices={data}
       />
+
       <ConfirmDialog
         description={t('matrix.confirmations.delete')}
         pending={processing}
-        onClose={handleCloseConfirmDeleteDialog}
+        onClose={() => setOpenConfirmDeleteDialog(false)}
         onConfirm={handleDeleteMatrix}
         open={openConfirmDeleteDialog}
         title={t('common.confirmation')}
       />
+
       {openMatrixDialog && (
         <MatrixDialog
           onCreate={handleCreateMatrix}
@@ -152,4 +151,4 @@ const MatrixManagement = () => {
   );
 };
 
-export default MatrixManagement;
+export default MatrixHomepage;

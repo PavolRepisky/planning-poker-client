@@ -5,22 +5,22 @@ const config = {
 
   matrixMaxRows: !Number.isNaN(Number(process.env.REACT_APP_MATRIX_MAX_ROWS))
     ? Number(process.env.REACT_APP_MATRIX_MAX_ROWS)
-    : 50,
+    : 6,
 
   matrixMinRows: !Number.isNaN(Number(process.env.REACT_APP_MATRIX_MIN_ROWS))
     ? Number(process.env.REACT_APP_MATRIX_MIN_ROWS)
-    : 50,
+    : 1,
   matrixMaxColumns: !Number.isNaN(
     Number(process.env.REACT_APP_MATRIX_MAX_COLUMNS)
   )
     ? Number(process.env.REACT_APP_MATRIX_MAX_COLUMNS)
-    : 50,
+    : 6,
 
   matrixMinColumns: !Number.isNaN(
     Number(process.env.REACT_APP_MATRIX_MIN_COLUMNS)
   )
     ? Number(process.env.REACT_APP_MATRIX_MIN_COLUMNS)
-    : 50,
+    : 1,
 
   origin: process.env.REACT_APP_ORIGIN || 'http://localhost:3000',
 };

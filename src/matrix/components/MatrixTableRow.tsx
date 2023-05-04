@@ -74,9 +74,8 @@ const MatrixTableRow = ({
         align="center"
         sx={{ borderTopLeftRadius: '1rem', borderBottomLeftRadius: '1rem' }}
       >
-        {matrix.id}
+        {matrix.name}
       </TableCell>
-      <TableCell align="center">{matrix.name}</TableCell>
       <TableCell align="center">{matrix.rows}</TableCell>
       <TableCell align="center">{matrix.columns}</TableCell>
       <TableCell align="center">{formatDate(matrix.createdAt)}</TableCell>
@@ -96,6 +95,7 @@ const MatrixTableRow = ({
         >
           <MoreVertIcon />
         </IconButton>
+
         <Menu
           id="matrix-row-menu"
           anchorEl={anchorEl}
@@ -114,19 +114,21 @@ const MatrixTableRow = ({
           <MenuItem onClick={handleEdit}>
             <ListItemIcon>
               <EditIcon />
-            </ListItemIcon>{' '}
+            </ListItemIcon>
             {t('common.edit')}
           </MenuItem>
+
           <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <DeleteIcon />
-            </ListItemIcon>{' '}
+            </ListItemIcon>
             {t('common.delete')}
           </MenuItem>
+
           <MenuItem onClick={handleView}>
             <ListItemIcon>
               <DeleteIcon />
-            </ListItemIcon>{' '}
+            </ListItemIcon>
             {t('common.view')}
           </MenuItem>
         </Menu>

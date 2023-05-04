@@ -79,7 +79,6 @@ const ProfilePassword = () => {
         <CardHeader title={t('profile.password.title')} />
 
         <CardContent sx={{ py: 0 }}>
-          {' '}
           <FormHelperText
             error={Boolean(passwordChangeStatus)}
             component="h1"

@@ -123,7 +123,7 @@
         "submit": "Register"
       },
       "notifications": {
-        "success": "Your account has been created successfully!"
+        "success": "Your account has been created successfully! Verify your e-mail to be able to log in."
       },
       "haveAccount": "Already have an account?"
     },
@@ -284,7 +284,6 @@
     "table": {
       "headers": {
         "actions": "Actions",
-        "id": "ID",
         "name": "Name",
         "rows": "Rows",
         "columns": "Columns",

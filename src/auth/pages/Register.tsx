@@ -56,7 +56,7 @@ const Register = () => {
   const handleRegister = async (formData: FormData) => {
     try {
       await register(formData);
-      snackbar.success(t('auth.register.notifications.accountCreated'));
+      snackbar.success(t('auth.register.notifications.success'));
       navigate('/login');
     } catch (err: any) {
       if (err.response && err.response.status === 400) {

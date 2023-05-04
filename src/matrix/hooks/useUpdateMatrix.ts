@@ -28,6 +28,8 @@ export const useUpdateMatrix = () => {
       queryClient.setQueryData<Matrix[]>(['matrices'], (oldMatrices) =>
         updateOne(oldMatrices, matrix)
       );
+
+      queryClient.setQueryData<Matrix>(['matrix', matrix.id], matrix);
     },
   });
 

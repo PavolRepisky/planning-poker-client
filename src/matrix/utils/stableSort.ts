@@ -1,6 +1,6 @@
 export const stableSort = <T>(
   array: readonly T[],
-  comparator: (a: T, b: T) => number
+  comparator: (a: any, b: any) => number
 ) => {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {

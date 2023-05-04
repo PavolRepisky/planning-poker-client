@@ -5,13 +5,13 @@ import {
   TablePagination,
 } from '@mui/material';
 import Empty from 'core/components/Empty';
+import MatrixTableHead from 'matrix/components/MatrixTableHead';
+import MatrixTableRow from 'matrix/components/MatrixTableRow';
 import MatrixData from 'matrix/types/MatrixData';
 import { descendingComparator } from 'matrix/utils/descendingComparator';
 import { stableSort } from 'matrix/utils/stableSort';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import MatrixTableHead from './MatrixTableHead';
-import MatrixTableRow from './MatrixTableRow';
 
 type Order = 'asc' | 'desc';
 
@@ -72,13 +72,6 @@ const MatrixTable = ({
     return <Empty title={t('matrix.table.empty')} />;
   }
 
-  const stringifiedMatrices = matrices.map((matrix) => {
-    return {
-      ...matrix,
-      values: JSON.stringify(matrix.values),
-    };
-  });
-
   return (
     <React.Fragment>
       <TableContainer>
@@ -95,13 +88,11 @@ const MatrixTable = ({
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
           />
+
           <TableBody>
-            {stableSort(stringifiedMatrices, getComparator(order, orderBy))
+            {stableSort(matrices, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((matrix, index) => {
-                const originalMatrix = matrices.find(
-                  (matrixObj) => matrixObj.id === matrix.id
-                );
                 return (
                   <MatrixTableRow
                     index={index}
@@ -110,13 +101,14 @@ const MatrixTable = ({
                     onEdit={onEdit}
                     onView={onView}
                     processing={processing}
-                    matrix={originalMatrix!}
+                    matrix={matrix}
                   />
                 );
               })}
           </TableBody>
         </Table>
       </TableContainer>
+
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"

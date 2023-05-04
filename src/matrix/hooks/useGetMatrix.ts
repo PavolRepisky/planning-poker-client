@@ -22,5 +22,8 @@ const fetchMatrix = async ({
 };
 
 export const useGetMatrix = (matrixId: number, authToken: string) => {
-  return useQuery(['matrix'], () => fetchMatrix({ matrixId, authToken }));
+  const { data } = useQuery(['matrix', matrixId], () =>
+    fetchMatrix({ matrixId, authToken })
+  );
+  return { data: data ?? undefined };
 };

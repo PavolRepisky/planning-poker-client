@@ -23,8 +23,8 @@ const ProfileInformation = lazy(
 const ProfilePassword = lazy(() => import('./user/pages/ProfilePassword'));
 
 // Matrix
-const MatrixManagement = lazy(() => import('./matrix/pages/MatrixManagement'));
-const MatrixView = lazy(() => import('./matrix/pages/MatrixView'));
+const MatrixHomepage = lazy(() => import('./matrix/pages/MatrixHomepage'));
+const MatrixDetail = lazy(() => import('./matrix/pages/MatrixDetail'));
 
 // Session
 const SessionHomepage = lazy(() => import('./session/pages/SessionHomepage'));
@@ -44,8 +44,8 @@ const AppRoutes = () => {
 
       <Route element={<PrivateRoutes />}>
         <Route element={<AppLayout />}>
-          <Route path="/matrices" element={<MatrixManagement />} />
-          <Route path="/matrices/:matrixId" element={<MatrixView />} />
+          <Route path="/matrices" element={<MatrixHomepage />} />
+          <Route path="/matrices/:matrixId" element={<MatrixDetail />} />
 
           <Route path="sessions" element={<SessionHomepage />} />
 

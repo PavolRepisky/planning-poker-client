@@ -17,11 +17,6 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: 'id',
-    align: 'center',
-    label: 'matrix.table.headers.id',
-  },
-  {
     id: 'name',
     align: 'center',
     label: 'matrix.table.headers.name',
@@ -91,6 +86,7 @@ const MatrixTableHead = ({
             </TableSortLabel>
           </TableCell>
         ))}
+
         <TableCell align="right" sx={{ py: 0 }}>
           {t('matrix.table.headers.actions')}
         </TableCell>
