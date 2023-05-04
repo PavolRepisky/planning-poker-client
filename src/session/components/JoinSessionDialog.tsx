@@ -15,29 +15,31 @@ import { useNavigate } from 'react-router';
 import { useJoinSession } from 'session/hooks/useJoinSession';
 import * as yup from 'yup';
 
-type JoinSessionModalProps = {
+type JoinSessionDialogProps = {
   onClose: () => void;
   open: boolean;
 };
 
-const JoinSessionModal = ({ onClose, open }: JoinSessionModalProps) => {
+const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
   const { t } = useTranslation();
   const snackbar = useSnackbar();
   const { authToken } = useAuth();
   const navigate = useNavigate();
   const { isJoining, joinSession } = useJoinSession();
 
-  const handleSubmit = async ({
-    hashId,
-  }: {
-    hashId: string;
-  }): Promise<void> => {
+  const validationSchema = yup.object({
+    hashId: yup.string().required(t('common.validations.required')),
+  });
+
+  type FormData = yup.InferType<typeof validationSchema>;
+
+  const handleSubmit = async (formData: FormData): Promise<void> => {
     try {
-      const data = await joinSession({ hashId, authToken });
+      const data = await joinSession({ hashId: formData.hashId, authToken });
       navigate(`/sessions/${data.session.hashId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {
-        formik.setFieldError('hashId', t('common.validations.hashId'));
+        formik.setFieldError('hashId', t('common.validations.session.id'));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
@@ -49,9 +51,7 @@ const JoinSessionModal = ({ onClose, open }: JoinSessionModalProps) => {
     initialValues: {
       hashId: '',
     },
-    validationSchema: yup.object({
-      hashId: yup.string().required(t('common.validations.required')),
-    }),
+    validationSchema,
     onSubmit: handleSubmit,
   });
 
@@ -88,6 +88,7 @@ const JoinSessionModal = ({ onClose, open }: JoinSessionModalProps) => {
 
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
+
           <LoadingButton loading={isJoining} type="submit" variant="contained">
             {t('session.modal.join.form.submit')}
           </LoadingButton>
@@ -97,4 +98,4 @@ const JoinSessionModal = ({ onClose, open }: JoinSessionModalProps) => {
   );
 };
 
-export default JoinSessionModal;
+export default JoinSessionDialog;

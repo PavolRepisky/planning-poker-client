@@ -7,13 +7,14 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import config from 'core/config/config';
 import { transformToFormikErrorsObj } from 'core/utils/transform';
 import { ValidationError } from 'express-validator';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-type CreateVotingModalProps = {
+type CreateVotingDialogProps = {
   onCreate: (votingData: {
     name: string;
     description?: string;
@@ -23,19 +24,26 @@ type CreateVotingModalProps = {
   processing: boolean;
 };
 
-const CreateVotingModal = ({
+const CreateVotingDialog = ({
   onCreate,
   onClose,
   open,
   processing,
-}: CreateVotingModalProps) => {
+}: CreateVotingDialogProps) => {
   const { t } = useTranslation();
 
-  const handleSubmit = async (votingData: {
-    name: string;
-    description?: string;
-  }) => {
-    const serverErrors = await onCreate(votingData);
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .trim()
+      .required(t('common.validations.required'))
+      .max(config.maxNameLength, t('common.validations.string.max')),
+  });
+
+  type FormData = yup.InferType<typeof validationSchema>;
+
+  const handleSubmit = async (formData: FormData) => {
+    const serverErrors = await onCreate(formData);
     formik.setErrors(transformToFormikErrorsObj(serverErrors));
   };
 
@@ -44,13 +52,7 @@ const CreateVotingModal = ({
       name: '',
       description: '',
     },
-    validationSchema: yup.object({
-      name: yup
-        .string()
-        .required(t('common.validations.required'))
-        .min(3, t('common.validations.minChar', { size: 3 }))
-        .max(50, t('common.validations.maxChar', { size: 50 })),
-    }),
+    validationSchema,
     onSubmit: handleSubmit,
   });
 
@@ -64,15 +66,16 @@ const CreateVotingModal = ({
     >
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="create-voting-dialog-title">
-          {t('session.modal.createVoting.title')}
+          {t('session.dialog.createVoting.title')}
         </DialogTitle>
+
         <DialogContent>
           <TextField
             margin="normal"
             required
             fullWidth
             id="name"
-            label={t('session.modal.createVoting.form.name.label')}
+            label={t('session.dialog.createVoting.form.name.label')}
             name="name"
             type="text"
             autoFocus
@@ -87,7 +90,7 @@ const CreateVotingModal = ({
             required
             fullWidth
             id="description"
-            label={t('session.modal.createVoting.form.description.label')}
+            label={t('session.dialog.createVoting.form.description.label')}
             name="description"
             type="text"
             autoFocus
@@ -100,10 +103,12 @@ const CreateVotingModal = ({
             helperText={formik.touched.description && formik.errors.description}
           />
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
+
           <LoadingButton loading={processing} type="submit" variant="contained">
-            {t('session.modal.createVoting.form.submit')}
+            {t('session.dialog.createVoting.form.submit')}
           </LoadingButton>
         </DialogActions>
       </form>
@@ -111,4 +116,4 @@ const CreateVotingModal = ({
   );
 };
 
-export default CreateVotingModal;
+export default CreateVotingDialog;

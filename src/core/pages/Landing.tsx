@@ -15,7 +15,7 @@ import {
 import Feature from 'core/components/Feature';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import JoinSessionModal from 'session/components/JoinSessionModal';
+import JoinSessionModal from 'session/components/JoinSessionDialog';
 import LandingLayout from '../components/LandingLayout';
 
 const listFeatures = [
@@ -54,7 +54,10 @@ const Landing = () => {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="outlined" onClick={() => setOpenJoinModal(true)}>
+              <Button
+                variant="contained"
+                onClick={() => setOpenJoinModal(true)}
+              >
                 {t('landing.join')}
               </Button>
             </Stack>

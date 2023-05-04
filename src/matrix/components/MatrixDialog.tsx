@@ -119,8 +119,8 @@ const MatrixDialog = ({
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="matrix-dialog-title">
           {editMode
-            ? t('matrix.modal.edit.title')
-            : t('matrix.modal.add.title')}
+            ? t('matrix.dialog.edit.title')
+            : t('matrix.dialog.add.title')}
         </DialogTitle>
 
         <DialogContent>
@@ -147,8 +147,8 @@ const MatrixDialog = ({
           <Button onClick={onClose}>{t('common.cancel')}</Button>
           <LoadingButton loading={processing} type="submit" variant="contained">
             {editMode
-              ? t('matrix.modal.edit.action')
-              : t('matrix.modal.add.action')}
+              ? t('matrix.dialog.edit.action')
+              : t('matrix.dialog.add.action')}
           </LoadingButton>
         </DialogActions>
       </form>

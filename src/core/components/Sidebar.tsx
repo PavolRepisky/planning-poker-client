@@ -38,12 +38,12 @@ export const menuItems = [
   },
   {
     icon: StyleIcon,
-    key: 'sidebar.menu.matrixManagement',
+    key: 'sidebar.menu.matrix',
     path: '/matrices',
   },
   {
     icon: HowToVoteIcon,
-    key: 'sidebar.menu.sessionManagement',
+    key: 'sidebar.menu.session',
     path: '/sessions',
   },
 ];
@@ -98,8 +98,9 @@ const Sidebar = ({
                 ? {
                     backgroundColor: theme.palette.background.default,
                     color: theme.palette.text.primary,
+                    mb: 1,
                   }
-                : {}
+                : { mb: 1 }
             }
           >
             <ListItemAvatar>
@@ -130,8 +131,9 @@ const Sidebar = ({
               ? {
                   backgroundColor: theme.palette.background.default,
                   color: theme.palette.text.primary,
+                  mb: 1,
                 }
-              : {}
+              : { mb: 1 }
           }
         >
           <ListItemAvatar>

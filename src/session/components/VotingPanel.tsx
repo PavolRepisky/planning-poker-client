@@ -14,11 +14,12 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useCreateVoting } from 'session/hooks/useCreateVoting';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
-import CreateVotingModal from './CreateVotingModal';
+import CreateVotingModal from './CreateVotingDialog';
 
 interface VotingPanelProps {
   voting?: SocketSessionVotingData;
-  isModerator: boolean;
+  isAdmin: boolean;
+  showVotes: boolean;
   onShowVotes: () => void;
   onCreateSuccess: (votingData: { name: string; description?: string }) => void;
   sessionHashId: string;
@@ -26,7 +27,8 @@ interface VotingPanelProps {
 
 const VotingPanel = ({
   voting,
-  isModerator,
+  isAdmin,
+  showVotes,
   onShowVotes,
   onCreateSuccess,
   sessionHashId,
@@ -34,7 +36,7 @@ const VotingPanel = ({
   const snackbar = useSnackbar();
   const { authToken } = useAuth();
   const { isCreating, createVoting } = useCreateVoting();
-  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
   const handleCreateVoting = async (votingData: {
     name: string;
@@ -50,8 +52,8 @@ const VotingPanel = ({
         name: createdVoting.name,
         description: createdVoting.description,
       });
-      snackbar.success(t('session.notifications.votingCreated'));
-      setOpenCreateModal(false);
+      snackbar.success(t('session.createVoting.notifications.success'));
+      setOpenCreateDialog(false);
 
       return [];
     } catch (err: any) {
@@ -59,16 +61,14 @@ const VotingPanel = ({
         return err.response.data.errors as ValidationError[];
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
-      setOpenCreateModal(false);
+      setOpenCreateDialog(false);
       return [];
     }
   };
 
   let title = voting?.name;
   if (!voting) {
-    title = isModerator
-      ? t('session.voting.toStart')
-      : t('session.voting.waiting');
+    title = isAdmin ? t('session.toStart') : t('session.waiting');
   }
 
   return (
@@ -85,28 +85,33 @@ const VotingPanel = ({
         )}
 
         <CardActions>
-          {isModerator && (
+          {isAdmin && (
             <Box sx={{ mt: 1 }}>
               <Button
                 variant="contained"
-                onClick={() => setOpenCreateModal(true)}
+                onClick={() => setOpenCreateDialog(true)}
                 sx={{ mr: { xs: 1, md: 2 } }}
               >
-                {t('session.voting.createVoting')}
+                {t('session.createVoting')}
               </Button>
-              <Button variant="outlined" onClick={onShowVotes}>
-                {t('session.voting.showVotes')}
+
+              <Button
+                variant="outlined"
+                onClick={onShowVotes}
+                disabled={showVotes}
+              >
+                {t('session.showVotes')}
               </Button>
             </Box>
           )}
         </CardActions>
       </Card>
 
-      {openCreateModal && (
+      {openCreateDialog && (
         <CreateVotingModal
           onCreate={handleCreateVoting}
-          onClose={() => setOpenCreateModal(false)}
-          open={openCreateModal}
+          onClose={() => setOpenCreateDialog(false)}
+          open={openCreateDialog}
           processing={isCreating}
         />
       )}

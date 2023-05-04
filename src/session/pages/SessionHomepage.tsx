@@ -5,13 +5,12 @@ import Toolbar from 'core/components/Toolbar';
 import { useGetMatrices } from 'matrix/hooks/useGetMatrices';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CreateSessionModal from 'session/components/CreateSessionModal';
-import JoinSessionModal from 'session/components/JoinSessionModal';
+import CreateSessionModal from 'session/components/CreateSessionDialog';
+import JoinSessionModal from 'session/components/JoinSessionDialog';
 
 const SessionHomepage = () => {
   const { t } = useTranslation();
   const { authToken } = useAuth();
-
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openJoinModal, setOpenJoinModal] = useState(false);
   const { data } = useGetMatrices(authToken);

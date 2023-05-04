@@ -56,7 +56,8 @@
         "taken": "Name is already taken"
       },
       "session": {
-        "matrixId": "Matrix with given id does not exist"
+        "matrixId": "Matrix with given id does not exist",
+        "id": "Session with given id does not exist"
       }
     }
   },
@@ -97,8 +98,8 @@
       "help": "Help",
       "home": "Home",
       "settings": "Settings",
-      "matrixManagement": "Card Decks",
-      "sessionManagement": "Sessions"
+      "matrix": "Card Decks",
+      "session": "Voting Sessions"
     }
   },
   "auth": {
@@ -266,7 +267,7 @@
         "label": "Values"
       }
     },
-    "modal": {
+    "dialog": {
       "add": {
         "action": "Add",
         "title": "Add Card Deck"
@@ -301,7 +302,7 @@
       "join": "Join Voting Session",
       "create": "Create Voting Session"
     },
-    "modal": {
+    "dialog": {
       "join": {
         "title": "Join Voting Session",
         "form": {
@@ -321,6 +322,9 @@
             "label": "Matrix ID"
           },
           "submit": "Create"
+        },
+        "notifications": {
+          "success": "Voting session has been created successfully!"
         }
       },
       "createVoting": {
@@ -333,6 +337,9 @@
             "label": "Description"
           },
           "submit": "Create"
+        },
+        "notifications": {
+          "success": "Voting has been created successfully!"
         }
       }
     },
@@ -348,19 +355,15 @@
           },
           "submit": "Join"
         }
+      },
+      "notifications": {
+        "success": "Voting session has been joined successfully!"
       }
     },
-    "voting": {
-      "waiting": "Waiting for moderator to create a voting",
-      "toStart": "Create a new voting to start",
-      "createVoting": "Create New Voting",
-      "showVotes": "Show Users Votes",
-      "players": "Players"
-    },
-    "notifications": {
-      "sessionCreated": "Voting session has been created successfully!",
-      "sessionJoined": "Voting session has been joined successfully!",
-      "votingCreated": "Voting has been created successfully!"
-    }
+    "waiting": "Waiting for moderator to create a voting",
+    "toStart": "Create a new voting to get started",
+    "createVoting": "Create New Voting",
+    "showVotes": "Show Users Votes",
+    "players": "Players"
   }
 }

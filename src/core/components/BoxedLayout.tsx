@@ -5,7 +5,6 @@ import {
   Breakpoint,
   Container,
   IconButton,
-  Paper,
   Toolbar,
   Typography,
   useTheme,
@@ -29,7 +28,7 @@ const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
   };
 
   return (
-    <Box component={Paper} height={'100vh'}>
+    <Box height={'100vh'}>
       <AppBar color="transparent" position="relative">
         <Toolbar>
           <IconButton

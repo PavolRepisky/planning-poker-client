@@ -1,4 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
+import config from 'core/config/config';
 import { useFormik } from 'formik';
 import { t } from 'i18next';
 import * as yup from 'yup';
@@ -11,14 +12,14 @@ const GuestForm = ({ onSubmit }: GuestFormProps) => {
   const validationSchema = yup.object({
     firstName: yup
       .string()
+      .trim()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .max(config.maxNameLength, t('common.validations.string.max')),
     lastName: yup
       .string()
+      .trim()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .max(config.maxNameLength, t('common.validations.string.max')),
   });
 
   const formik = useFormik({

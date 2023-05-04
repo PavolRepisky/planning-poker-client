@@ -17,7 +17,7 @@ const SessionJoinManager = () => {
   const { t } = useTranslation();
   const { hashId } = useParams();
   const navigate = useNavigate();
-  const { isJoining, joinSession } = useJoinSession();
+  const { joinSession } = useJoinSession();
   const [data, setData] = useState<{
     session: SessionData;
     matrix: MatrixData;
