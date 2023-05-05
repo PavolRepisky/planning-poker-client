@@ -13,6 +13,7 @@
     "retry": "Try Again",
     "selected": "Selected",
     "update": "Update",
+    "settings": "Settings",
     "snackbar": {
       "error": "Error",
       "success": "Success",
@@ -64,6 +65,7 @@
   "landing": {
     "title": "Completely free and open-source multidimensional planning poker tool for agile development teams",
     "join": "Join Voting Session",
+    "altDemo": "Application demo",
     "links": {
       "api": "API Source Code",
       "client": "Client Source Code"
@@ -71,19 +73,23 @@
     "features": {
       "builder": {
         "title": "Two-dimensional card deck builder",
-        "description": "Evaluate tasks based on multiple parameters, by using two-dimensional card decks."
+        "description": "Evaluate tasks based on multiple parameters, by using two-dimensional card decks.",
+        "imgAlt": "Showcase of two-dimensional card deck builder"
       },
       "realTime": {
         "title": "Real-time estimation",
-        "description": "Vote and estimate tasks in real-time, with our simple and intuitive interface."
+        "description": "Vote and estimate tasks in real-time, with our simple and intuitive interface.",
+        "imgAlt": "Showcase of estimation process"
       },
       "inGameVoting": {
         "title": "In-Game voting creation",
-        "description": "The session administrator can create a new vote at any time, regardless of the current state of the vote."
+        "description": "The session administrator can create a new vote at any time, regardless of the current state of the vote.",
+        "imgAlt": "Showcase of in-game voting creation"
       },
       "cardDeckManagement": {
         "title": "Card deck management",
-        "description": "Manage your card decks as you wish."
+        "description": "Manage your card decks as you wish.",
+        "imgAlt": "Showcase of card deck management"
       },
       "noLimits": "Free forever with no limits",
       "unlimitedSessions": "Unlimited number of voting sessions per user",

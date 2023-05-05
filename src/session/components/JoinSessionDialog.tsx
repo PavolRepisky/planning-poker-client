@@ -65,7 +65,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
     >
       <form onSubmit={formik.handleSubmit} noValidate>
         <DialogTitle id="join-session-dialog-title">
-          {t('session.modal.join.title')}
+          {t('session.dialog.join.title')}
         </DialogTitle>
 
         <DialogContent>
@@ -74,7 +74,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
             required
             fullWidth
             id="hashId"
-            label={t('session.modal.join.form.hashId.label')}
+            label={t('session.dialog.join.form.hashId.label')}
             name="hashId"
             type="text"
             autoFocus
@@ -90,7 +90,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
           <Button onClick={onClose}>{t('common.cancel')}</Button>
 
           <LoadingButton loading={isJoining} type="submit" variant="contained">
-            {t('session.modal.join.form.submit')}
+            {t('session.dialog.join.form.submit')}
           </LoadingButton>
         </DialogActions>
       </form>

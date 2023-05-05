@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Container,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -13,10 +14,10 @@ import {
   useTheme,
 } from '@mui/material';
 import Feature from 'core/components/Feature';
+import LandingLayout from 'core/components/LandingLayout';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import JoinSessionModal from 'session/components/JoinSessionDialog';
-import LandingLayout from '../components/LandingLayout';
 
 const listFeatures = [
   { name: 'landing.features.unlimitedSessions' },
@@ -73,7 +74,7 @@ const Landing = () => {
 
         <Container sx={{ py: 6 }} maxWidth="md">
           <img
-            alt="Application demo"
+            alt={t('landing.altDemo')}
             src={`images/placeholder.png`}
             style={{
               borderRadius: 24,
@@ -88,32 +89,32 @@ const Landing = () => {
         <Container sx={{ py: 8 }} maxWidth="lg">
           <Stack alignItems="center" spacing={5}>
             <Feature
-              title="landing.features.builder.title"
-              description="landing.features.builder.description"
+              title={t('landing.features.builder.title')}
+              description={t('landing.features.builder.title')}
               rightAlign={false}
               imageSrc="images/placeholder.png"
-              imageAlt="Card deck builder showcase"
+              imageAlt={t('landing.features.builder.imgAlt')}
             />
             <Feature
-              title="landing.features.realTime.title"
-              description="landing.features.realTime.description"
+              title={t('landing.features.realTime.title')}
+              description={t('landing.features.realTime.description')}
               rightAlign={true}
               imageSrc="images/placeholder.png"
-              imageAlt="Real time estimation showcase deck builder showcase"
+              imageAlt={t('landing.features.realTime.imgAlt')}
             />
             <Feature
-              title="landing.features.inGameVoting.title"
-              description="landing.features.inGameVoting.description"
+              title={t('landing.features.inGameVoting.title')}
+              description={t('landing.features.inGameVoting.description')}
               rightAlign={false}
               imageSrc="images/placeholder.png"
-              imageAlt="In-game voting showcase"
+              imageAlt={t('landing.features.inGameVoting.imgAlt')}
             />
             <Feature
-              title="landing.features.cardDeckManagement.title"
-              description="landing.features.cardDeckManagement.description"
+              title={t('landing.features.cardDeckManagement.title')}
+              description={t('landing.features.cardDeckManagement.description')}
               rightAlign={true}
               imageSrc="images/placeholder.png"
-              imageAlt="In-game voting showcase"
+              imageAlt={t('landing.features.cardDeckManagement.imgAlt')}
             />
           </Stack>
         </Container>
@@ -144,21 +145,24 @@ const Landing = () => {
 
             <Box sx={{ display: 'flex', mt: 5 }}>
               <Button
-                component="a"
+                component={Link}
                 href={process.env.REACT_APP_API_SOURCE_LINK}
                 rel="noopener noreferrer"
                 target="_blank"
                 variant="outlined"
                 sx={{ mr: 2 }}
+                role="link"
               >
                 {t('landing.links.api')}
               </Button>
+
               <Button
-                component="a"
+                component={Link}
                 href={process.env.REACT_APP_CLIENT_SOURCE_LINK}
                 rel="noopener noreferrer"
                 target="_blank"
                 variant="outlined"
+                role="link"
               >
                 {t('landing.links.client')}
               </Button>

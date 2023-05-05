@@ -30,17 +30,20 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
   return (
     <Paper square>
       <AppBar color="transparent" position="relative">
-        <Toolbar>
+        <Toolbar role="toolbar">
           <IconButton
             component={RouterLink}
-            to={'/login'}
+            to={'/'}
             sx={{ '&:hover': { background: 'transparent' } }}
+            role="img"
+            aria-label="Logo"
           >
             <Logo size={24} sx={{ mr: 1 }} />
             <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>
               {process.env.REACT_APP_NAME}
             </Typography>
           </IconButton>
+
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Button
@@ -63,7 +66,7 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
 
           <IconButton
             color="default"
-            aria-label="settings"
+            aria-label={t('common.settings')}
             component="span"
             onClick={handleSettingsToggle}
           >

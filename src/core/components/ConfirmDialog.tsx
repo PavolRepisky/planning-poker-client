@@ -31,15 +31,26 @@ const ConfirmDialog = ({
   const { t } = useTranslation();
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="confirm-dialog-title"
+      aria-describedby="confirm-dialog-description"
+    >
       <DialogContent sx={{ textAlign: 'center' }}>
         <SvgContainer>
           <ConfirmSvg style={{ maxWidth: 280, width: '100%' }} />
         </SvgContainer>
 
-        <DialogTitle sx={{ p: 0, mb: 1 }}>{title}</DialogTitle>
+        <DialogTitle id="confirm-dialog-title" sx={{ p: 0, mb: 1 }}>
+          {title}
+        </DialogTitle>
 
-        {description && <DialogContentText>{description}</DialogContentText>}
+        {description && (
+          <DialogContentText id="confirm-dialog-description">
+            {description}
+          </DialogContentText>
+        )}
       </DialogContent>
 
       <DialogActions>

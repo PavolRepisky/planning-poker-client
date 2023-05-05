@@ -1,5 +1,4 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 type FeatureProps = {
   title: string;
@@ -16,18 +15,16 @@ const TextItem = ({
   title: string;
   description: string;
 }) => {
-  const { t } = useTranslation();
-
   return (
     <Grid item xs={12} md={5} sx={{ display: 'flex', alignItems: 'center' }}>
       <Box>
         <Typography
-          variant="h1"
+          variant="h2"
           align="left"
           color="text.primary"
           marginBottom={2}
         >
-          {t(title)}
+          {title}
         </Typography>
 
         <Typography
@@ -36,7 +33,7 @@ const TextItem = ({
           align="left"
           color="text.primary"
         >
-          {t(description)}
+          {description}
         </Typography>
       </Box>
     </Grid>

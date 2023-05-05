@@ -55,7 +55,7 @@ const Result = ({
           {title}
         </Typography>
 
-        {subTitle && <Typography variant="body2">{subTitle}</Typography>}
+        {subTitle && <Typography variant="body1">{subTitle}</Typography>}
 
         {extra && <Box sx={{ mt: 4, textAlign: 'center' }}>{extra}</Box>}
       </Box>
