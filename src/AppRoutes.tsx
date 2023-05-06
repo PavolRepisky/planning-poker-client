@@ -36,7 +36,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route path="sessions/:hashId" element={<SessionJoinManager />} />
+        <Route path="/sessions/:hashId" element={<SessionJoinManager />} />
       </Route>
 
       <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
@@ -47,9 +47,9 @@ const AppRoutes = () => {
           <Route path="/matrices" element={<MatrixHomepage />} />
           <Route path="/matrices/:matrixId" element={<MatrixDetail />} />
 
-          <Route path="sessions" element={<SessionHomepage />} />
+          <Route path="/sessions" element={<SessionHomepage />} />
 
-          <Route path="profile" element={<Profile />}>
+          <Route path="/" element={<Profile />}>
             <Route path="" element={<ProfileInformation />} />
             <Route path="password" element={<ProfilePassword />} />
           </Route>

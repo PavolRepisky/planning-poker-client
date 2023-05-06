@@ -19,8 +19,8 @@ import { useNavigate } from 'react-router';
 const MatrixHomepage = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const { authToken } = useAuth();
   const navigate = useNavigate();
+  const { userData } = useAuth();
 
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openMatrixDialog, setOpenMatrixDialog] = useState(false);
@@ -32,16 +32,13 @@ const MatrixHomepage = () => {
   const { isCreating, createMatrix } = useCreateMatrix();
   const { isDeleting, deleteMatrix } = useDeleteMatrix();
   const { isUpdating, updateMatrix } = useUpdateMatrix();
-  const { data } = useGetMatrices(authToken);
+  const { data } = useGetMatrices();
 
   const processing = isCreating || isUpdating || isDeleting;
 
   const handleCreateMatrix = async (matrix: Partial<MatrixData>) => {
     try {
-      await createMatrix({
-        matrix,
-        authToken,
-      });
+      await createMatrix(matrix);
       snackbar.success(
         t('matrix.notifications.created', {
           matrixName: matrix.name,
@@ -58,7 +55,7 @@ const MatrixHomepage = () => {
       return;
     }
     try {
-      await deleteMatrix({ id: matrixDeleted.id, authToken });
+      await deleteMatrix(matrixDeleted.id);
       setMatrixDeleted(undefined);
       setOpenConfirmDeleteDialog(false);
       snackbar.success(
@@ -73,7 +70,7 @@ const MatrixHomepage = () => {
 
   const handleUpdateMatrix = async (matrix: MatrixData) => {
     try {
-      await updateMatrix({ matrix, authToken });
+      await updateMatrix(matrix);
       setOpenMatrixDialog(false);
       snackbar.success(
         t('matrix.notifications.updated', {

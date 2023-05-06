@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Stack } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
@@ -15,13 +14,12 @@ import { useNavigate, useParams } from 'react-router';
 import VoteCard from 'session/components/VoteCard';
 
 const MatrixDetail = () => {
-  const { authToken } = useAuth();
   const navigate = useNavigate();
   const { matrixId } = useParams();
   const snackbar = useSnackbar();
   const { t } = useTranslation();
 
-  const { data } = useGetMatrix(Number(matrixId), authToken);
+  const { data } = useGetMatrix(Number(matrixId));
   const [openMatrixDialog, setOpenMatrixDialog] = useState(false);
   const { isUpdating, updateMatrix } = useUpdateMatrix();
   const { isDeleting, deleteMatrix } = useDeleteMatrix();
@@ -37,7 +35,7 @@ const MatrixDetail = () => {
 
   const handleUpdateMatrix = async (matrix: MatrixData) => {
     try {
-      await updateMatrix({ matrix, authToken });
+      await updateMatrix(matrix);
       setOpenMatrixDialog(false);
       snackbar.success(
         t('matrix.notifications.updated', {
@@ -54,7 +52,7 @@ const MatrixDetail = () => {
       return;
     }
     try {
-      await deleteMatrix({ id: data.id, authToken });
+      await deleteMatrix(data.id);
       setOpenConfirmDeleteDialog(false);
       snackbar.success(
         t('matrix.notifications.deleted', {

@@ -7,7 +7,6 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +22,6 @@ type JoinSessionDialogProps = {
 const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
   const { t } = useTranslation();
   const snackbar = useSnackbar();
-  const { authToken } = useAuth();
   const navigate = useNavigate();
   const { isJoining, joinSession } = useJoinSession();
 
@@ -35,7 +33,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
 
   const handleSubmit = async (formData: FormData): Promise<void> => {
     try {
-      const data = await joinSession({ hashId: formData.hashId, authToken });
+      const data = await joinSession(formData.hashId);
       navigate(`/sessions/${data.session.hashId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {

@@ -13,7 +13,7 @@ import { useJoinSession } from 'session/hooks/useJoinSession';
 import SessionData from 'session/types/SessionData';
 
 const SessionJoinManager = () => {
-  const { userData, authToken } = useAuth();
+  const { userData } = useAuth();
   const { t } = useTranslation();
   const { hashId } = useParams();
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const SessionJoinManager = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await joinSession({ hashId: hashId ?? '', authToken });
+        const response = await joinSession(hashId ?? '');
         setData(response);
       } catch {
         navigate('/404');

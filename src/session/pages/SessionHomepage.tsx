@@ -10,10 +10,9 @@ import JoinSessionModal from 'session/components/JoinSessionDialog';
 
 const SessionHomepage = () => {
   const { t } = useTranslation();
-  const { authToken } = useAuth();
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openJoinModal, setOpenJoinModal] = useState(false);
-  const { data } = useGetMatrices(authToken);
+  const { data } = useGetMatrices();
 
   return (
     <React.Fragment>

@@ -7,7 +7,6 @@ import {
   CardHeader,
   Typography,
 } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import { ValidationError } from 'express-validator';
 import { t } from 'i18next';
@@ -34,7 +33,6 @@ const VotingPanel = ({
   sessionHashId,
 }: VotingPanelProps) => {
   const snackbar = useSnackbar();
-  const { authToken } = useAuth();
   const { isCreating, createVoting } = useCreateVoting();
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
@@ -46,7 +44,6 @@ const VotingPanel = ({
       const createdVoting = await createVoting({
         sessionHashId,
         votingData,
-        authToken,
       });
       onCreateSuccess({
         name: createdVoting.name,

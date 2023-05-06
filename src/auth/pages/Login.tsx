@@ -82,7 +82,7 @@ const Login = () => {
       />
 
       <Grid item xs={12} md={5} component={Paper} square>
-        <BoxedLayout maxWidth="xs" >
+        <BoxedLayout maxWidth="xs">
           <Typography component="h1" variant="h4">
             {t('auth.login.title')}
           </Typography>

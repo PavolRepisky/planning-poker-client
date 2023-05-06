@@ -8,7 +8,6 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
 import config from 'core/config/config';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import ServerValidationError from 'core/types/ServerValidationError';
@@ -32,7 +31,6 @@ const CreateSessionDialog = ({
   matrices,
 }: CreateSessionDialogProps) => {
   const { t } = useTranslation();
-  const { authToken } = useAuth();
   const snackbar = useSnackbar();
   const { createSession, isCreating } = useCreateSession();
   const navigate = useNavigate();
@@ -54,10 +52,7 @@ const CreateSessionDialog = ({
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      const createdSession = await createSession({
-        session: formData,
-        authToken,
-      });
+      const createdSession = await createSession(formData);
       snackbar.success(t('session.create.notifications.success'));
       onClose();
       navigate(`/sessions/${createdSession.hashId}`);

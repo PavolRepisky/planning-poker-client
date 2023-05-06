@@ -20,8 +20,8 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 const ProfileInformation = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const { authToken, userData } = useAuth();
-  const { isUpdating, updateName } = useUpdateName(authToken);
+  const { accessToken, userData } = useAuth();
+  const { isUpdating, updateName } = useUpdateName(accessToken);
 
   const validationSchema = yup.object({
     firstName: yup
@@ -42,7 +42,7 @@ const ProfileInformation = () => {
     const { firstName, lastName } = formData;
 
     try {
-      await updateName({ firstName, lastName, authToken });
+      await updateName({ firstName, lastName });
       snackbar.success(t('profile.info.notifications.success'));
     } catch (err: any) {
       if (err.response && err.response.status === 400) {

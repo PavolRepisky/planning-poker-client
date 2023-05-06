@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
 import passwordRegex from 'auth/types/passwordRegex';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import ServerValidationError from 'core/types/ServerValidationError';
@@ -22,7 +21,6 @@ import * as yup from 'yup';
 const ProfilePassword = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const { authToken } = useAuth();
   const { isUpdating, updatePassword } = useUpdatePassword();
   const [passwordChangeStatus, setPasswordChangeStatus] = useState('');
 
@@ -42,7 +40,7 @@ const ProfilePassword = () => {
 
   const handleUpdatePassword = async (formData: FormData) => {
     try {
-      await updatePassword({ ...formData, authToken });
+      await updatePassword({ ...formData });
       formik.resetForm();
       snackbar.success(t('profile.password.notifications.success'));
     } catch (err: any) {

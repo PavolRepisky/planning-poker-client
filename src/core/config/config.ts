@@ -23,6 +23,7 @@ const config = {
     : 1,
 
   origin: process.env.REACT_APP_ORIGIN || 'http://localhost:3000',
+  accessTokenKey: 'accessToken',
 };
 
 export default config;

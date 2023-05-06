@@ -1,12 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 
-const logout = async ({ authToken }: { authToken: string }): Promise<void> => {
-  await axios.get('/logout', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+const logout = async (): Promise<void> => {
+  await axios.get('/logout');
 };
 
 export const useLogout = () => {
