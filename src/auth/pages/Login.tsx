@@ -42,7 +42,7 @@ const Login = () => {
     try {
       const { email, password } = formData;
       await login(email, password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         const validationErrors = err.response.data
