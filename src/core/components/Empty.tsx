@@ -1,5 +1,5 @@
-import { ReactComponent as EmptySvg } from '../assets/empty.svg';
-import Result from './Result';
+import Result from 'core/components/Result';
+import { ReactComponent as EmptySvg } from 'assets/empty.svg';
 
 type EmptyProps = {
   message?: string;

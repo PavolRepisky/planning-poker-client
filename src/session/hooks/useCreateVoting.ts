@@ -5,23 +5,16 @@ import VotingData from 'session/types/VotingData';
 const createVoting = async ({
   sessionHashId,
   votingData,
-  authToken,
 }: {
   sessionHashId: string;
   votingData: {
     name: string;
     description?: string;
   };
-  authToken: string;
 }): Promise<VotingData> => {
   const { data } = await axios.post(
     `/sessions/${sessionHashId}/voting`,
-    votingData,
-    {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    }
+    votingData
   );
   return data.data.voting;
 };

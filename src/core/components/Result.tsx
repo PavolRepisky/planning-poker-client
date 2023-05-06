@@ -1,8 +1,8 @@
 import { Box, Container, Typography } from '@mui/material';
+import { ReactComponent as ErrorSvg } from 'assets/error.svg';
+import { ReactComponent as SuccessSvg } from 'assets/success.svg';
+import SvgContainer from 'core/components/SvgContainer';
 import React from 'react';
-import { ReactComponent as ErrorSvg } from '../assets/error.svg';
-import { ReactComponent as SuccessSvg } from '../assets/success.svg';
-import SvgContainer from './SvgContainer';
 
 type ResultImageProps = {
   customImage?: React.ReactNode;
@@ -20,7 +20,11 @@ const ResultImage = ({ customImage, status }: ResultImageProps) => {
     }
   }
 
-  return image ? <Box marginBottom={3} width='80%'>{image}</Box> : null;
+  return image ? (
+    <Box marginBottom={3} width="80%">
+      {image}
+    </Box>
+  ) : null;
 };
 
 type ResultProps = {
@@ -46,10 +50,13 @@ const Result = ({
         <SvgContainer>
           <ResultImage customImage={image} status={status} />
         </SvgContainer>
+
         <Typography gutterBottom variant="h5">
           {title}
         </Typography>
-        {subTitle && <Typography variant="body2">{subTitle}</Typography>}
+
+        {subTitle && <Typography variant="body1">{subTitle}</Typography>}
+
         {extra && <Box sx={{ mt: 4, textAlign: 'center' }}>{extra}</Box>}
       </Box>
     </Container>

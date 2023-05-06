@@ -5,12 +5,8 @@ import {
   default as MatrixData,
 } from 'matrix/types/MatrixData';
 
-const fetchMatrices = async (authToken: string): Promise<Matrix[]> => {
-  const { data } = await axios.get('/matrices', {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+const fetchMatrices = async (): Promise<Matrix[]> => {
+  const { data } = await axios.get('/matrices');
 
   return data.data.matrices.map((matrix: MatrixData) => {
     return {
@@ -20,6 +16,6 @@ const fetchMatrices = async (authToken: string): Promise<Matrix[]> => {
   });
 };
 
-export const useGetMatrices = (authToken: string) => {
-  return useQuery(['matrices'], () => fetchMatrices(authToken));
+export const useGetMatrices = () => {
+  return useQuery(['matrices'], () => fetchMatrices());
 };

@@ -1,0 +1,375 @@
+{
+  "common": {
+    "backHome": "Back to Home",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "confirmation": "Confirmation",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "login": "Login",
+    "register": "Register",
+    "reset": "Reset",
+    "retry": "Try Again",
+    "selected": "Selected",
+    "update": "Update",
+    "settings": "Settings",
+    "snackbar": {
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning"
+    },
+    "errors": {
+      "forbidden": {
+        "subTitle": "You don't have access to view this page",
+        "title": "Oops!"
+      },
+      "notFound": {
+        "subTitle": "Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL?",
+        "title": "Oops!"
+      },
+      "unexpected": {
+        "subTitle": "Something went wrong! If the problem persists, contact us!",
+        "title": "Oops!"
+      }
+    },
+    "validations": {
+      "required": "The field is required",
+      "type": "Invalid value type",
+      "string": {
+        "max": "Value is too long",
+        "min": "Value is too short"
+      },
+      "integer": {
+        "max": "Value is too big",
+        "min": "Value is too low"
+      },
+      "email": {
+        "invalid": "E-mail address is invalid",
+        "taken": "E-mail address is already in use"
+      },
+      "password": {
+        "weak": "Password must be at least 8 characters, contain a lower and upper case letter and a digit",
+        "match": "Passwords must match"
+      },
+      "matrix": {
+        "uniqueValues": "All values must be different",
+        "taken": "Name is already taken"
+      },
+      "session": {
+        "matrixId": "Matrix with given id does not exist",
+        "id": "Session with given id does not exist"
+      }
+    }
+  },
+  "landing": {
+    "title": "Completely free and open-source multidimensional planning poker tool for agile development teams",
+    "join": "Join Voting Session",
+    "altDemo": "Application demo",
+    "links": {
+      "api": "API Source Code",
+      "client": "Client Source Code"
+    },
+    "features": {
+      "builder": {
+        "title": "Two-dimensional card deck builder",
+        "description": "Evaluate tasks based on multiple parameters, by using two-dimensional card decks.",
+        "imgAlt": "Showcase of two-dimensional card deck builder"
+      },
+      "realTime": {
+        "title": "Real-time estimation",
+        "description": "Vote and estimate tasks in real-time, with our simple and intuitive interface.",
+        "imgAlt": "Showcase of estimation process"
+      },
+      "inGameVoting": {
+        "title": "In-Game voting creation",
+        "description": "The session administrator can create a new vote at any time, regardless of the current state of the vote.",
+        "imgAlt": "Showcase of in-game voting creation"
+      },
+      "cardDeckManagement": {
+        "title": "Card deck management",
+        "description": "Manage your card decks as you wish.",
+        "imgAlt": "Showcase of card deck management"
+      },
+      "noLimits": "Free forever with no limits",
+      "unlimitedSessions": "Unlimited number of voting sessions per user",
+      "unlimitedUsers": "Unlimited number of users per voting session",
+      "unlimitedVotings": "Unlimited number of votings per voting session",
+      "noPersonalDetails": "No unnecessary personal details needed"
+    }
+  },
+  "sidebar": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "help": "Help",
+      "home": "Home",
+      "settings": "Settings",
+      "matrix": "Card Decks",
+      "session": "Voting Sessions"
+    }
+  },
+  "auth": {
+    "register": {
+      "title": "Register",
+      "form": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        },
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
+        },
+        "submit": "Register"
+      },
+      "notifications": {
+        "success": "Your account has been created successfully! Verify your e-mail to be able to log in."
+      },
+      "haveAccount": "Already have an account?"
+    },
+    "login": {
+      "title": "Log in",
+      "form": {
+        "email": {
+          "label": "E-mail Address"
+        },
+        "password": {
+          "label": "Password"
+        },
+        "submit": "Log In"
+      },
+      "invalidCredentials": "Incorrect e-mail address or password",
+      "noAccount": "Don't have an account yet?",
+      "forgottenPassword": "Forgotten password?",
+      "resetPassword": "Reset Password"
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "subTitle": "You will receive an e-mail with instructions on how to reset your password",
+      "backToLogin": "Back to login",
+      "form": {
+        "email": {
+          "label": "E-mail Address"
+        },
+        "submit": "Send"
+      },
+      "notifications": {
+        "success": "Password reset instructions were sent to your email. Please check your inbox and follow the provided instructions to reset your password."
+      }
+    },
+    "resetPassword": {
+      "title": "Change your password",
+      "form": {
+        "password": {
+          "label": "New Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
+        },
+        "submit": "Change Password"
+      },
+      "notifications": {
+        "success": "Your password has been changed successfully!"
+      }
+    },
+    "verifyEmail": {
+      "notifications": {
+        "success": "Your e-mail has been verified successfully!"
+      }
+    }
+  },
+  "settings": {
+    "drawer": {
+      "direction": {
+        "label": "Direction",
+        "options": {
+          "ltr": "LTR",
+          "rtl": "RTL"
+        }
+      },
+      "language": {
+        "label": "Language",
+        "options": {
+          "en": "English",
+          "sk": "Slovak"
+        }
+      },
+      "mode": {
+        "label": "Mode",
+        "options": {
+          "dark": "Dark",
+          "light": "Light"
+        }
+      },
+      "sidebar": {
+        "label": "Sidebar",
+        "options": {
+          "collapsed": "Collapsed",
+          "full": "Full"
+        }
+      },
+      "title": "Settings"
+    }
+  },
+  "profile": {
+    "menu": {
+      "info": "Information",
+      "password": "Password"
+    },
+    "info": {
+      "title": "Update information",
+      "form": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        }
+      },
+      "notifications": {
+        "success": "Information has been updated successfully!"
+      }
+    },
+    "password": {
+      "title": "Change password",
+      "form": {
+        "password": {
+          "label": "Password"
+        },
+        "newPassword": {
+          "label": "New Password"
+        },
+        "confirmationPassword": {
+          "label": "Confirmation Password"
+        }
+      },
+      "notifications": {
+        "success": "The password has been changed successfully!"
+      }
+    }
+  },
+  "matrix": {
+    "confirmations": {
+      "delete": "Are you sure you want to delete this card deck?"
+    },
+    "form": {
+      "name": {
+        "label": "Name"
+      },
+      "rows": {
+        "label": "Rows"
+      },
+      "columns": {
+        "label": "Columns"
+      },
+      "values": {
+        "label": "Values"
+      }
+    },
+    "dialog": {
+      "add": {
+        "action": "Add",
+        "title": "Add Card Deck"
+      },
+      "edit": {
+        "action": "Edit",
+        "title": "Edit Card Deck"
+      }
+    },
+    "notifications": {
+      "created": "{{matrixName}} has been created!",
+      "deleted": "{{matrixName}} have been deleted!",
+      "updated": "{{matrixName}} has been updated!"
+    },
+    "table": {
+      "headers": {
+        "actions": "Actions",
+        "name": "Name",
+        "rows": "Rows",
+        "columns": "Columns",
+        "createdAt": "Created At"
+      },
+      "empty": "No card decks yet"
+    },
+    "toolbar": {
+      "title": "Card Decks"
+    }
+  },
+  "session": {
+    "homepage": {
+      "title": "Voting Session",
+      "join": "Join Voting Session",
+      "create": "Create Voting Session"
+    },
+    "dialog": {
+      "join": {
+        "title": "Join Voting Session",
+        "form": {
+          "hashId": {
+            "label": "Session id"
+          },
+          "submit": "Join"
+        }
+      },
+      "create": {
+        "title": "Create Voting Session",
+        "form": {
+          "name": {
+            "label": "Name"
+          },
+          "matrixId": {
+            "label": "Matrix ID"
+          },
+          "submit": "Create"
+        },
+        "notifications": {
+          "success": "Voting session has been created successfully!"
+        }
+      },
+      "createVoting": {
+        "title": "Create New Voting",
+        "form": {
+          "name": {
+            "label": "Name"
+          },
+          "description": {
+            "label": "Description"
+          },
+          "submit": "Create"
+        },
+        "notifications": {
+          "success": "Voting has been created successfully!"
+        }
+      }
+    },
+    "join": {
+      "guest": {
+        "title": "Enter your name",
+        "form": {
+          "firstName": {
+            "label": "First Name"
+          },
+          "lastName": {
+            "label": "Last Name"
+          },
+          "submit": "Join"
+        }
+      },
+      "notifications": {
+        "success": "Voting session has been joined successfully!"
+      }
+    },
+    "waiting": "Waiting for moderator to create a voting",
+    "toStart": "Create a new voting to get started",
+    "createVoting": "Create New Voting",
+    "showVotes": "Show Users Votes",
+    "players": "Players"
+  }
+}

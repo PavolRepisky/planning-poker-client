@@ -7,9 +7,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import { ReactComponent as ConfirmSvg } from 'assets/confirm.svg';
+import SvgContainer from 'core/components/SvgContainer';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as ConfirmSvg } from '../assets/confirm.svg';
-import SvgContainer from './SvgContainer';
 
 type ConfirmDialogProps = {
   description?: string;
@@ -41,15 +41,18 @@ const ConfirmDialog = ({
         <SvgContainer>
           <ConfirmSvg style={{ maxWidth: 280, width: '100%' }} />
         </SvgContainer>
-        <DialogTitle id="confirm-dialog-title" sx={{ pb: 1, pt: 0 }}>
+
+        <DialogTitle id="confirm-dialog-title" sx={{ p: 0, mb: 1 }}>
           {title}
         </DialogTitle>
+
         {description && (
           <DialogContentText id="confirm-dialog-description">
             {description}
           </DialogContentText>
         )}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>{t('common.cancel')}</Button>
         <LoadingButton

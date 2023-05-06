@@ -1,15 +1,18 @@
 import { useGetUser } from 'auth/hooks/useGetUser';
 import { useLogin } from 'auth/hooks/useLogin';
+import { useLogout } from 'auth/hooks/useLogout';
+import config from 'core/config/config';
+import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import React, { createContext, useContext } from 'react';
 import UserData from 'user/types/userData';
-import { useLocalStorage } from '../../core/hooks/useLocalStorage';
 
 interface AuthContextInterface {
   isLoggingIn: boolean;
+  isLoggingOut: boolean;
   login: (email: string, password: string) => Promise<any>;
-  logout: () => void;
+  logout: () => Promise<void>;
   userData?: UserData;
-  authToken: string;
+  accessToken: string;
 }
 
 export const AuthContext = createContext({} as AuthContextInterface);
@@ -19,19 +22,23 @@ type AuthProviderProps = {
 };
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [authToken, setAuthToken] = useLocalStorage<string>('authToken', '');
-  const [socketConnectionId, setSocketConnectionId] = useLocalStorage<
-    string | null
-  >('connectionId', null);
+  const [accessToken, setAccessToken] = useLocalStorage<string>(
+    config.accessTokenKey,
+    ''
+  );
+  const [_, setSocketConnectionId] = useLocalStorage<string | null>(
+    'connectionId',
+    null
+  );
 
   const { isLoggingIn, login } = useLogin();
-  const { data: userData } = useGetUser(authToken);
+  const { isLoggingOut, logout } = useLogout();
+  const { data: userData } = useGetUser(accessToken);
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const data = await login({ email, password });
-      setAuthToken(data.data.token);
-      return data;
+      const accessToken = await login({ email, password });
+      setAccessToken(accessToken);
     } catch (err) {
       throw err;
     }
@@ -39,7 +46,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const handleLogout = async () => {
     try {
-      setAuthToken('');
+      await logout();
+      setAccessToken('');
       setSocketConnectionId(null);
     } catch (err) {
       throw err;
@@ -50,10 +58,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         isLoggingIn,
+        isLoggingOut,
         login: handleLogin,
         logout: handleLogout,
         userData,
-        authToken,
+        accessToken,
       }}
     >
       {children}

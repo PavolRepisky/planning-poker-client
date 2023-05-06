@@ -7,9 +7,9 @@ const login = async ({
 }: {
   email: string;
   password: string;
-}): Promise<{ message: string; data: { token: string } }> => {
+}): Promise<string> => {
   const { data } = await axios.post('/login', { email, password });
-  return data;
+  return data.data.accessToken;
 };
 
 export const useLogin = () => {

@@ -1,10 +1,10 @@
 import { createTheme as createMuiTheme } from '@mui/material';
-import { createThemeComponents } from './components';
-import mixins from './mixins';
-import { darkPalette, lightPalette } from './palette';
-import shape from './shape';
-import transitions from './transitions';
-import typography from './typography';
+import { createThemeComponents } from 'core/theme/components';
+import mixins from 'core/theme/mixins';
+import { darkPalette, lightPalette } from 'core/theme/palette';
+import shape from 'core/theme/shape';
+import transitions from 'core/theme/transitions';
+import typography from 'core/theme/typography';
 
 export const createTheme = (
   direction: 'ltr' | 'rtl',
@@ -12,7 +12,6 @@ export const createTheme = (
 ) => {
   const palette = mode === 'dark' ? darkPalette : lightPalette;
 
-  // Create base theme
   const baseTheme = createMuiTheme({
     direction,
     mixins,
@@ -22,7 +21,6 @@ export const createTheme = (
     typography,
   });
 
-  // Inject base theme to be used in components
   return createMuiTheme(
     {
       components: createThemeComponents(baseTheme),

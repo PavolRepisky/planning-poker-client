@@ -3,20 +3,10 @@ import axios from 'core/config/axios';
 import { updateOne } from 'core/utils/crudUtils';
 import Matrix from 'matrix/types/MatrixData';
 
-const updateMatrix = async ({
-  matrix,
-  authToken,
-}: {
-  matrix: Matrix;
-  authToken?: string;
-}): Promise<Matrix> => {
+const updateMatrix = async (matrix: Matrix): Promise<Matrix> => {
   const { id, ...matrixData } = matrix;
 
-  const { data } = await axios.patch(`/matrices/${matrix.id}`, matrixData, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+  const { data } = await axios.patch(`/matrices/${matrix.id}`, matrixData);
   return data.data.matrix;
 };
 
@@ -28,6 +18,8 @@ export const useUpdateMatrix = () => {
       queryClient.setQueryData<Matrix[]>(['matrices'], (oldMatrices) =>
         updateOne(oldMatrices, matrix)
       );
+
+      queryClient.setQueryData<Matrix>(['matrix', matrix.id], matrix);
     },
   });
 

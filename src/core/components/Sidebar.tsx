@@ -1,5 +1,4 @@
 import {
-  HelpCenter as HelpCenterIcon,
   Home as HomeIcon,
   HowToVote as HowToVoteIcon,
   Person as PersonIcon,
@@ -10,17 +9,19 @@ import {
   Avatar,
   Box,
   Drawer,
+  IconButton,
   List,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Typography,
   useTheme,
 } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
 import Logo from 'core/components/Logo';
 import { drawerCollapsedWidth, drawerWidth } from 'core/config/layout';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, Link as RouterLink, useLocation } from 'react-router-dom';
 
 type SidebarProps = {
   collapsed: boolean;
@@ -37,18 +38,13 @@ export const menuItems = [
   },
   {
     icon: StyleIcon,
-    key: 'sidebar.menu.matrixManagement',
+    key: 'sidebar.menu.matrix',
     path: '/matrices',
   },
   {
     icon: HowToVoteIcon,
-    key: 'sidebar.menu.sessionManagement',
+    key: 'sidebar.menu.session',
     path: '/sessions',
-  },
-  {
-    icon: HelpCenterIcon,
-    key: 'sidebar.menu.help',
-    path: '/help',
   },
 ];
 
@@ -67,7 +63,29 @@ const Sidebar = ({
 
   const drawer = (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
-      <Logo sx={{ display: 'flex', p: 4 }} />
+      <IconButton
+        component={RouterLink}
+        to={'/'}
+        sx={{
+          '&:hover': { background: 'transparent' },
+          p: 4,
+          display: 'flex',
+          justifyContent: 'left',
+          alignItems: 'center',
+          color: theme.palette.text.primary,
+        }}
+      >
+        <Logo size={24} sx={{ mr: 1 }} />
+        <Typography
+          variant="h5"
+          color="inherit"
+          noWrap
+          sx={{ mb: 1, display: collapsed ? 'none' : 'block' }}
+        >
+          {process.env.REACT_APP_NAME}
+        </Typography>
+      </IconButton>
+
       <List component="nav" sx={{ px: 2 }}>
         {menuItems.map((item) => (
           <ListItemButton
@@ -80,8 +98,9 @@ const Sidebar = ({
                 ? {
                     backgroundColor: theme.palette.background.default,
                     color: theme.palette.text.primary,
+                    mb: 1,
                   }
-                : {}
+                : { mb: 1 }
             }
           >
             <ListItemAvatar>
@@ -89,6 +108,7 @@ const Sidebar = ({
                 <item.icon />
               </Avatar>
             </ListItemAvatar>
+
             <ListItemText
               primary={t(item.key)}
               sx={{
@@ -98,7 +118,9 @@ const Sidebar = ({
           </ListItemButton>
         ))}
       </List>
+
       <Box sx={{ flexGrow: 1 }} />
+
       <List component="nav" sx={{ p: 2 }}>
         <ListItemButton
           component={NavLink}
@@ -109,8 +131,9 @@ const Sidebar = ({
               ? {
                   backgroundColor: theme.palette.background.default,
                   color: theme.palette.text.primary,
+                  mb: 1,
                 }
-              : {}
+              : { mb: 1 }
           }
         >
           <ListItemAvatar>
@@ -118,6 +141,7 @@ const Sidebar = ({
               <PersonIcon />
             </Avatar>
           </ListItemAvatar>
+
           {userData && (
             <ListItemText
               primary={`${userData.firstName} ${userData.lastName}`}
@@ -127,12 +151,14 @@ const Sidebar = ({
             />
           )}
         </ListItemButton>
+
         <ListItemButton onClick={onSettingsToggle}>
           <ListItemAvatar>
             <Avatar>
               <SettingsIcon />
             </Avatar>
           </ListItemAvatar>
+
           <ListItemText
             primary={t('sidebar.menu.settings')}
             sx={{
@@ -146,7 +172,6 @@ const Sidebar = ({
 
   return (
     <Box
-      aria-label="Sidebar"
       component="nav"
       sx={{
         width: { lg: width },
@@ -170,6 +195,7 @@ const Sidebar = ({
       >
         {drawer}
       </Drawer>
+
       <Drawer
         variant="permanent"
         open

@@ -1,27 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'core/config/axios';
 
-const register = async ({
-  firstName,
-  lastName,
-  email,
-  password,
-  confirmationPassword,
-}: {
+const register = async (userData: {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   confirmationPassword: string;
-}): Promise<{ message: string }> => {
-  const { data } = await axios.post('/register', {
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmationPassword,
-  });
-  return data;
+}): Promise<string> => {
+  const { data } = await axios.post('/register', userData);
+  return data.data.userId;
 };
 
 export const useRegister = () => {

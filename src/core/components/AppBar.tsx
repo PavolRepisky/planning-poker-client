@@ -1,6 +1,6 @@
-import { AppBar as MuiAppBar} from '@mui/material';
+import { AppBar as MuiAppBar } from '@mui/material';
 import { drawerCollapsedWidth, drawerWidth } from 'core/config/layout';
-import { useSettings } from '../contexts/SettingsProvider';
+import { useSettings } from 'core/contexts/SettingsProvider';
 
 type AppBarProps = {
   children: React.ReactNode;

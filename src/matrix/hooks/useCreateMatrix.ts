@@ -3,18 +3,8 @@ import axios from 'core/config/axios';
 import { addOne } from 'core/utils/crudUtils';
 import Matrix from 'matrix/types/MatrixData';
 
-const createMatrix = async ({
-  matrix,
-  authToken,
-}: {
-  matrix: Partial<Matrix>;
-  authToken: string;
-}): Promise<Matrix> => {
-  const { data } = await axios.post('/matrices', matrix, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+const createMatrix = async (matrix: Partial<Matrix>): Promise<Matrix> => {
+  const { data } = await axios.post('/matrices', matrix);
   return data.data.matrix;
 };
 

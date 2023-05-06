@@ -6,10 +6,14 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 // Core
 const AppLayout = lazy(() => import('./core/pages/AppLayout'));
 const NotFound = lazy(() => import('core/pages/NotFound'));
+const Landing = lazy(() => import('core/pages/Landing'));
 
 // Auth
 const Register = lazy(() => import('./auth/pages/Register'));
 const Login = lazy(() => import('./auth/pages/Login'));
+const ForgotPassword = lazy(() => import('./auth/pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./auth/pages/ResetPassword'));
+const VerifyEmail = lazy(() => import('./auth/pages/VerifyEmail'));
 
 // User
 const Profile = lazy(() => import('./user/pages/Profile'));
@@ -19,8 +23,8 @@ const ProfileInformation = lazy(
 const ProfilePassword = lazy(() => import('./user/pages/ProfilePassword'));
 
 // Matrix
-const MatrixManagement = lazy(() => import('./matrix/pages/MatrixManagement'));
-const MatrixView = lazy(() => import('./matrix/pages/MatrixView'));
+const MatrixHomepage = lazy(() => import('./matrix/pages/MatrixHomepage'));
+const MatrixDetail = lazy(() => import('./matrix/pages/MatrixDetail'));
 
 // Session
 const SessionHomepage = lazy(() => import('./session/pages/SessionHomepage'));
@@ -31,18 +35,21 @@ const SessionJoinManager = lazy(
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<AppLayout />}>
-        <Route path="sessions/:hashId" element={<SessionJoinManager />} />
+      <Route element={<AppLayout />}>
+        <Route path="/sessions/:hashId" element={<SessionJoinManager />} />
       </Route>
 
+      <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+      <Route path="/verify-email/:verificationCode" element={<VerifyEmail />} />
+
       <Route element={<PrivateRoutes />}>
-        <Route path="/" element={<AppLayout />}>
-          <Route path="matrices" element={<MatrixManagement />} />
-          <Route path="matrices/:matrixId" element={<MatrixView />} />
+        <Route element={<AppLayout />}>
+          <Route path="/matrices" element={<MatrixHomepage />} />
+          <Route path="/matrices/:matrixId" element={<MatrixDetail />} />
 
-          <Route path="sessions" element={<SessionHomepage />} />
+          <Route path="/sessions" element={<SessionHomepage />} />
 
-          <Route path="profile" element={<Profile />}>
+          <Route path="/" element={<Profile />}>
             <Route path="" element={<ProfileInformation />} />
             <Route path="password" element={<ProfilePassword />} />
           </Route>
@@ -50,8 +57,10 @@ const AppRoutes = () => {
       </Route>
 
       <Route element={<PublicRoutes />}>
+        <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
 
       <Route path="404" element={<NotFound />} />

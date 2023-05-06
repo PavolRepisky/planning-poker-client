@@ -3,18 +3,8 @@ import axios from 'core/config/axios';
 import { removeOne } from 'core/utils/crudUtils';
 import Matrix from 'matrix/types/MatrixData';
 
-const deleteMatrix = async ({
-  id,
-  authToken,
-}: {
-  id: number;
-  authToken: string;
-}): Promise<Matrix> => {
-  const { data } = await axios.delete(`/matrices/${id}`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+const deleteMatrix = async (id: number): Promise<Matrix> => {
+  const { data } = await axios.delete(`/matrices/${id}`);
   return data.data.matrix;
 };
 

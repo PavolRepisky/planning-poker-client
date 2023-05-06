@@ -13,11 +13,11 @@ import { useJoinSession } from 'session/hooks/useJoinSession';
 import SessionData from 'session/types/SessionData';
 
 const SessionJoinManager = () => {
-  const { userData, authToken } = useAuth();
+  const { userData } = useAuth();
   const { t } = useTranslation();
   const { hashId } = useParams();
   const navigate = useNavigate();
-  const { isJoining, joinSession } = useJoinSession();
+  const { joinSession } = useJoinSession();
   const [data, setData] = useState<{
     session: SessionData;
     matrix: MatrixData;
@@ -33,7 +33,7 @@ const SessionJoinManager = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await joinSession({ hashId: hashId ?? '', authToken });
+        const response = await joinSession(hashId ?? '');
         setData(response);
       } catch {
         navigate('/404');
@@ -63,7 +63,7 @@ const SessionJoinManager = () => {
       );
     }
     return (
-      <BoxedLayout title={data.session.name}>
+      <BoxedLayout>
         <Box sx={{ width: '100%' }}>
           <VotingSession
             session={data.session}

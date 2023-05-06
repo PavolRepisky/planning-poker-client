@@ -91,13 +91,14 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     }
   };
 
-  const isModerator = user.id === session.ownerId;
+  const isAdmin = user.id === session.ownerId;
 
   return (
     <React.Fragment>
       <VotingPanel
-        isModerator={isModerator}
+        isAdmin={isAdmin}
         voting={voting}
+        showVotes={showVotes}
         onCreateSuccess={handleVotingCreated}
         onShowVotes={handleShowVotes}
         sessionHashId={session.hashId}
@@ -139,7 +140,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
         <Grid item xs={12} md>
           <Box>
             <Typography component="h2" marginBottom={3} variant="h4">
-              {t('session.voting.players')}
+              {t('session.players')}
             </Typography>
             <Box>
               {users?.map((user, index) => {

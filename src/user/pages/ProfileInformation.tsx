@@ -8,8 +8,9 @@ import {
   TextField,
 } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
-import { transformToFormikErrorsObj } from 'core/utils/transform';
-import { ValidationError } from 'express-validator';
+import config from 'core/config/config';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useUpdateName } from 'user/hooks/useUpdateName';
@@ -19,53 +20,55 @@ import { useSnackbar } from '../../core/contexts/SnackbarProvider';
 const ProfileInformation = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
-  const { authToken, userData } = useAuth();
-  const { isUpdating, updateName } = useUpdateName(authToken);
+  const { accessToken, userData } = useAuth();
+  const { isUpdating, updateName } = useUpdateName(accessToken);
 
   const validationSchema = yup.object({
     firstName: yup
       .string()
+      .trim()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .max(config.maxNameLength, t('common.validations.string.max')),
     lastName: yup
       .string()
+      .trim()
       .required(t('common.validations.required'))
-      .min(3, t('common.validations.minChar', { size: 3 }))
-      .max(50, t('common.validations.maxChar', { size: 50 })),
+      .max(config.maxNameLength, t('common.validations.string.max')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
 
-  const formik = useFormik({
-    initialValues: {
-      firstName: userData ? userData.firstName : '',
-      lastName: userData ? userData.lastName : '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => handleSubmit(values),
-  });
-
-  const handleSubmit = async (values: FormData) => {
-    const { firstName, lastName } = values;
+  const handleSubmit = async (formData: FormData) => {
+    const { firstName, lastName } = formData;
 
     try {
-      await updateName({ firstName, lastName, authToken });
-      snackbar.success(t('profile.notifications.profileUpdated'));
+      await updateName({ firstName, lastName });
+      snackbar.success(t('profile.info.notifications.success'));
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
-        const validationErrors = err.response.data.errors as ValidationError[];
-        formik.setErrors(transformToFormikErrorsObj(validationErrors));
+        const validationErrors = err.response.data
+          .errors as ServerValidationError[];
+        formik.setErrors(parseValidationErrors(validationErrors));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      firstName: userData ? userData.firstName : '',
+      lastName: userData ? userData.lastName : '',
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
+
   return (
     <form onSubmit={formik.handleSubmit} noValidate>
       <Card>
         <CardHeader title={t('profile.info.title')} />
+
         <CardContent>
           <TextField
             required
@@ -82,6 +85,7 @@ const ProfileInformation = () => {
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             helperText={formik.touched.firstName && formik.errors.firstName}
           />
+
           <TextField
             required
             fullWidth
@@ -97,10 +101,12 @@ const ProfileInformation = () => {
             helperText={formik.touched.lastName && formik.errors.lastName}
           />
         </CardContent>
+
         <CardActions>
           <Button onClick={() => formik.resetForm()}>
             {t('common.reset')}
           </Button>
+
           <LoadingButton loading={isUpdating} type="submit" variant="contained">
             {t('common.update')}
           </LoadingButton>
