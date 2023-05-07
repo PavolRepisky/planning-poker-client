@@ -11,7 +11,6 @@ import SocketSessionJoinUserData from 'session/types/SocketSessionJoinUserData';
 import SocketSessionUserData from 'session/types/SocketSessionUserData';
 import SocketSessionUserVoteData from 'session/types/SocketSessionUserVoteData';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
-import { v4 } from 'uuid';
 import VotingPanel from './VotingPanel';
 import VotingPlayerRow from './VotingPlayerRow';
 
@@ -28,11 +27,9 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   const [selectedCard, setSelectedCard] = useState<SocketSessionUserVoteData>();
   const [showVotes, setShowVotes] = useState(false);
 
-  const [socketConnectionId, setSocketConnectionId] = useLocalStorage<string>(
-    'connectionId',
-    ''
-  );
-  const socketClient = SocketClient.getInstance(socketConnectionId);
+  const [socketConnectionId] = useLocalStorage<string>('connectionId', '');
+
+  const socketClient = SocketClient.getInstance();
 
   const handleVotingCreated = (votingData: {
     name: string;
@@ -69,8 +66,6 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   useEffect(() => {
     socketClient.connect();
     socketClient.setupSessionUpdateListener(handleSessionUpdate);
-
-    setSocketConnectionId(user.id ?? v4());
 
     const userJoinData = {
       firstName: user.firstName,

@@ -49,7 +49,7 @@ const VotingPanel = ({
         name: createdVoting.name,
         description: createdVoting.description,
       });
-      snackbar.success(t('session.createVoting.notifications.success'));
+      snackbar.success(t('session.dialog.createVoting.notifications.success'));
       setOpenCreateDialog(false);
 
       return [];
