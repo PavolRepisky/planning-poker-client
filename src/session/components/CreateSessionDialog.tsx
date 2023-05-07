@@ -53,7 +53,7 @@ const CreateSessionDialog = ({
   const handleSubmit = async (formData: FormData) => {
     try {
       const createdSession = await createSession(formData);
-      snackbar.success(t('session.create.notifications.success'));
+      snackbar.success(t('session.dialog.create.notifications.success'));
       onClose();
       navigate(`/sessions/${createdSession.hashId}`);
     } catch (err: any) {

@@ -38,7 +38,6 @@ class SocketClient {
     connectionId: string,
     callback: (sessionData: SocketSessionUserData | null) => void
   ) => {
-    console.log('emit sent')
     this.socket.emit(
       'getUser',
       sessionHashId,
@@ -52,13 +51,19 @@ class SocketClient {
   joinSession = (
     sessionHashId: string,
     userData: SocketSessionJoinUserData,
-    callback: (sessionData: SocketSessionData) => void
+    callback: (data: {
+      sessionData: SocketSessionData;
+      userVote: SocketSessionUserVoteData | null;
+    }) => void
   ) => {
     this.socket.emit(
       'joinSession',
       sessionHashId,
       userData,
-      (response: SocketSessionData) => {
+      (response: {
+        sessionData: SocketSessionData;
+        userVote: SocketSessionUserVoteData | null;
+      }) => {
         callback(response);
       }
     );
@@ -82,6 +87,17 @@ class SocketClient {
     this.socket.on('sessionUpdate', (sessionData: SocketSessionData) => {
       callback(sessionData);
     });
+  };
+
+  setupVoteUpdateListener = (
+    callback: (voteData: SocketSessionUserVoteData | null) => void
+  ) => {
+    this.socket.on(
+      'voteUpdate',
+      (voteData: SocketSessionUserVoteData | null) => {
+        callback(voteData);
+      }
+    );
   };
 }
 
