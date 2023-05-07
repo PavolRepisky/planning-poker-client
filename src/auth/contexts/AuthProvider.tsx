@@ -26,10 +26,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     config.accessTokenKey,
     ''
   );
-  const [_, setSocketConnectionId] = useLocalStorage<string | null>(
-    'connectionId',
-    null
-  );
 
   const { isLoggingIn, login } = useLogin();
   const { isLoggingOut, logout } = useLogout();
@@ -48,7 +44,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       await logout();
       setAccessToken('');
-      setSocketConnectionId(null);
     } catch (err) {
       throw err;
     }
