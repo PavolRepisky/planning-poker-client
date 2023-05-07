@@ -8,7 +8,6 @@ import VoteCard from 'session/components/VoteCard';
 import SessionData from 'session/types/SessionData';
 import SocketSessionData from 'session/types/SocketSessionData';
 import SocketSessionJoinUserData from 'session/types/SocketSessionJoinUserData';
-import SocketSessionUserData from 'session/types/SocketSessionUserData';
 import SocketSessionUserVoteData from 'session/types/SocketSessionUserVoteData';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
 import VotingPanel from './VotingPanel';
@@ -22,23 +21,19 @@ interface VotingSessionProps {
 
 const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   const { t } = useTranslation();
-  const [users, setUsers] = useState<SocketSessionUserData[]>([]);
-  const [voting, setVoting] = useState<SocketSessionVotingData>();
+  const [socketSessionData, setSocketSessionData] = useState<SocketSessionData>(
+    {
+      users: [],
+    }
+  );
   const [selectedCard, setSelectedCard] = useState<SocketSessionUserVoteData>();
-  const [showVotes, setShowVotes] = useState(false);
 
   const [socketConnectionId] = useLocalStorage<string>('connectionId', '');
 
   const socketClient = SocketClient.getInstance();
 
-  const handleVotingCreated = (votingData: {
-    name: string;
-    description?: string;
-  }): void => {
-    socketClient.createVoting({
-      name: votingData.name,
-      description: votingData.description,
-    } as SocketSessionVotingData);
+  const handleVotingCreated = (votingData: SocketSessionVotingData): void => {
+    socketClient.createVoting(votingData);
   };
 
   const handleVote = (vote: SocketSessionUserVoteData) => {
@@ -46,9 +41,9 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
       if (getMatrixValue(vote)) {
         socketClient.vote(vote);
 
-        const voteIsSame =
+        const votedTwice =
           selectedCard?.row === vote.row && selectedCard.column === vote.column;
-        setSelectedCard(voteIsSame ? undefined : vote);
+        setSelectedCard(votedTwice ? undefined : vote);
       }
     } catch {}
   };
@@ -58,14 +53,27 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   };
 
   const handleSessionUpdate = (sessionData: SocketSessionData) => {
-    setVoting(sessionData.voting);
-    setUsers(sessionData.users);
-    setShowVotes(sessionData.showVotes);
+    setSocketSessionData(sessionData);
+  };
+
+  const handleVoteUpdate = (voteData: SocketSessionUserVoteData | null) => {
+    if (voteData && getMatrixValue(voteData)) {
+      setSelectedCard(voteData);
+    }
+  }
+
+  const handleJoin = (data: {
+    sessionData: SocketSessionData;
+    userVote: SocketSessionUserVoteData | null;
+  }) => {
+    handleSessionUpdate(data.sessionData);
+    handleVoteUpdate(data.userVote);
   };
 
   useEffect(() => {
     socketClient.connect();
     socketClient.setupSessionUpdateListener(handleSessionUpdate);
+    socketClient.setupVoteUpdateListener(handleVoteUpdate)
 
     const userJoinData = {
       firstName: user.firstName,
@@ -73,7 +81,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
       connectionId: socketConnectionId,
     } as SocketSessionJoinUserData;
 
-    socketClient.joinSession(session.hashId, userJoinData, handleSessionUpdate);
+    socketClient.joinSession(session.hashId, userJoinData, handleJoin);
 
     return () => {
       socketClient.disconnect();
@@ -93,12 +101,16 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   const countVotes = () => {
     const res: Record<string, number> = {};
 
-    users.forEach((user) => {
-      const matrixValue = user.vote ? getMatrixValue(user.vote) : null;
+    if (!socketSessionData.votes) {
+      return {};
+    }
+
+    for (const voteData of Object.values(socketSessionData.votes)) {
+      const matrixValue = getMatrixValue(voteData);
       if (matrixValue) {
         res[matrixValue] = (res[matrixValue] || 0) + 1;
       }
-    });
+    }
     return res;
   };
 
@@ -120,14 +132,14 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     <React.Fragment>
       <VotingPanel
         isAdmin={isAdmin}
-        voting={voting}
-        showVotes={showVotes}
+        voting={socketSessionData.voting}
+        showVotes={socketSessionData.votes !== undefined}
         onCreateSuccess={handleVotingCreated}
         onShowVotes={handleShowVotes}
         sessionHashId={session.hashId}
       />
 
-      {voting && showVotes && (
+      {socketSessionData.votes && (
         <Grid
           container
           spacing={1}
@@ -171,7 +183,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
       )}
 
       <Grid container spacing={5}>
-        {voting && !showVotes && (
+        {socketSessionData.voting && socketSessionData.votes === undefined && (
           <Grid item sx={{ width: 'fit-content', mx: 'auto' }}>
             {matrix.values.map((row, rowIdx) => {
               return (
@@ -209,7 +221,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
               {t('session.players')}
             </Typography>
             <Box>
-              {users.map((user, index) => {
+              {socketSessionData.users.map((user, index) => {
                 return (
                   <VotingPlayerRow
                     key={user.connectionId}
@@ -217,8 +229,10 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                     lastName={user.lastName}
                     voted={user.voted}
                     voteValue={
-                      user.vote
-                        ? getMatrixValue(user.vote) ?? undefined
+                      socketSessionData.votes
+                        ? getMatrixValue(
+                            socketSessionData.votes[user.connectionId]
+                          ) ?? undefined
                         : undefined
                     }
                   />
