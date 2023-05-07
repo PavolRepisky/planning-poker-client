@@ -1,5 +1,6 @@
 import { PaletteMode } from '@mui/material';
 
+// illustrations color:  #4A7DE4
 const palette = {
   grey: {
     '50': '#ECEFF1',
