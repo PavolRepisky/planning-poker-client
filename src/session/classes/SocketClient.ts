@@ -1,27 +1,26 @@
-import socket from 'core/config/socket';
+import config from 'core/config/config';
 import SocketSessionData from 'session/types/SocketSessionData';
 import SocketSessionJoinUserData from 'session/types/SocketSessionJoinUserData';
+import SocketSessionUserData from 'session/types/SocketSessionUserData';
 import SocketSessionUserVoteData from 'session/types/SocketSessionUserVoteData';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
 import { io, Socket } from 'socket.io-client';
 
 class SocketClient {
   static instance: SocketClient;
-  connectionId: string;
   socket: Socket;
 
-  constructor(connectionId: string) {
-    const host = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
+  constructor() {
+    const host = config.origin;
 
     this.socket = io(host, {
       autoConnect: false,
     });
-    this.connectionId = connectionId;
   }
 
-  public static getInstance(connectionId: string): SocketClient {
+  public static getInstance(): SocketClient {
     if (!SocketClient.instance) {
-      SocketClient.instance = new SocketClient(connectionId);
+      SocketClient.instance = new SocketClient();
     }
     return SocketClient.instance;
   }
@@ -32,6 +31,22 @@ class SocketClient {
 
   disconnect = () => {
     this.socket.disconnect();
+  };
+
+  getUserData = (
+    sessionHashId: string,
+    connectionId: string,
+    callback: (sessionData: SocketSessionUserData | null) => void
+  ) => {
+    console.log('emit sent')
+    this.socket.emit(
+      'getUser',
+      sessionHashId,
+      connectionId,
+      (response: SocketSessionUserData | null) => {
+        callback(response);
+      }
+    );
   };
 
   joinSession = (

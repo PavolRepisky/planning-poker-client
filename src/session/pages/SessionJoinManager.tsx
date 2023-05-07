@@ -3,14 +3,18 @@ import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import BoxedLayout from 'core/components/BoxedLayout';
 import Toolbar from 'core/components/Toolbar';
+import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import MatrixData from 'matrix/types/MatrixData';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router';
+import SocketClient from 'session/classes/SocketClient';
 import GuestForm from 'session/components/GuestForm';
 import VotingSession from 'session/components/VotingSession';
 import { useJoinSession } from 'session/hooks/useJoinSession';
 import SessionData from 'session/types/SessionData';
+import SocketSessionUserData from 'session/types/SocketSessionUserData';
+import { v4 } from 'uuid';
 
 const SessionJoinManager = () => {
   const { userData } = useAuth();
@@ -18,6 +22,13 @@ const SessionJoinManager = () => {
   const { hashId } = useParams();
   const navigate = useNavigate();
   const { joinSession } = useJoinSession();
+  const socketClient = SocketClient.getInstance();
+
+  const [socketConnectionId, setSocketConnectionId] = useLocalStorage<string>(
+    'connectionId',
+    userData?.id ?? ''
+  );
+
   const [data, setData] = useState<{
     session: SessionData;
     matrix: MatrixData;
@@ -30,6 +41,19 @@ const SessionJoinManager = () => {
 
   const userLoggedIn = userData !== undefined;
 
+  const handleSetUserData = (socketUserData: SocketSessionUserData | null) => {
+    if (socketUserData) {
+      setGuestUserData({
+        firstName: socketUserData.firstName,
+        lastName: socketUserData.lastName,
+      });
+    } else {
+      setSocketConnectionId(v4());
+    }
+
+    socketClient.disconnect();
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -37,9 +61,25 @@ const SessionJoinManager = () => {
         setData(response);
       } catch {
         navigate('/404');
+        return;
       }
     }
     fetchData();
+
+    if (userData) {
+      return;
+    }
+
+    if (socketConnectionId) {
+      socketClient.connect();
+      socketClient.getUserData(
+        hashId ?? '',
+        socketConnectionId,
+        handleSetUserData
+      );
+    } else {
+      setSocketConnectionId(v4());
+    }
   }, []);
 
   if (!data) {
@@ -55,9 +95,10 @@ const SessionJoinManager = () => {
           </Typography>
 
           <GuestForm
-            onSubmit={(formData: { firstName: string; lastName: string }) =>
-              setGuestUserData(formData)
-            }
+            onSubmit={(formData: { firstName: string; lastName: string }) => {
+              setGuestUserData(formData);
+              socketClient.disconnect();
+            }}
           />
         </BoxedLayout>
       );
