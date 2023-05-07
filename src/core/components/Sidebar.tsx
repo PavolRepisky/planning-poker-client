@@ -65,7 +65,7 @@ const Sidebar = ({
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
       <IconButton
         component={RouterLink}
-        to={'/'}
+        to={'/home'}
         sx={{
           '&:hover': { background: 'transparent' },
           p: 4,

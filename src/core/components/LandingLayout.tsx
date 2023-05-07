@@ -7,6 +7,7 @@ import {
   Paper,
   Toolbar,
   Typography,
+  useTheme,
 } from '@mui/material';
 import Footer from 'core/components/Footer';
 import Logo from 'core/components/Logo';
@@ -22,6 +23,7 @@ type LandingLayoutProps = {
 const LandingLayout = ({ children }: LandingLayoutProps) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const handleSettingsToggle = () => {
     setSettingsOpen(!settingsOpen);
@@ -34,7 +36,10 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
           <IconButton
             component={RouterLink}
             to={'/'}
-            sx={{ '&:hover': { background: 'transparent' } }}
+            sx={{
+              '&:hover': { background: 'transparent' },
+              color: theme.palette.text.primary,
+            }}
             role="img"
             aria-label="Logo"
           >

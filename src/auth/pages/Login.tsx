@@ -76,7 +76,7 @@ const Login = () => {
         sx={{
           backgroundImage: 'url(./images/login.svg)',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
+          backgroundSize: '70%',
           backgroundPosition: 'center',
         }}
       />

@@ -218,6 +218,31 @@
       "title": "Settings"
     }
   },
+  "home": {
+    "welcome": {
+      "message": "Follow those four simple steps to create a new voting estimation session.",
+      "subTitle": "Let's play a game!",
+      "title": "Hi {{name}},"
+    },
+    "widgets": {
+      "createMatrix": {
+        "title": "Create a card deck",
+        "subTitle": "Specify names and values of a card deck, which you want to use in the session"
+      },
+      "createSession": {
+        "title": "Create a voting session",
+        "subTitle": "Choose a name and a card for the session"
+      },
+      "invite": {
+        "title": "Invite your team",
+        "subTitle": "Invite other teammemebrs by sharing your url address"
+      },
+      "vote": {
+        "title": "Vote!",
+        "subTitle": "Create a new voting and pick a card"
+      }
+    }
+  },
   "profile": {
     "menu": {
       "info": "Information",

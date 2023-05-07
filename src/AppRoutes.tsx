@@ -21,6 +21,7 @@ const ProfileInformation = lazy(
   () => import('./user/pages/ProfileInformation')
 );
 const ProfilePassword = lazy(() => import('./user/pages/ProfilePassword'));
+const Home = lazy(() => import('./user/pages/Home'));
 
 // Matrix
 const MatrixHomepage = lazy(() => import('./matrix/pages/MatrixHomepage'));
@@ -49,7 +50,9 @@ const AppRoutes = () => {
 
           <Route path="/sessions" element={<SessionHomepage />} />
 
-          <Route path="/" element={<Profile />}>
+          <Route path="/home" element={<Home />} />
+
+          <Route path="/profile" element={<Profile />}>
             <Route path="" element={<ProfileInformation />} />
             <Route path="password" element={<ProfilePassword />} />
           </Route>

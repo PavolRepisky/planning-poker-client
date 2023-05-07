@@ -46,7 +46,13 @@ const Result = ({
 }: ResultProps) => {
   return (
     <Container maxWidth={maxWidth}>
-      <Box sx={{ textAlign: 'center', px: 3, py: 8 }}>
+      <Box
+        sx={{
+          textAlign: 'center',
+          px: 3,
+          py: 8,
+        }}
+      >
         <SvgContainer>
           <ResultImage customImage={image} status={status} />
         </SvgContainer>
