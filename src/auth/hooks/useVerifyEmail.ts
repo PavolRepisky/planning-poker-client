@@ -1,5 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
+
+let axios: AxiosInstance;
 
 const verifyEmail = async ({
   verificationCode,
@@ -10,6 +13,7 @@ const verifyEmail = async ({
 };
 
 export function useVerifyEmail() {
+  axios = useAxios();
   const { isLoading, mutateAsync } = useMutation(verifyEmail);
   return { isVerifying: isLoading, verifyEmail: mutateAsync };
 }

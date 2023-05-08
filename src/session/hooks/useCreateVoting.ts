@@ -1,6 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
 import VotingData from 'session/types/VotingData';
+
+let axios: AxiosInstance;
 
 const createVoting = async ({
   sessionHashId,
@@ -20,6 +23,7 @@ const createVoting = async ({
 };
 
 export const useCreateVoting = () => {
+  axios = useAxios();
   const { isLoading, mutateAsync } = useMutation(createVoting);
   return { isCreating: isLoading, createVoting: mutateAsync };
 };
