@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
 import { updateOne } from 'core/utils/crudUtils';
 import Matrix from 'matrix/types/MatrixData';
+
+let axios: AxiosInstance;
 
 const updateMatrix = async (matrix: Matrix): Promise<Matrix> => {
   const { id, ...matrixData } = matrix;
@@ -11,6 +14,7 @@ const updateMatrix = async (matrix: Matrix): Promise<Matrix> => {
 };
 
 export const useUpdateMatrix = () => {
+  axios = useAxios();
   const queryClient = useQueryClient();
 
   const { isLoading, mutateAsync } = useMutation(updateMatrix, {

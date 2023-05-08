@@ -1,5 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
+
+let axios: AxiosInstance;
 
 const login = async ({
   email,
@@ -13,6 +16,7 @@ const login = async ({
 };
 
 export const useLogin = () => {
+  axios = useAxios();
   const { isLoading, mutateAsync } = useMutation(login);
   return { isLoggingIn: isLoading, login: mutateAsync };
 };

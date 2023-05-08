@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
 import UserData from 'user/types/userData';
+
+let axios: AxiosInstance;
 
 const fetchUser = async (): Promise<UserData | null> => {
   try {
@@ -12,9 +15,9 @@ const fetchUser = async (): Promise<UserData | null> => {
 };
 
 export function useGetUser(key?: string) {
+  axios = useAxios();
   const { data } = useQuery(['user-info', key], () => fetchUser(), {
     enabled: !!key,
   });
-
   return { data: data ?? undefined };
 }

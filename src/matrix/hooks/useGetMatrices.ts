@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
 import {
   default as Matrix,
   default as MatrixData,
 } from 'matrix/types/MatrixData';
+
+let axios: AxiosInstance;
 
 const fetchMatrices = async (): Promise<Matrix[]> => {
   const { data } = await axios.get('/matrices');
@@ -17,5 +20,6 @@ const fetchMatrices = async (): Promise<Matrix[]> => {
 };
 
 export const useGetMatrices = () => {
+  axios = useAxios();
   return useQuery(['matrices'], () => fetchMatrices());
 };

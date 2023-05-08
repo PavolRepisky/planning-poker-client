@@ -1,5 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
+
+let axios: AxiosInstance;
 
 const resetPassword = async ({
   password,
@@ -17,6 +20,7 @@ const resetPassword = async ({
 };
 
 export function useResetPassword() {
+  axios = useAxios();
   const { isLoading, mutateAsync } = useMutation(resetPassword);
   return { isResetting: isLoading, resetPassword: mutateAsync };
 }

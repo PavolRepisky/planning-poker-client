@@ -1,6 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'core/config/axios';
+import { AxiosInstance } from 'axios';
+import useAxios from 'core/hooks/useAxios';
 import SessionData from 'session/types/SessionData';
+
+let axios: AxiosInstance;
 
 const createSession = async (
   session: Partial<SessionData>
@@ -10,6 +13,7 @@ const createSession = async (
 };
 
 export const useCreateSession = () => {
+  axios = useAxios();
   const { isLoading, mutateAsync } = useMutation(createSession);
   return { isCreating: isLoading, createSession: mutateAsync };
 };
