@@ -39,7 +39,7 @@ class SocketClient {
     callback: (sessionData: SocketSessionUserData | null) => void
   ) => {
     this.socket.emit(
-      'getUser',
+      'get_user',
       sessionHashId,
       connectionId,
       (response: SocketSessionUserData | null) => {
@@ -57,7 +57,7 @@ class SocketClient {
     }) => void
   ) => {
     this.socket.emit(
-      'joinSession',
+      'join_session',
       sessionHashId,
       userData,
       (response: {
@@ -70,11 +70,11 @@ class SocketClient {
   };
 
   createVoting = (votingData: SocketSessionVotingData) => {
-    this.socket.emit('createVoting', votingData);
+    this.socket.emit('create_voting', votingData);
   };
 
   showVotes = () => {
-    this.socket.emit('showVotes');
+    this.socket.emit('show_votes');
   };
 
   vote = (vote: SocketSessionUserVoteData) => {
@@ -84,7 +84,7 @@ class SocketClient {
   setupSessionUpdateListener = (
     callback: (sessionData: SocketSessionData) => void
   ) => {
-    this.socket.on('sessionUpdate', (sessionData: SocketSessionData) => {
+    this.socket.on('session_update', (sessionData: SocketSessionData) => {
       callback(sessionData);
     });
   };
@@ -93,7 +93,7 @@ class SocketClient {
     callback: (voteData: SocketSessionUserVoteData | null) => void
   ) => {
     this.socket.on(
-      'voteUpdate',
+      'vote_update',
       (voteData: SocketSessionUserVoteData | null) => {
         callback(voteData);
       }

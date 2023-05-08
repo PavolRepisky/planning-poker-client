@@ -13,7 +13,7 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { useCreateVoting } from 'session/hooks/useCreateVoting';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
-import CreateVotingModal from './CreateVotingDialog';
+import CreateVotingDialog from './CreateVotingDialog';
 
 interface VotingPanelProps {
   voting?: SocketSessionVotingData;
@@ -105,7 +105,7 @@ const VotingPanel = ({
       </Card>
 
       {openCreateDialog && (
-        <CreateVotingModal
+        <CreateVotingDialog
           onCreate={handleCreateVoting}
           onClose={() => setOpenCreateDialog(false)}
           open={openCreateDialog}

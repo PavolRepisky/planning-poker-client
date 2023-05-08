@@ -8,7 +8,7 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { verificationCode } = useParams();
-  const { isVerifying, verifyEmail } = useVerifyEmail();
+  const { verifyEmail } = useVerifyEmail();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -24,12 +24,12 @@ const VerifyEmail = () => {
           navigate('/404');
           return;
         }
-        navigate('/404');
+        navigate('/');
         snackbar.error(t('common.errors.unexpected.subTitle'));
       }
     }
     fetchData();
-  }, []);
+  }, [navigate, snackbar, t, verificationCode, verifyEmail]);
 
   return <></>;
 };

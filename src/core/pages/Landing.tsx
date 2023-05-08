@@ -17,7 +17,7 @@ import Feature from 'core/components/Feature';
 import LandingLayout from 'core/components/LandingLayout';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import JoinSessionModal from 'session/components/JoinSessionDialog';
+import JoinSessionDialog from 'session/components/JoinSessionDialog';
 
 const listFeatures = [
   { name: 'landing.features.unlimitedSessions' },
@@ -29,7 +29,7 @@ const listFeatures = [
 const Landing = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const [openJoinModal, setOpenJoinModal] = useState(false);
+  const [openJoinDialog, setOpenJoinDialog] = useState(false);
 
   return (
     <LandingLayout>
@@ -57,7 +57,7 @@ const Landing = () => {
             >
               <Button
                 variant="contained"
-                onClick={() => setOpenJoinModal(true)}
+                onClick={() => setOpenJoinDialog(true)}
               >
                 {t('landing.join')}
               </Button>
@@ -65,10 +65,10 @@ const Landing = () => {
           </Container>
         </Box>
 
-        {openJoinModal && (
-          <JoinSessionModal
-            onClose={() => setOpenJoinModal(false)}
-            open={openJoinModal}
+        {openJoinDialog && (
+          <JoinSessionDialog
+            onClose={() => setOpenJoinDialog(false)}
+            open={openJoinDialog}
           />
         )}
 
@@ -87,7 +87,7 @@ const Landing = () => {
         </Container>
 
         <Container sx={{ py: 8 }} maxWidth="lg">
-          <Stack alignItems="center" spacing={5}>
+          <Box>
             <Feature
               title={t('landing.features.builder.title')}
               description={t('landing.features.builder.title')}
@@ -116,7 +116,7 @@ const Landing = () => {
               imageSrc="images/placeholder.png"
               imageAlt={t('landing.features.cardDeckManagement.imgAlt')}
             />
-          </Stack>
+          </Box>
         </Container>
 
         <Container sx={{ pt: 5 }} maxWidth="md">

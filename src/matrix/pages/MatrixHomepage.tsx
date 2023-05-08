@@ -5,6 +5,7 @@ import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
+import ServerValidationError from 'core/types/ServerValidationError';
 import MatrixDialog from 'matrix/components/MatrixDialog';
 import MatrixTable from 'matrix/components/MatrixTable';
 import { useCreateMatrix } from 'matrix/hooks/useCreateMatrix';
@@ -36,7 +37,9 @@ const MatrixHomepage = () => {
 
   const processing = isCreating || isUpdating || isDeleting;
 
-  const handleCreateMatrix = async (matrix: Partial<MatrixData>) => {
+  const handleCreateMatrix = async (
+    matrix: Partial<MatrixData>
+  ): Promise<ServerValidationError[]> => {
     try {
       await createMatrix(matrix);
       snackbar.success(
@@ -45,8 +48,13 @@ const MatrixHomepage = () => {
         })
       );
       setOpenMatrixDialog(false);
-    } catch {
+      return [];
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        return err.response.data.errors as ServerValidationError[];
+      }
       snackbar.error(t('common.errors.unexpected.subTitle'));
+      return [];
     }
   };
 
@@ -68,7 +76,9 @@ const MatrixHomepage = () => {
     }
   };
 
-  const handleUpdateMatrix = async (matrix: MatrixData) => {
+  const handleUpdateMatrix = async (
+    matrix: MatrixData
+  ): Promise<ServerValidationError[]> => {
     try {
       await updateMatrix(matrix);
       setOpenMatrixDialog(false);
@@ -77,8 +87,13 @@ const MatrixHomepage = () => {
           matrixName: matrix.name,
         })
       );
-    } catch {
+      return [];
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        return err.response.data.errors as ServerValidationError[];
+      }
       snackbar.error(t('common.errors.unexpected.subTitle'));
+      return [];
     }
   };
 

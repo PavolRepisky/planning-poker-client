@@ -37,8 +37,7 @@
       "required": "The field is required",
       "type": "Invalid value type",
       "string": {
-        "max": "Value is too long",
-        "min": "Value is too short"
+        "max": "Value is too long"
       },
       "integer": {
         "max": "Value is too big",
@@ -146,6 +145,7 @@
         "submit": "Log In"
       },
       "invalidCredentials": "Incorrect e-mail address or password",
+      "unverifiedEmail": "E-mail address is not verified",
       "noAccount": "Don't have an account yet?",
       "forgottenPassword": "Forgotten password?",
       "resetPassword": "Reset Password"
@@ -287,12 +287,6 @@
     "form": {
       "name": {
         "label": "Name"
-      },
-      "rows": {
-        "label": "Rows"
-      },
-      "columns": {
-        "label": "Columns"
       },
       "values": {
         "label": "Values"

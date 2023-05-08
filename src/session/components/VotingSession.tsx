@@ -60,7 +60,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     if (voteData && getMatrixValue(voteData)) {
       setSelectedCard(voteData);
     }
-  }
+  };
 
   const handleJoin = (data: {
     sessionData: SocketSessionData;
@@ -73,7 +73,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   useEffect(() => {
     socketClient.connect();
     socketClient.setupSessionUpdateListener(handleSessionUpdate);
-    socketClient.setupVoteUpdateListener(handleVoteUpdate)
+    socketClient.setupVoteUpdateListener(handleVoteUpdate);
 
     const userJoinData = {
       firstName: user.firstName,
@@ -182,7 +182,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
         </Grid>
       )}
 
-      <Grid container spacing={5}>
+      <Grid container spacing={5} sx={{ minWidth: 500, overflowX: 'auto' }}>
         {socketSessionData.voting && socketSessionData.votes === undefined && (
           <Grid item sx={{ width: 'fit-content', mx: 'auto' }}>
             {matrix.values.map((row, rowIdx) => {
@@ -191,7 +191,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                   key={`row[${rowIdx}]`}
                   container
                   spacing={{ xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 }}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: { xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 } }}
                 >
                   {row.map((column, columnIdx) => {
                     return (
