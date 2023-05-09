@@ -31,7 +31,8 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
       users: [],
     }
   );
-  const [selectedCard, setSelectedCard] = useState<SocketSessionUserVoteData>();
+  const [selectedCard, setSelectedCard] =
+    useState<SocketSessionUserVoteData | null>(null);
 
   const socketClient = SocketClient.getInstance();
 
@@ -43,10 +44,6 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     try {
       if (getMatrixValue(vote)) {
         socketClient.vote(vote);
-
-        const votedTwice =
-          selectedCard?.row === vote.row && selectedCard.column === vote.column;
-        setSelectedCard(votedTwice ? undefined : vote);
       }
     } catch {}
   };
@@ -61,7 +58,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
 
   const handleVoteUpdate = (voteData: SocketSessionUserVoteData | null) => {
     if (!voteData) {
-      setSelectedCard(undefined);
+      setSelectedCard(null);
       return;
     }
     if (getMatrixValue(voteData)) {
@@ -208,7 +205,8 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                           row={rowIdx}
                           column={columnIdx}
                           selected={
-                            rowIdx === selectedCard?.row &&
+                            selectedCard !== null &&
+                            rowIdx === selectedCard.row &&
                             columnIdx === selectedCard.column
                           }
                           onClick={handleVote}
