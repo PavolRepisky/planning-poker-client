@@ -37,7 +37,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      navigate('/');
     } catch {
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }

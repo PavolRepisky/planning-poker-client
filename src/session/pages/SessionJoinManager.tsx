@@ -24,9 +24,9 @@ const SessionJoinManager = () => {
   const { joinSession } = useJoinSession();
   const socketClient = SocketClient.getInstance();
 
-  const [socketConnectionId, setSocketConnectionId] = useLocalStorage<string>(
+  const [connectionId, setSocketConnectionId] = useLocalStorage<string>(
     'connectionId',
-    userData?.id ?? ''
+    ''
   );
 
   const [data, setData] = useState<{
@@ -70,13 +70,9 @@ const SessionJoinManager = () => {
       return;
     }
 
-    if (socketConnectionId) {
+    if (connectionId) {
       socketClient.connect();
-      socketClient.getUserData(
-        hashId ?? '',
-        socketConnectionId,
-        handleSetUserData
-      );
+      socketClient.getUserData(hashId ?? '', connectionId, handleSetUserData);
     } else {
       setSocketConnectionId(v4());
     }
@@ -113,6 +109,7 @@ const SessionJoinManager = () => {
               firstName: guestUserData.firstName,
               lastName: guestUserData.lastName,
               loggedIn: false,
+              connectionId: connectionId,
             }}
           />
         </Box>
@@ -125,6 +122,7 @@ const SessionJoinManager = () => {
     firstName: userData.firstName,
     lastName: userData.lastName,
     loggedIn: userLoggedIn,
+    connectionId: userData.id,
   };
 
   return (

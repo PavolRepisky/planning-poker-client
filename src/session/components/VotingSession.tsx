@@ -1,5 +1,4 @@
 import { Box, Grid, LinearProgress, Typography } from '@mui/material';
-import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import MatrixData from 'matrix/types/MatrixData';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,13 @@ import VotingPanel from './VotingPanel';
 import VotingPlayerRow from './VotingPlayerRow';
 
 interface VotingSessionProps {
-  user: { id?: string; firstName: string; lastName: string; loggedIn: boolean };
+  user: {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    loggedIn: boolean;
+    connectionId: string;
+  };
   matrix: MatrixData;
   session: SessionData;
 }
@@ -27,8 +32,6 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     }
   );
   const [selectedCard, setSelectedCard] = useState<SocketSessionUserVoteData>();
-
-  const [socketConnectionId] = useLocalStorage<string>('connectionId', '');
 
   const socketClient = SocketClient.getInstance();
 
@@ -57,7 +60,11 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   };
 
   const handleVoteUpdate = (voteData: SocketSessionUserVoteData | null) => {
-    if (voteData && getMatrixValue(voteData)) {
+    if (!voteData) {
+      setSelectedCard(undefined);
+      return;
+    }
+    if (getMatrixValue(voteData)) {
       setSelectedCard(voteData);
     }
   };
@@ -78,7 +85,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     const userJoinData = {
       firstName: user.firstName,
       lastName: user.lastName,
-      connectionId: socketConnectionId,
+      connectionId: user.connectionId,
     } as SocketSessionJoinUserData;
 
     socketClient.joinSession(session.hashId, userJoinData, handleJoin);
