@@ -16,7 +16,7 @@ const TextItem = ({
   description: string;
 }) => {
   return (
-    <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+    <Grid item xs={12} sm={5} sx={{ display: 'flex', alignItems: 'center' }}>
       <Box>
         <Typography
           variant="h2"

@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import Feature from 'core/components/Feature';
 import LandingLayout from 'core/components/LandingLayout';
+import { useSettings } from 'core/contexts/SettingsProvider';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import JoinSessionDialog from 'session/components/JoinSessionDialog';
@@ -28,8 +29,9 @@ const listFeatures = [
 
 const Landing = () => {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [openJoinDialog, setOpenJoinDialog] = useState(false);
+  const { mode } = useSettings();
 
   return (
     <LandingLayout>
@@ -75,7 +77,7 @@ const Landing = () => {
         <Container sx={{ py: 6 }} maxWidth="md">
           <img
             alt={t('landing.altDemo')}
-            src={`images/placeholder.png`}
+            src={`images/demo_${mode}_${i18n.language}.png`}
             style={{
               borderRadius: 24,
               borderStyle: 'solid',
@@ -90,31 +92,31 @@ const Landing = () => {
           <Box>
             <Feature
               title={t('landing.features.builder.title')}
-              description={t('landing.features.builder.title')}
+              description={t('landing.features.builder.description')}
               rightAlign={false}
-              imageSrc="images/placeholder.png"
+              imageSrc={`images/matrix_editor_${mode}_${i18n.language}.png`}
               imageAlt={t('landing.features.builder.imgAlt')}
             />
             <Feature
               title={t('landing.features.realTime.title')}
               description={t('landing.features.realTime.description')}
               rightAlign={true}
-              imageSrc="images/placeholder.png"
+              imageSrc={`images/real_time_voting_${mode}_${i18n.language}.png`}
               imageAlt={t('landing.features.realTime.imgAlt')}
             />
             <Feature
               title={t('landing.features.inGameVoting.title')}
               description={t('landing.features.inGameVoting.description')}
               rightAlign={false}
-              imageSrc="images/placeholder.png"
+              imageSrc={`images/in-game_voting_${mode}_${i18n.language}.png`}
               imageAlt={t('landing.features.inGameVoting.imgAlt')}
             />
             <Feature
-              title={t('landing.features.cardDeckManagement.title')}
-              description={t('landing.features.cardDeckManagement.description')}
+              title={t('landing.features.matrixManagement.title')}
+              description={t('landing.features.matrixManagement.description')}
               rightAlign={true}
-              imageSrc="images/placeholder.png"
-              imageAlt={t('landing.features.cardDeckManagement.imgAlt')}
+              imageSrc={`images/matrix_management_${mode}_${i18n.language}.png`}
+              imageAlt={t('landing.features.matrixManagement.imgAlt')}
             />
           </Box>
         </Container>
