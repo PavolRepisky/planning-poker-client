@@ -1,5 +1,4 @@
 import { Box, Grid, LinearProgress, Typography } from '@mui/material';
-import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import MatrixData from 'matrix/types/MatrixData';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,13 @@ import VotingPanel from './VotingPanel';
 import VotingPlayerRow from './VotingPlayerRow';
 
 interface VotingSessionProps {
-  user: { id?: string; firstName: string; lastName: string; loggedIn: boolean };
+  user: {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    loggedIn: boolean;
+    connectionId: string;
+  };
   matrix: MatrixData;
   session: SessionData;
 }
@@ -26,9 +31,8 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
       users: [],
     }
   );
-  const [selectedCard, setSelectedCard] = useState<SocketSessionUserVoteData>();
-
-  const [socketConnectionId] = useLocalStorage<string>('connectionId', '');
+  const [selectedCard, setSelectedCard] =
+    useState<SocketSessionUserVoteData | null>(null);
 
   const socketClient = SocketClient.getInstance();
 
@@ -40,10 +44,6 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
     try {
       if (getMatrixValue(vote)) {
         socketClient.vote(vote);
-
-        const votedTwice =
-          selectedCard?.row === vote.row && selectedCard.column === vote.column;
-        setSelectedCard(votedTwice ? undefined : vote);
       }
     } catch {}
   };
@@ -57,10 +57,14 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   };
 
   const handleVoteUpdate = (voteData: SocketSessionUserVoteData | null) => {
-    if (voteData && getMatrixValue(voteData)) {
+    if (!voteData) {
+      setSelectedCard(null);
+      return;
+    }
+    if (getMatrixValue(voteData)) {
       setSelectedCard(voteData);
     }
-  }
+  };
 
   const handleJoin = (data: {
     sessionData: SocketSessionData;
@@ -73,12 +77,12 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
   useEffect(() => {
     socketClient.connect();
     socketClient.setupSessionUpdateListener(handleSessionUpdate);
-    socketClient.setupVoteUpdateListener(handleVoteUpdate)
+    socketClient.setupVoteUpdateListener(handleVoteUpdate);
 
     const userJoinData = {
       firstName: user.firstName,
       lastName: user.lastName,
-      connectionId: socketConnectionId,
+      connectionId: user.connectionId,
     } as SocketSessionJoinUserData;
 
     socketClient.joinSession(session.hashId, userJoinData, handleJoin);
@@ -182,7 +186,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
         </Grid>
       )}
 
-      <Grid container spacing={5}>
+      <Grid container spacing={5} sx={{ minWidth: 500, overflowX: 'auto' }}>
         {socketSessionData.voting && socketSessionData.votes === undefined && (
           <Grid item sx={{ width: 'fit-content', mx: 'auto' }}>
             {matrix.values.map((row, rowIdx) => {
@@ -191,7 +195,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                   key={`row[${rowIdx}]`}
                   container
                   spacing={{ xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 }}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: { xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 } }}
                 >
                   {row.map((column, columnIdx) => {
                     return (
@@ -201,7 +205,8 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                           row={rowIdx}
                           column={columnIdx}
                           selected={
-                            rowIdx === selectedCard?.row &&
+                            selectedCard !== null &&
+                            rowIdx === selectedCard.row &&
                             columnIdx === selectedCard.column
                           }
                           onClick={handleVote}

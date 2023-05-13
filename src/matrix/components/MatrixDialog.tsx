@@ -8,6 +8,8 @@ import {
   TextField,
 } from '@mui/material';
 import config from 'core/config/config';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
 import ValuesGrid from 'matrix/components/ValuesGrid';
 import MatrixData from 'matrix/types/MatrixData';
@@ -15,9 +17,9 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 type MatrixDialogProps = {
-  onCreate: (matrix: Partial<MatrixData>) => void;
+  onCreate: (matrix: Partial<MatrixData>) => Promise<ServerValidationError[]>;
   onClose: () => void;
-  onUpdate: (matrix: MatrixData) => void;
+  onUpdate: (matrix: MatrixData) => Promise<ServerValidationError[]>;
   open: boolean;
   processing: boolean;
   matrix?: MatrixData;
@@ -83,16 +85,28 @@ const MatrixDialog = ({
 
   type FormData = yup.InferType<typeof validationSchema>;
 
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     const matrixValues = formData.values;
     const rows = matrixValues.length;
     const columns = matrixValues.length > 0 ? matrixValues[0].length : 0;
 
+    let serverValidationErrors: ServerValidationError[] = [];
+
     if (matrix && matrix.id) {
-      onUpdate({ ...formData, id: matrix.id, rows, columns } as MatrixData);
+      serverValidationErrors = await onUpdate({
+        ...formData,
+        id: matrix.id,
+        rows,
+        columns,
+      } as MatrixData);
     } else {
-      onCreate({ ...formData, rows, columns });
+      serverValidationErrors = await onCreate({
+        ...formData,
+        rows,
+        columns,
+      });
     }
+    formik.setErrors(parseValidationErrors(serverValidationErrors));
   };
 
   const formik = useFormik({

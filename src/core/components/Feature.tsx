@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 type FeatureProps = {
   title: string;
@@ -16,7 +16,7 @@ const TextItem = ({
   description: string;
 }) => {
   return (
-    <Grid item xs={12} md={5} sx={{ display: 'flex', alignItems: 'center' }}>
+    <Grid item xs={12} sm={5} sx={{ display: 'flex', alignItems: 'center' }}>
       <Box>
         <Typography
           variant="h2"
@@ -73,16 +73,19 @@ const Feature = ({
   imageSrc,
   imageAlt,
 }: FeatureProps) => {
+  const theme = useTheme();
+  const isExtraSmall = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <Grid container spacing={4}>
-      {rightAlign && (
+    <Grid container spacing={3} sx={{ mb: 4 }}>
+      {rightAlign && !isExtraSmall && (
         <>
           <ImageItem imageSrc={imageSrc} imageAlt={imageAlt} />
           <TextItem title={title} description={description} />
         </>
       )}
 
-      {!rightAlign && (
+      {(!rightAlign || isExtraSmall) && (
         <>
           <TextItem title={title} description={description} />
           <ImageItem imageSrc={imageSrc} imageAlt={imageAlt} />

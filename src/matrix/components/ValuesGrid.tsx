@@ -8,6 +8,8 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import config from 'core/config/config';
+import { useTranslation } from 'react-i18next';
 
 interface ValuesGridProps {
   formik: any;
@@ -16,105 +18,53 @@ interface ValuesGridProps {
 
 const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
   const theme = useTheme();
+  const { t } = useTranslation();
+
+  const values: string[][] = formik.values.values;
 
   const handleValueChange = (
+    row: number,
+    column: number,
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    const indexes = event.target.name.split('=')[1];
-    const idx1 = +indexes.split(',')[0];
-    const idx2 = +indexes.split(',')[1];
-
-    const newValues = formik.values.values;
-    newValues[idx1][idx2] = event.target.value;
-
-    formik.setFieldValue('values', newValues);
+    values[row][column] = event.target.value;
+    formik.setFieldValue('values', values);
   };
 
   const handleAddRow = () => {
-    if (
-      formik.values.values.length >=
-      (process.env.REACT_APP_MATRIX_MAX_ROWS ?? 6)
-    ) {
-      return;
-    }
-    const newValues = formik.values.values;
-    const columns = newValues ? newValues[0].length : 0;
-    const rows = newValues.length;
-    newValues.push(new Array(columns).fill(''));
-    formik.setFieldValue('values', newValues);
-    formik.setFieldValue('rows', rows + 1);
+    const columnsCount = values[0].length;
+    values.push(new Array(columnsCount).fill(''));
+    formik.setFieldValue('values', values);
   };
 
   const handleRemoveRow = () => {
-    if (formik.values.values.length <= 1) {
-      return;
-    }
-    const newValues = formik.values.values;
-    const rows = newValues.length;
-    newValues.pop();
-    formik.setFieldValue('values', newValues);
-    formik.setFieldValue('rows', rows - 1);
+    values.pop();
+    formik.setFieldValue('values', values);
   };
 
   const handleAddColumn = () => {
-    if (
-      formik.values.values[0].length >=
-      (process.env.REACT_APP_MATRIX_MAX_COLUMNS ?? 6)
-    ) {
-      return;
-    }
-    const newValues = formik.values.values.map((row: string[]) => {
+    const newValues = values.map((row: string[]) => {
       const newRow = row;
       newRow.push('');
       return newRow;
     });
-    const columns = newValues ? newValues[0].length : 0;
     formik.setFieldValue('values', newValues);
-    formik.setFieldValue('columns', columns);
   };
 
   const handleRemoveColumn = () => {
-    if (formik.values.values[0].length <= 1) {
-      return;
-    }
     const newValues = formik.values.values.map((row: string[]) => {
       const newRow = row;
       newRow.pop();
       return newRow;
     });
-    const columns = newValues ? newValues[0].length : 0;
     formik.setFieldValue('values', newValues);
-    formik.setFieldValue('columns', columns - 1);
   };
-
-  const gridRows: any = [];
-  formik.values.values.forEach((row: string[], idx: number) => {
-    const items = row.map((item, idx2) => (
-      <Grid item xs>
-        <TextField
-          key={`value=${idx},${idx2}`}
-          required
-          fullWidth
-          name={`value=${idx},${idx2}`}
-          value={item}
-          type="text"
-          disabled={processing}
-          onChange={handleValueChange}
-        />
-      </Grid>
-    ));
-    gridRows.push(
-      <Grid container spacing={2} className="values-row" key={`row=${idx}`}>
-        {items}
-      </Grid>
-    );
-  });
 
   return (
     <Box>
-      <Box sx={{ pl: 1, mb: 1 }}>
+      <Box sx={{ ml: 2, mb: 1 }}>
         <Typography component="p" color={theme.palette.text.secondary}>
-          Values *
+          {t('matrix.form.values.label')} *
         </Typography>
         <FormHelperText
           error={formik.touched.values && Boolean(formik.errors.values)}
@@ -123,71 +73,86 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
         </FormHelperText>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={{ xs: 1, md: 2 }}
+        minWidth="sm"
+        sx={{ overflowX: 'auto', minWidth: 500 }}
+      >
         <Grid item xs>
-          {gridRows}
-
-          <Button
-            fullWidth
-            size="small"
-            variant="outlined"
-            onClick={handleAddRow}
-            disabled={
-              formik.values.values
-                ? formik.values.values.length >=
-                  (process.env.REACT_APP_MATRIX_MAX_ROWS ?? 6)
-                : false
-            }
-            sx={{
-              borderBottom: 'none',
-              borderBottomRightRadius: 0,
-              borderBottomLeftRadius: 0,
-            }}
-          >
-            +
-          </Button>
-          <Button
-            size="small"
-            fullWidth
-            variant="outlined"
-            onClick={handleRemoveRow}
-            disabled={
-              formik.values.values ? formik.values.values.length <= 1 : false
-            }
-            sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
-          >
-            -
-          </Button>
+          <Grid container spacing={1}>
+            {values.map((row, idx) => {
+              return (
+                <Grid key={idx} item xs={12}>
+                  <Grid container spacing={{ xs: 1, md: 2 }}>
+                    {row.map((value, idx2) => {
+                      return (
+                        <Grid key={idx2} item xs sx={{ minWidth: 0 }}>
+                          <TextField
+                            required
+                            fullWidth
+                            value={value}
+                            type="text"
+                            disabled={processing}
+                            onChange={(event) =>
+                              handleValueChange(idx, idx2, event)
+                            }
+                          />
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Grid>
+              );
+            })}
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                size="small"
+                variant="outlined"
+                onClick={handleAddRow}
+                disabled={values.length >= config.matrixMaxRows}
+                sx={{
+                  borderBottom: 'none',
+                  borderBottomRightRadius: 0,
+                  borderBottomLeftRadius: 0,
+                }}
+              >
+                +
+              </Button>
+              <Button
+                size="small"
+                fullWidth
+                variant="outlined"
+                onClick={handleRemoveRow}
+                disabled={values.length <= config.matrixMinRows}
+                sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
+              >
+                -
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
+
         <Grid
           item
           xs="auto"
           sx={{
-            width: '100%',
             display: 'flex',
             justifyContent: 'flex-end',
-            mb: 13,
+            mb: 17,
           }}
         >
-          <ButtonGroup size="small" aria-label="small outlined button group">
+          <ButtonGroup size="small">
             <Button
               onClick={handleAddColumn}
-              disabled={
-                formik.values.values
-                  ? formik.values.values[0].length >=
-                    (process.env.REACT_APP_MATRIX_MAX_COLUMNS ?? 6)
-                  : false
-              }
+              disabled={values[0].length >= config.matrixMaxColumns}
             >
               +
             </Button>
             <Button
               onClick={handleRemoveColumn}
-              disabled={
-                formik.values.values
-                  ? formik.values.values[0].length <= 1
-                  : false
-              }
+              disabled={values[0].length <= config.matrixMinColumns}
             >
               -
             </Button>

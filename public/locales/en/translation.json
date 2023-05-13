@@ -37,8 +37,7 @@
       "required": "The field is required",
       "type": "Invalid value type",
       "string": {
-        "max": "Value is too long",
-        "min": "Value is too short"
+        "max": "Value is too long"
       },
       "integer": {
         "max": "Value is too big",
@@ -54,16 +53,16 @@
       },
       "matrix": {
         "uniqueValues": "All values must be different",
-        "taken": "Name is already taken"
+        "taken": "Name is already taken",
+        "invalidId": "Evaluation matrix with given ID was not found"
       },
       "session": {
-        "matrixId": "Matrix with given id does not exist",
-        "id": "Session with given id does not exist"
+        "matrixId": "Evaluation matrix with given ID does not exist"
       }
     }
   },
   "landing": {
-    "title": "Completely free and open-source multidimensional planning poker tool for agile development teams",
+    "title": "Free, open-source, multidimensional planning poker for agile development teams",
     "join": "Join Voting Session",
     "altDemo": "Application demo",
     "links": {
@@ -72,9 +71,9 @@
     },
     "features": {
       "builder": {
-        "title": "Two-dimensional card deck builder",
-        "description": "Evaluate tasks based on multiple parameters, by using two-dimensional card decks.",
-        "imgAlt": "Showcase of two-dimensional card deck builder"
+        "title": "Multidimensional evaluation matrix editor",
+        "description": "Evaluate tasks based on multiple parameters, by using multidimensional evaluation matrices.",
+        "imgAlt": "Showcase of multidimensional evaluation matrix editor"
       },
       "realTime": {
         "title": "Real-time estimation",
@@ -86,12 +85,12 @@
         "description": "The session administrator can create a new vote at any time, regardless of the current state of the vote.",
         "imgAlt": "Showcase of in-game voting creation"
       },
-      "cardDeckManagement": {
-        "title": "Card deck management",
-        "description": "Manage your card decks as you wish.",
+      "matrixManagement": {
+        "title": "Evaluation matrices management",
+        "description": "Manage your evaluation matrices as you wish. Sort, edit, view or delete them, at any time in just a few clicks.",
         "imgAlt": "Showcase of card deck management"
       },
-      "noLimits": "Free forever with no limits",
+      "noLimits": "Free forever and with no limits",
       "unlimitedSessions": "Unlimited number of voting sessions per user",
       "unlimitedUsers": "Unlimited number of users per voting session",
       "unlimitedVotings": "Unlimited number of votings per voting session",
@@ -100,11 +99,10 @@
   },
   "sidebar": {
     "menu": {
-      "dashboard": "Dashboard",
       "help": "Help",
       "home": "Home",
       "settings": "Settings",
-      "matrix": "Card Decks",
+      "matrix": "Evaluation matrices",
       "session": "Voting Sessions"
     }
   },
@@ -130,7 +128,7 @@
         "submit": "Register"
       },
       "notifications": {
-        "success": "Your account has been created successfully! Verify your e-mail to be able to log in."
+        "success": "Your account has been created successfully! Before logging in, you need to confirm your email"
       },
       "haveAccount": "Already have an account?"
     },
@@ -146,6 +144,7 @@
         "submit": "Log In"
       },
       "invalidCredentials": "Incorrect e-mail address or password",
+      "unverifiedEmail": "E-mail address is not verified",
       "noAccount": "Don't have an account yet?",
       "forgottenPassword": "Forgotten password?",
       "resetPassword": "Reset Password"
@@ -226,20 +225,20 @@
     },
     "widgets": {
       "createMatrix": {
-        "title": "Create a card deck",
-        "subTitle": "Specify names and values of a card deck, which you want to use in the session"
+        "title": "Design an evaluation matrix",
+        "subTitle": "Specify a unique name for it and define its values."
       },
       "createSession": {
         "title": "Create a voting session",
-        "subTitle": "Choose a name and a card for the session"
+        "subTitle": "Pick a name and newly created matrix, which will be used in the game."
       },
       "invite": {
         "title": "Invite your team",
-        "subTitle": "Invite other teammemebrs by sharing your url address"
+        "subTitle": "Invite other team members to join, by sharing your URL address."
       },
       "vote": {
         "title": "Vote!",
-        "subTitle": "Create a new voting and pick a card"
+        "subTitle": "Create a new voting by filling up a simple form and then pick a card."
       }
     }
   },
@@ -259,7 +258,7 @@
         }
       },
       "notifications": {
-        "success": "Information has been updated successfully!"
+        "success": "Personal information has been updated successfully!"
       }
     },
     "password": {
@@ -282,17 +281,11 @@
   },
   "matrix": {
     "confirmations": {
-      "delete": "Are you sure you want to delete this card deck?"
+      "delete": "Are you sure you want to delete this evaluation matrix?"
     },
     "form": {
       "name": {
         "label": "Name"
-      },
-      "rows": {
-        "label": "Rows"
-      },
-      "columns": {
-        "label": "Columns"
       },
       "values": {
         "label": "Values"
@@ -301,17 +294,17 @@
     "dialog": {
       "add": {
         "action": "Add",
-        "title": "Add Card Deck"
+        "title": "Add evaluation matrix"
       },
       "edit": {
         "action": "Edit",
-        "title": "Edit Card Deck"
+        "title": "Edit evaluation matrix"
       }
     },
     "notifications": {
-      "created": "{{matrixName}} has been created!",
-      "deleted": "{{matrixName}} have been deleted!",
-      "updated": "{{matrixName}} has been updated!"
+      "created": "Evaluation matrix \"{{matrixName}}\" has been created!",
+      "deleted": "Evaluation matrix \"{{matrixName}}\" have been deleted!",
+      "updated": "Evaluation matrix \"{{matrixName}}\" has been updated!"
     },
     "table": {
       "headers": {
@@ -321,10 +314,10 @@
         "columns": "Columns",
         "createdAt": "Created At"
       },
-      "empty": "No card decks yet"
+      "empty": "No evaluation matrices created yet"
     },
     "toolbar": {
-      "title": "Card Decks"
+      "title": "Evaluation matrices"
     }
   },
   "session": {
@@ -338,7 +331,7 @@
         "title": "Join Voting Session",
         "form": {
           "hashId": {
-            "label": "Session id"
+            "label": "Voting Session ID"
           },
           "submit": "Join"
         }
@@ -350,7 +343,7 @@
             "label": "Name"
           },
           "matrixId": {
-            "label": "Matrix ID"
+            "label": "Evaluation matrix ID"
           },
           "submit": "Create"
         },
@@ -391,7 +384,7 @@
         "success": "Voting session has been joined successfully!"
       }
     },
-    "waiting": "Waiting for moderator to create a voting",
+    "waiting": "Waiting for the administrator to create a voting",
     "toStart": "Create a new voting to get started",
     "createVoting": "Create New Voting",
     "showVotes": "Show Users Votes",

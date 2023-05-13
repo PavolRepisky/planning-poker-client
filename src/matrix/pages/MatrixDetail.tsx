@@ -3,6 +3,7 @@ import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
+import ServerValidationError from 'core/types/ServerValidationError';
 import MatrixDialog from 'matrix/components/MatrixDialog';
 import { useDeleteMatrix } from 'matrix/hooks/useDeleteMatrix';
 import { useGetMatrix } from 'matrix/hooks/useGetMatrix';
@@ -33,7 +34,9 @@ const MatrixDetail = () => {
     }
   }, [data, navigate]);
 
-  const handleUpdateMatrix = async (matrix: MatrixData) => {
+  const handleUpdateMatrix = async (
+    matrix: MatrixData
+  ): Promise<ServerValidationError[]> => {
     try {
       await updateMatrix(matrix);
       setOpenMatrixDialog(false);
@@ -42,8 +45,13 @@ const MatrixDetail = () => {
           matrixName: matrix.name,
         })
       );
-    } catch {
+      return [];
+    } catch (err: any) {
+      if (err.response && err.response.status === 400) {
+        return err.response.data.errors as ServerValidationError[];
+      }
       snackbar.error(t('common.errors.unexpected.subTitle'));
+      return [];
     }
   };
 
@@ -98,7 +106,7 @@ const MatrixDetail = () => {
                 key={`row[${rowIdx}]`}
                 container
                 spacing={{ xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 }}
-                sx={{ mb: 2 }}
+                sx={{ mb: 2, minWidth: 500, overflowX: 'auto' }}
               >
                 {row.map((column, columnIdx) => {
                   return (
@@ -121,7 +129,7 @@ const MatrixDetail = () => {
 
       {openMatrixDialog && (
         <MatrixDialog
-          onCreate={() => {}}
+          onCreate={() => Promise.resolve([])}
           onClose={() => setOpenMatrixDialog(false)}
           onUpdate={handleUpdateMatrix}
           open={openMatrixDialog}

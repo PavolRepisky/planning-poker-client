@@ -2,7 +2,6 @@ import { Check as CheckIcon, Person as PersonIcon } from '@mui/icons-material';
 import { Avatar, Box, Card, CardContent, Typography } from '@mui/material';
 
 interface VotingPlayerRowProps {
-  key: string;
   firstName: string;
   lastName: string;
   voted: boolean;
@@ -10,14 +9,13 @@ interface VotingPlayerRowProps {
 }
 
 const VotingPlayerRow = ({
-  key,
   firstName,
   lastName,
   voted,
   voteValue,
 }: VotingPlayerRowProps) => {
   return (
-    <Card key={key} sx={{ mb: 1 }}>
+    <Card sx={{ mb: 1 }}>
       <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar sx={{ mr: 2 }}>
           <PersonIcon />

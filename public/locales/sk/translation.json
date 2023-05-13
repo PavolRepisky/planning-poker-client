@@ -1,49 +1,114 @@
 {
   "common": {
+    "backHome": "Späť domov",
     "cancel": "Zrušiť",
     "confirm": "Potvrdiť",
     "confirmation": "Potvrdenie",
-    "delete": "Odstrániť",
+    "delete": "Vymazať",
     "edit": "Upraviť",
-    "errors": {
-      "forbidden": {
-        "subTitle": "Na zobrazenie tejto stránky nemáte prístup!",
-        "title": "Oops!"
-      },
-      "notFound": {
-        "subTitle": "Ľutujeme, nepodarilo sa nám nájsť stránku, ktorú hľadáte. Možno ste zle zadali adresu URL?",
-        "title": "Oops!"
-      },
-      "unexpected": {
-        "subTitle": "Niečo sa pokazilo! Ak problém pretrváva, kontaktujte nás!",
-        "title": "Oops!"
-      },
-      "underConstructions": {
-        "subTitle": "Na tejto stránke aktívne pracujeme.",
-        "title": "Vo výstavbe!"
-      }
-    },
+    "view": "Zobraziť",
+    "login": "Prihlásiť sa",
+    "register": "Registrovať sa",
     "reset": "Resetovať",
-    "retry": "Skúste znova",
+    "retry": "Skúsiť znova",
     "selected": "Vybraný",
+    "update": "Aktualizovať",
+    "settings": "Nastavenia",
     "snackbar": {
       "error": "Chyba",
-      "success": "Úspech"
+      "success": "Úspech",
+      "warning": "Upozornenie"
     },
-    "update": "Aktualizovať",
+    "errors": {
+      "forbidden": {
+        "subTitle": "Na zobrazenie tejto stránky nemáš prístup",
+        "title": "Ojoj!"
+      },
+      "notFound": {
+        "subTitle": "Ľutujeme, nepodarilo sa nám nájsť stránku, ktorú hľadáš. Možno si zle zadali adresu URL?",
+        "title": "Ojoj!"
+      },
+      "unexpected": {
+        "subTitle": "Niečo sa pokazilo! Ak problém pretrváva, kontaktuj nás!",
+        "title": "Ojoj!"
+      }
+    },
     "validations": {
-      "email": "Nesprávna emailová adresa",
-      "password": "Musí mať aspoň 8 znakov, musí obsahovať malé a veľké písmeno a číslicu",
-      "passwordMatch": "Heslo sa nezhoduje",
-      "maxChar": "Musí mať {{size}} znakov alebo menej",
-      "minChar": "Musí mať aspoň {{size}} znakov alebo viac",
-      "minNum": "Musí byť aspoň {{num}} alebo väčšie",
-      "required": "Povinné pole"
+      "required": "Pole je povinné",
+      "type": "Neplatný typ hodnoty",
+      "string": {
+        "max": "Hodnota je príliš dlhá"
+      },
+      "integer": {
+        "max": "Hodnota je príliš veľká",
+        "min": "Hodnota je príliš nízka"
+      },
+      "email": {
+        "invalid": "Emailová adresa je neplatná",
+        "taken": "E-mailová adresa sa už používa"
+      },
+      "password": {
+        "weak": "Heslo musí mať aspoň 8 znakov, musí obsahovať malé a veľké písmeno a číslicu",
+        "match": "Heslá sa musia zhodovať"
+      },
+      "matrix": {
+        "uniqueValues": "Všetky hodnoty musia byť odlišné",
+        "taken": "Meno sa už používa",
+        "invalidId": "Hodnotiaca matica s daným ID sa nenašla"
+      },
+      "session": {
+        "matrixId": "Hodnotiaca matica s daným ID neexistuje"
+      }
+    }
+  },
+  "landing": {
+    "title": "Bezplatný, open-source, viacrozmerný plánovací poker pre agilné vývojové tímy",
+    "join": "Pripojiť sa k hlasovaniu",
+    "altDemo": "Ukážka aplikácie",
+    "links": {
+      "api": "Zdrojový kód API",
+      "client": "Zdrojový kód klienta"
+    },
+    "features": {
+      "builder": {
+        "title": "Editor viacrozmerných hodnotiacich matíc",
+        "description": "Vyhodnoťte úlohy na základe viacerých parametrov pomocou viacrozmerných hodnotiacich matíc.",
+        "imgAlt": "Ukážka editora viacrozmerných hodnotiacich matíc"
+      },
+      "realTime": {
+        "title": "Odhadovanie v reálnom čase",
+        "description": "Hlasujte a odhadujte úlohy v reálnom čase pomocou nášho jednoduchého a intuitívneho rozhrania.",
+        "imgAlt": "Ukážka procesu odhadovania"
+      },
+      "inGameVoting": {
+        "title": "Tvorba hlasovaní priamo v hre",
+        "description": "Správca relácie môže kedykoľvek vytvoriť nové hlasovanie bez ohľadu na aktuálny stav hlasovania.",
+        "imgAlt": "Ukážka tvorby hlasovania v hre"
+      },
+      "matrixManagement": {
+        "title": "Manažment hodnotiacich matíc",
+        "description": "Spravujte svoje hodnotiace matice, ako si želáte. Zoraďte, upravte, prezerajte alebo odstráňte ich kedykoľvek len pár kliknutiami.",
+        "imgAlt": "Ukážka správy balíčka kariet"
+      },
+      "noLimits": "Navždy zadarmo a bez obmedzení",
+      "unlimitedSessions": "Neobmedzený počet hlasovacích relácií na používateľa",
+      "unlimitedUsers": "Neobmedzený počet účastníkov v hlasovacích reláciach",
+      "unlimitedVotings": "Neobmedzený počet hlasovovaní v hlasovacích reláciach",
+      "noPersonalDetails": "Nie sú potrebné žiadne zbytočné osobné údaje"
+    }
+  },
+  "sidebar": {
+    "menu": {
+      "help": "Pomoc",
+      "home": "Domov",
+      "settings": "Nastavenia",
+      "matrix": "Hodnotiace matice",
+      "session": "Hlasovacie relácie"
     }
   },
   "auth": {
     "register": {
-      "title": "Registrovať",
+      "title": "Registrovať sa",
       "form": {
         "firstName": {
           "label": "Krstné Meno"
@@ -52,38 +117,129 @@
           "label": "Priezvisko"
         },
         "email": {
-          "label": "E-mailová adresa"
+          "label": "E-mailová Adresa"
         },
         "password": {
           "label": "Heslo"
         },
         "confirmationPassword": {
-          "label": "Potvrdzovacie heslo"
+          "label": "Potvrdzovacie Heslo"
         },
-        "submit": "Registrovať"
+        "submit": "Registrovať sa"
       },
       "notifications": {
-        "accountCreated": "Váš účet bol úspešne vytvorený!"
+        "success": "Tvoj účet bol úspešne vytvorený! Pred prihlásením je potrebné potvrdiť svoj email."
       },
-      "haveAccount": "Máte už účet?",
-      "login": "Prihláste sa"
+      "haveAccount": "Máš už účet?"
     },
     "login": {
       "title": "Prihlásiť sa",
       "form": {
         "email": {
-          "label": "E-mailová adresa"
+          "label": "E-mailová Adresa"
         },
         "password": {
           "label": "Heslo"
         },
         "submit": "Prihlásiť sa"
       },
-      "notifications": {
-        "invalidCredentials": "Neplatné prihlasovacie údaje. Skontrolujte svoju e-mailovú adresu a heslo a skúste to znova."
+      "invalidCredentials": "Nesprávna e-mailová adresa alebo heslo",
+      "unverifiedEmail": "E-mailová adresa nie je potvrdená",
+      "noAccount": "Ešte nemáš účet?",
+      "forgottenPassword": "Zabudol si heslo?",
+      "resetPassword": "Obnoviť heslo"
+    },
+    "forgotPassword": {
+      "title": "Obnoviť heslo",
+      "subTitle": "Dostaneš e-mail s pokynmi, ako heslo obnoviť",
+      "backToLogin": "Späť na prihlásenie",
+      "form": {
+        "email": {
+          "label": "E-mailová adresa"
+        },
+        "submit": "Odoslať"
       },
-      "noAccount": "Ešte nemáte účet?",
-      "register": "Registrujte sa"
+      "notifications": {
+        "success": "Pokyny na obnovenie hesla boli odoslané na tvoj e-mail. Skontroluj si svoju doručenú poštu a postupuj podľa poskytnutých pokynov pre obnovenie hesla."
+      }
+    },
+    "resetPassword": {
+      "title": "Zmeniť heslo",
+      "form": {
+        "password": {
+          "label": "Nové Heslo"
+        },
+        "confirmationPassword": {
+          "label": "Potvrdzovacie Heslo"
+        },
+        "submit": "Zmeniť heslo"
+      },
+      "notifications": {
+        "success": "Tvoje heslo bolo úspešne zmenené!"
+      }
+    },
+    "verifyEmail": {
+      "notifications": {
+        "success": "Tvoj e-mail bol úspešne overený!"
+      }
+    }
+  },
+  "settings": {
+    "drawer": {
+      "direction": {
+        "label": "Smer",
+        "options": {
+          "ltr": "LTR",
+          "rtl": "RTL"
+        }
+      },
+      "language": {
+        "label": "Jazyk",
+        "options": {
+          "en": "Angličtina",
+          "sk": "Slovenčina"
+        }
+      },
+      "mode": {
+        "label": "Režim",
+        "options": {
+          "dark": "Tmavý",
+          "light": "Svetlý"
+        }
+      },
+      "sidebar": {
+        "label": "Bočný panel",
+        "options": {
+          "collapsed": "Zúžený",
+          "full": "Celý"
+        }
+      },
+      "title": "Nastavenia"
+    }
+  },
+  "home": {
+    "welcome": {
+      "message": "Postupuj podľa týchto štyroch jednoduchých krokov pre vytvorenie novej hlasovacej relácie.",
+      "subTitle": "Zahrajme si hru!",
+      "title": "Ahoj {{name}},"
+    },
+    "widgets": {
+      "createMatrix": {
+        "title": "Navrhni hodnotiacu maticu",
+        "subTitle": "Zadaj jej jedinečný názov a definujte jej hodnoty."
+      },
+      "createSession": {
+        "title": "Vytvor hlasovaciu reláciu",
+        "subTitle": "Vyber názov a novovytvorenú maticu, ktorá bude použitá v hre."
+      },
+      "invite": {
+        "title": "Pozvi svoj tím",
+        "subTitle": "Pozvi ostatných členov tímu, aby sa pripojili, zdieľaním svojej adresy URL."
+      },
+      "vote": {
+        "title": "Hlasuj",
+        "subTitle": "Vytvor nové hlasovanie vyplnením jednoduchého formulára a následne si vyber kartu."
+      }
     }
   },
   "profile": {
@@ -100,6 +256,9 @@
         "lastName": {
           "label": "Priezvisko"
         }
+      },
+      "notifications": {
+        "success": "Osobné údaje boli úspešne aktualizované!"
       }
     },
     "password": {
@@ -114,12 +273,121 @@
         "confirmationPassword": {
           "label": "Potvrdzovacie Heslo"
         }
+      },
+      "notifications": {
+        "success": "Tvoje heslo bolo úspešne zmenené!"
+      }
+    }
+  },
+  "matrix": {
+    "confirmations": {
+      "delete": "Naozaj chceš odstrániť túto hodnotiacu maticu?"
+    },
+    "form": {
+      "name": {
+        "label": "Meno"
+      },
+      "values": {
+        "label": "Hodnoty"
+      }
+    },
+    "dialog": {
+      "add": {
+        "action": "Pridať",
+        "title": "Pridať hodnotiacu maticu"
+      },
+      "edit": {
+        "action": "Upraviť",
+        "title": "Upraviť hodnotiacu maticu"
       }
     },
     "notifications": {
-      "informationUpdated": "Informácie boli úspešne aktualizované!",
-      "passwordChanged": "Heslo bolo úspešne zmenené!",
-      "wrongPassword": "Zadané heslo je nesprávne!"
+      "created": "Hodnotiaca matica: \"{{matrixName}}\" bola vytvorená!",
+      "deleted": "Hodnotiaca matica: \"{{matrixName}}\" bola vymazaná",
+      "updated": "Hodnotiaca matica: \"{{matrixName}}\" bola aktualizovaná"
+    },
+    "table": {
+      "headers": {
+        "actions": "Možnosti",
+        "name": "Meno",
+        "rows": "Riadky",
+        "columns": "Stlpce",
+        "createdAt": "Dátum vytvorenia"
+      },
+      "empty": "Zatiaľ nie sú vytvorené žiadne hodnotiace matice"
+    },
+    "toolbar": {
+      "title": "Hodnotiace matice"
     }
+  },
+  "session": {
+    "homepage": {
+      "title": "Hlasovacie relácie",
+      "join": "Pripojiť sa k hlasovaniu",
+      "create": "Vytvoriť hlasovaciu reláciu"
+    },
+    "dialog": {
+      "join": {
+        "title": "Pripojiť sa k hlasovaniu",
+        "form": {
+          "hashId": {
+            "label": "ID Hlasovacej Relácie"
+          },
+          "submit": "Pripojiť sa"
+        }
+      },
+      "create": {
+        "title": "Vytvoriť hlasovaciu reláciu",
+        "form": {
+          "name": {
+            "label": "Meno"
+          },
+          "matrixId": {
+            "label": "ID Hodnotiacej Matice"
+          },
+          "submit": "Vytvoriť"
+        },
+        "notifications": {
+          "success": "Hlasovacia relácia bola úspešne vytvorená!"
+        }
+      },
+      "createVoting": {
+        "title": "Vytvoriť nové hlasovanie",
+        "form": {
+          "name": {
+            "label": "Meno"
+          },
+          "description": {
+            "label": "Popis"
+          },
+          "submit": "Vytvoriť"
+        },
+        "notifications": {
+          "success": "Hlasovanie bolo úspešne vytvorené!"
+        }
+      }
+    },
+    "join": {
+      "guest": {
+        "title": "Zadaj svoje meno",
+        "form": {
+          "firstName": {
+            "label": "Krstné Meno"
+          },
+          "lastName": {
+            "label": "Priezvisko"
+          },
+          "submit": "Pripojiť sa"
+        }
+      },
+      "notifications": {
+        "success": "Pripojenie do hlasovacej relácie prebehlo úspešne"
+      }
+    },
+    "waiting": "Čakajte, kým administrátor vytvorí hlasovanie",
+    "toStart": "Začni vytvorením nového hlasovania",
+    "createVoting": "Vytvoriť nové hlasovanie",
+    "showVotes": "Zobraziť hlasy hráčov",
+    "players": "Hráči"
   }
 }

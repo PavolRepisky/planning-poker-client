@@ -14,8 +14,6 @@ const useAxios = () => {
     withCredentials: true,
   });
 
-  console.log('axios created with language=', i18n.language);
-
   instance.interceptors.request.use(
     (config) => {
       const item = localStorage.getItem(appConfig.accessTokenKey);

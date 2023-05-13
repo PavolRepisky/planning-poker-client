@@ -54,6 +54,10 @@ const Login = () => {
         setLoginStatus(t('auth.login.invalidCredentials'));
         return;
       }
+      if (err.response && err.response.status === 403) {
+        setLoginStatus(t('auth.login.unverifiedEmail'));
+        return;
+      }
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }
   };
