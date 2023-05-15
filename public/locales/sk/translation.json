@@ -389,6 +389,12 @@
     "toStart": "Začni vytvorením nového hlasovania",
     "createVoting": "Vytvoriť nové hlasovanie",
     "showVotes": "Zobraziť hlasy hráčov",
-    "players": "Hráči"
+    "players": "Hráči",
+    "invite": {
+      "title": "Pozvať hráčov",
+      "notifications": {
+        "success": "ID hlasovacej relácie bolo skopírované do schránky. Zdieľajte ho so svojimi spoluhráčmi a začnite hrať!"
+      }
+    }
   }
 }
