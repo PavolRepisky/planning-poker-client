@@ -11,6 +11,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
+import { useAuth } from 'auth/contexts/AuthProvider';
 import { drawerWidth } from 'core/config/layout';
 import { useSettings } from 'core/contexts/SettingsProvider';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +31,7 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
     mode,
   } = useSettings();
   const { i18n, t } = useTranslation();
+  const { userData } = useAuth();
 
   const handleDirectionChange = (_: any, direction: 'ltr' | 'rtl') => {
     changeDirection(direction);
@@ -144,30 +146,34 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
           </ToggleButton>
         </ToggleButtonGroup>
 
-        <Typography
-          gutterBottom
-          id="settings-sidebar"
-          marginTop={3}
-          variant="h6"
-        >
-          {t('settings.drawer.sidebar.label')}
-        </Typography>
+        {userData && (
+          <>
+            <Typography
+              gutterBottom
+              id="settings-sidebar"
+              marginTop={3}
+              variant="h6"
+            >
+              {t('settings.drawer.sidebar.label')}
+            </Typography>
 
-        <ToggleButtonGroup
-          color="primary"
-          value={collapsed}
-          exclusive
-          fullWidth
-          onChange={handleSidebarChange}
-        >
-          <ToggleButton value={true}>
-            {t('settings.drawer.sidebar.options.collapsed')}
-          </ToggleButton>
+            <ToggleButtonGroup
+              color="primary"
+              value={collapsed}
+              exclusive
+              fullWidth
+              onChange={handleSidebarChange}
+            >
+              <ToggleButton value={true}>
+                {t('settings.drawer.sidebar.options.collapsed')}
+              </ToggleButton>
 
-          <ToggleButton value={false}>
-            {t('settings.drawer.sidebar.options.full')}
-          </ToggleButton>
-        </ToggleButtonGroup>
+              <ToggleButton value={false}>
+                {t('settings.drawer.sidebar.options.full')}
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </>
+        )}
       </Box>
     </Drawer>
   );
