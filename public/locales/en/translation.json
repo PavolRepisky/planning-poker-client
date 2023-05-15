@@ -389,6 +389,12 @@
     "toStart": "Create a new voting to get started",
     "createVoting": "Create New Voting",
     "showVotes": "Show Users Votes",
-    "players": "Players"
+    "players": "Players",
+    "invite": {
+      "title": "Invite Players",
+      "notifications": {
+        "success": "Voting session ID has been copied to clipboard. Share it with your teammates and start playing!"
+      }
+    }
   }
 }
