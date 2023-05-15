@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
@@ -99,32 +99,33 @@ const MatrixDetail = () => {
           alignItems: 'center',
         }}
       >
-        <Box>
+        <Stack
+          direction="column"
+          spacing={{ xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 }}
+          sx={{ mb: { xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 } }}
+        >
           {data?.values.map((row, rowIdx) => {
             return (
-              <Grid
+              <Stack
+                direction="row"
                 key={`row[${rowIdx}]`}
-                container
                 spacing={{ xs: 0.5, sm: 0.75, lg: 1, xl: 1.25 }}
-                sx={{ mb: 2, minWidth: 500, overflowX: 'auto' }}
               >
                 {row.map((column, columnIdx) => {
                   return (
-                    <Grid key={`rowValue[${rowIdx},${columnIdx}]`} item xs>
-                      <VoteCard
-                        value={column}
-                        row={rowIdx}
-                        column={columnIdx}
-                        selected={false}
-                        onClick={() => {}}
-                      ></VoteCard>
-                    </Grid>
+                    <VoteCard
+                      value={column}
+                      row={rowIdx}
+                      column={columnIdx}
+                      selected={false}
+                      key={`value[${rowIdx},${columnIdx}]`}
+                    />
                   );
                 })}
-              </Grid>
+              </Stack>
             );
           })}
-        </Box>
+        </Stack>
       </Box>
 
       {openMatrixDialog && (
