@@ -343,7 +343,8 @@
             "label": "Meno"
           },
           "matrixId": {
-            "label": "ID Hodnotiacej Matice"
+            "label": "ID Hodnotiacej Matice",
+            "warning": "Najprv vytvor hodnotiacu maticu"
           },
           "submit": "Vytvoriť"
         },

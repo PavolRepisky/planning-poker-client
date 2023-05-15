@@ -125,6 +125,11 @@ const CreateSessionDialog = ({
                 {matrix.name}
               </MenuItem>
             ))}
+            {matrices.length === 0 && (
+              <MenuItem disabled={true}>
+                {t('session.dialog.create.form.matrixId.warning')}
+              </MenuItem>
+            )}
           </TextField>
         </DialogContent>
 

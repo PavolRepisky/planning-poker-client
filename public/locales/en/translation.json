@@ -343,7 +343,8 @@
             "label": "Name"
           },
           "matrixId": {
-            "label": "Evaluation matrix ID"
+            "label": "Evaluation matrix ID",
+            "warning": "First create an evaluation matrix"
           },
           "submit": "Create"
         },
