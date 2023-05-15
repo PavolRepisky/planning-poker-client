@@ -1,9 +1,12 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
   FormHelperText,
   Grid,
+  IconButton,
+  InputAdornment,
   Link,
   Paper,
   TextField,
@@ -26,6 +29,7 @@ const Login = () => {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [loginStatus, setLoginStatus] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const validationSchema = yup.object({
     email: yup
@@ -124,7 +128,7 @@ const Login = () => {
               fullWidth
               name="password"
               label={t('auth.login.form.password.label')}
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               disabled={isLoggingIn}
@@ -132,6 +136,18 @@ const Login = () => {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <LoadingButton

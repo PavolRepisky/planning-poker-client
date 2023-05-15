@@ -1,6 +1,13 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, TextField, Typography } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useResetPassword } from 'auth/hooks/useResetPassword';
 import passwordRegex from 'auth/types/passwordRegex';
 import BoxedLayout from 'core/components/BoxedLayout';
@@ -8,7 +15,7 @@ import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import ServerValidationError from 'core/types/ServerValidationError';
 import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -19,7 +26,8 @@ const ResetPassword = () => {
   const { t } = useTranslation();
   const { resetToken } = useParams();
   const { resetPassword, isResetting } = useResetPassword();
-  const { logout } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -94,13 +102,25 @@ const ResetPassword = () => {
           id="password"
           label={t('auth.resetPassword.form.password.label')}
           name="password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           autoComplete="new-password"
           disabled={isResetting}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           required
@@ -108,7 +128,7 @@ const ResetPassword = () => {
           id="confirmationPassword"
           label={t('auth.resetPassword.form.confirmationPassword.label')}
           name="confirmationPassword"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'}
           disabled={isResetting}
           value={formik.values.confirmationPassword}
           onChange={formik.handleChange}
@@ -120,6 +140,18 @@ const ResetPassword = () => {
             formik.touched.confirmationPassword &&
             formik.errors.confirmationPassword
           }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle confirmation password visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         <LoadingButton
