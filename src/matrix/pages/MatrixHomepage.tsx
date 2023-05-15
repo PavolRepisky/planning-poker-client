@@ -1,5 +1,5 @@
 import { Add as AddIcon } from '@mui/icons-material';
-import { Fab } from '@mui/material';
+import { Fab, Typography } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
@@ -121,13 +121,18 @@ const MatrixHomepage = () => {
       <AppBar>
         <Toolbar title={t('matrix.toolbar.title')}>
           <Fab
-            aria-label="logout"
+            aria-label={t('matrix.dialog.add.action')}
             color="primary"
+            variant="extended"
             disabled={processing}
             onClick={() => handleOpenMatrixDialog()}
-            size="small"
+            size="medium"
           >
-            <AddIcon />
+            <Typography variant="h6" sx={{ ml: 0.75 }}>
+              {t('matrix.dialog.add.action')}
+            </Typography>
+
+            <AddIcon sx={{ ml: 0.55 }} />
           </Fab>
         </Toolbar>
       </AppBar>
