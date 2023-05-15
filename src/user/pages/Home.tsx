@@ -10,10 +10,12 @@ import SvgContainer from 'core/components/SvgContainer';
 import Toolbar from 'core/components/Toolbar';
 import { t } from 'i18next';
 import React from 'react';
+import { useNavigate } from 'react-router';
 import HomeWidget from 'user/components/HomeWidget';
 
 const Home = () => {
   const { userData } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <React.Fragment>
@@ -61,6 +63,7 @@ const Home = () => {
                 svg={<CreateMatrixSvg height={125} width="auto" />}
                 title={`1. ${t('home.widgets.createMatrix.title')}`}
                 subTitle={t('home.widgets.createMatrix.subTitle')}
+                onClick={() => navigate('/matrices')}
               />
             </Grid>
             <Grid item xs={12} lg={6}>
@@ -68,6 +71,7 @@ const Home = () => {
                 svg={<CreateSessionSvg height={150} width="auto" />}
                 title={`2. ${t('home.widgets.createSession.title')}`}
                 subTitle={t('home.widgets.createSession.subTitle')}
+                onClick={() => navigate('/sessions')}
               />
             </Grid>
             <Grid item xs={12} lg={6}>
@@ -75,6 +79,7 @@ const Home = () => {
                 svg={<InviteSvg height={122} width="auto" />}
                 title={`3. ${t('home.widgets.invite.title')}`}
                 subTitle={t('home.widgets.invite.subTitle')}
+                onClick={() => navigate('/sessions')}
               />
             </Grid>
             <Grid item xs={12} lg={6}>
@@ -82,6 +87,7 @@ const Home = () => {
                 svg={<VoteSvg height={150} width="auto" />}
                 title={`4. ${t('home.widgets.vote.title')}`}
                 subTitle={t('home.widgets.vote.subTitle')}
+                onClick={() => navigate('/sessions')}
               />
             </Grid>
           </Grid>
