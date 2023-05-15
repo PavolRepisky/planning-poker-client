@@ -1,3 +1,4 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Card,
@@ -5,6 +6,8 @@ import {
   CardContent,
   CardHeader,
   FormHelperText,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from '@mui/material';
@@ -23,6 +26,9 @@ const ProfilePassword = () => {
   const { t } = useTranslation();
   const { isUpdating, updatePassword } = useUpdatePassword();
   const [passwordChangeStatus, setPasswordChangeStatus] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validationSchema = yup.object({
     password: yup.string().required(t('common.validations.required')),
@@ -94,7 +100,7 @@ const ProfilePassword = () => {
             fullWidth
             name="password"
             label={t('profile.password.form.password.label')}
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             id="password"
             autoFocus
             autoComplete="current-password"
@@ -103,13 +109,25 @@ const ProfilePassword = () => {
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirmation password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             required
             fullWidth
             name="newPassword"
             label={t('profile.password.form.newPassword.label')}
-            type="password"
+            type={showNewPassword ? 'text' : 'password'}
             id="newPassword"
             autoComplete="new-password"
             disabled={isUpdating}
@@ -119,13 +137,25 @@ const ProfilePassword = () => {
               formik.touched.newPassword && Boolean(formik.errors.newPassword)
             }
             helperText={formik.touched.newPassword && formik.errors.newPassword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirmation password visibility"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             required
             fullWidth
             name="confirmationPassword"
             label={t('profile.password.form.confirmationPassword.label')}
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             id="confirmationPassword"
             disabled={isUpdating}
             value={formik.values.confirmationPassword}
@@ -138,6 +168,18 @@ const ProfilePassword = () => {
               formik.touched.confirmationPassword &&
               formik.errors.confirmationPassword
             }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirmation password visibility"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </CardContent>
 
