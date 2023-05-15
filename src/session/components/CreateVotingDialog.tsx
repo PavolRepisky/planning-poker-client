@@ -87,7 +87,6 @@ const CreateVotingDialog = ({
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             id="description"
             label={t('session.dialog.createVoting.form.description.label')}
