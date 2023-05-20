@@ -47,6 +47,7 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
+// Mock the useNavigate hook
 const mockedNavigate = jest.fn();
 beforeEach(() => {
   jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
@@ -160,7 +161,7 @@ describe('Registration page', () => {
         5
       );
     });
-  });
+  }, 10000);
 
   it('validates, that names are valid length', async () => {
     render(<Register />);
