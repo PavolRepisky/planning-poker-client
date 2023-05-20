@@ -1,37 +1,46 @@
-/* eslint-disable testing-library/no-node-access */
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import Register from 'auth/pages/Register';
-import axios from 'axios';
 import config from 'core/config/config';
-import ServerValidationError from 'core/types/ServerValidationError';
 import {
-  fillFormWithCorrectValues,
-  getConfirmationPasswordField,
-  getEmailField,
-  getFirstNameField,
-  getLastNameField,
-  getPasswordField,
-  getSubmitButton,
-} from 'helpers/Register.helper';
-import {
-  expectToShowErrorAlert,
-  expectToShowSuccessAlert,
-} from 'helpers/Snackbar.helper';
+  confirmationPasswordInput,
+  emailInput,
+  exampleData,
+  fillUpForm,
+  firstNameInput,
+  lastNameInput,
+  passwordInput,
+  submitButton,
+} from 'helpers/auth/Register.helper';
 import * as router from 'react-router';
 import { render, screen, waitFor } from 'test-utils';
 
-/* --------- Mocks -------- */
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+// Mock the useRegister hook
+const mockedRegister = jest.fn();
+jest.mock('auth/hooks/useRegister', () => ({
+  useRegister: () => ({
+    isRegistering: false,
+    register: mockedRegister,
+  }),
+}));
 
+// Mock the useSnackbar hook
+const mockedSnackbarSuccess = jest.fn();
+const mockedSnackbarError = jest.fn();
+jest.mock('core/contexts/SnackbarProvider', () => ({
+  useSnackbar: () => ({
+    success: mockedSnackbarSuccess,
+    error: mockedSnackbarError,
+  }),
+}));
+
+// Mock the useNavigate hook
 const mockedNavigate = jest.fn();
 beforeEach(() => {
   jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
 });
-/*------------------------- */
 
-describe('Register page', () => {
-  it('contains a title', () => {
+describe('Registration page', () => {
+  it('renders title correctly', () => {
     render(<Register />);
 
     expect(
@@ -41,18 +50,18 @@ describe('Register page', () => {
     ).toBeInTheDocument();
   });
 
-  it('contains a registration form', () => {
+  it('renders form correctly', () => {
     render(<Register />);
 
-    expect(getFirstNameField()).toBeInTheDocument();
-    expect(getLastNameField()).toBeInTheDocument();
-    expect(getEmailField()).toBeInTheDocument();
-    expect(getPasswordField()).toBeInTheDocument();
-    expect(getConfirmationPasswordField()).toBeInTheDocument();
-    expect(getSubmitButton()).toBeInTheDocument();
+    expect(firstNameInput()).toBeInTheDocument();
+    expect(lastNameInput()).toBeInTheDocument();
+    expect(emailInput()).toBeInTheDocument();
+    expect(passwordInput()).toBeInTheDocument();
+    expect(confirmationPasswordInput()).toBeInTheDocument();
+    expect(submitButton()).toBeInTheDocument();
   });
 
-  it('contains a login and back home links', async () => {
+  it('renders login and back-home links correctly', async () => {
     render(<Register />);
 
     const loginLink = screen.getByRole('link', {
@@ -68,155 +77,170 @@ describe('Register page', () => {
     expect(backHomeLink).toHaveAttribute('href', '/');
   });
 
-  it('all fields are required and text inputs are trimmed', async () => {
+  it('handles inputs changes', async () => {
     render(<Register />);
-    user.setup();
 
-    await user.click(getSubmitButton());
+    await userEvent.type(firstNameInput(), exampleData.firstName);
+    expect(firstNameInput()).toHaveValue(exampleData.firstName);
+
+    await userEvent.type(lastNameInput(), exampleData.lastName);
+    expect(lastNameInput()).toHaveValue(exampleData.lastName);
+
+    await userEvent.type(emailInput(), exampleData.email);
+    expect(emailInput()).toHaveValue(exampleData.email);
+
+    await userEvent.type(passwordInput(), exampleData.password);
+    expect(passwordInput()).toHaveValue(exampleData.password);
+
+    await userEvent.type(
+      confirmationPasswordInput(),
+      exampleData.confirmationPassword
+    );
+    expect(confirmationPasswordInput()).toHaveValue(
+      exampleData.confirmationPassword
+    );
+  });
+
+  it('validates and trims the required inputs', async () => {
+    render(<Register />);
+
+    await userEvent.type(firstNameInput(), ' ');
+    await userEvent.type(lastNameInput(), '  ');
+    await userEvent.type(emailInput(), '    ');
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      const requiredErrors = screen.queryAllByText(
-        'common.validations.required'
+      expect(screen.queryAllByText('common.validations.required').length).toBe(
+        5
       );
-      expect(requiredErrors.length).toBe(5);
-    });
-
-    await user.type(getFirstNameField(), '   ');
-    await user.type(getLastNameField(), ' ');
-    await user.type(getEmailField(), ' ');
-    await user.click(getSubmitButton());
-
-    await waitFor(() => {
-      const requiredErrors = screen.queryAllByText(
-        'common.validations.required'
-      );
-      expect(requiredErrors.length).toBe(5);
     });
   });
 
-  it('name fields have limited max length', async () => {
+  it('validates name inputs max length', async () => {
     render(<Register />);
-    user.setup();
 
-    await user.type(getFirstNameField(), 'f'.repeat(config.maxNameLength + 1));
-    await user.type(getLastNameField(), 'l'.repeat(config.maxNameLength + 1));
+    await userEvent.type(
+      firstNameInput(),
+      'f'.repeat(config.maxNameLength + 1)
+    );
 
-    await user.click(getSubmitButton());
+    await userEvent.type(lastNameInput(), 'l'.repeat(config.maxNameLength + 1));
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      const namesErrors = screen.queryAllByText(
-        'common.validations.string.max'
-      );
-      expect(namesErrors.length).toBe(2);
+      expect(
+        screen.queryAllByText('common.validations.string.max').length
+      ).toBe(2);
     });
-  });
+  }, 10000);
 
   it('validates e-mail format', async () => {
     render(<Register />);
-    user.setup();
 
-    await user.type(getEmailField(), 'invalid-email');
-    await user.click(getSubmitButton());
+    await userEvent.type(emailInput(), 'invalid-email');
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      const emailError = screen.getByText('common.validations.email.invalid');
-      expect(emailError).toBeInTheDocument();
+      expect(
+        screen.queryAllByText('common.validations.email.invalid').length
+      ).toBe(1);
     });
   });
 
-  it('password can not be weak', async () => {
+  it('validates password strength', async () => {
     render(<Register />);
-    user.setup();
 
-    const passwordField = getPasswordField();
-    if (!passwordField) {
-      return;
-    }
-
-    await user.type(passwordField, 'weakpassword');
-    await user.click(getSubmitButton());
+    await userEvent.type(passwordInput(), 'weak-password');
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      const passwordError = screen.getByText(
-        'common.validations.password.weak'
-      );
-      expect(passwordError).toBeInTheDocument();
+      expect(
+        screen.queryAllByText('common.validations.password.weak').length
+      ).toBe(1);
     });
   });
 
-  it('confirmation password must match password', async () => {
+  it('validates passwords match', async () => {
     render(<Register />);
-    user.setup();
 
-    const passwordField = getPasswordField();
-    const confirmationPasswordField = getConfirmationPasswordField();
-    if (!passwordField || !confirmationPasswordField) {
-      return false;
-    }
-
-    await user.type(passwordField, 'Password123');
-    await user.type(confirmationPasswordField, 'invalid');
-    await user.click(getSubmitButton());
+    await userEvent.type(passwordInput(), exampleData.password);
+    await userEvent.type(
+      confirmationPasswordInput(),
+      exampleData.password + 'mismatch'
+    );
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      const confirmationPasswordError = screen.getByText(
-        'common.validations.password.match'
-      );
-      expect(confirmationPasswordError).toBeInTheDocument();
+      expect(
+        screen.queryAllByText('common.validations.password.match').length
+      ).toBe(1);
     });
   });
 
-  it('shows a success alert and redirects to login page, if correct values are submitted', async () => {
+  it('submits correct values', async () => {
     render(<Register />);
-    user.setup();
 
-    mockedAxios.post.mockResolvedValue({
+    await fillUpForm(exampleData);
+    await userEvent.click(submitButton());
+
+    await waitFor(() => {
+      expect(mockedRegister).toHaveBeenCalledWith(exampleData);
+    });
+  });
+
+  it('calls a success alert and redirects to the login page in case of a successful registration request', async () => {
+    render(<Register />);
+
+    mockedRegister.mockResolvedValueOnce({
       status: 200,
       data: {
         data: {
-          userId: 'mxsm9x0xs5x5w',
+          userId: 'user-id',
         },
       },
     });
 
-    const passwordField = getPasswordField();
-    const confirmationPasswordField = getConfirmationPasswordField();
+    await fillUpForm(exampleData);
+    await userEvent.click(submitButton());
 
-    if (!passwordField || !confirmationPasswordField) {
-      return;
-    }
-
-    await fillFormWithCorrectValues();
-    await user.click(getSubmitButton());
     expect(mockedNavigate).toHaveBeenCalledWith('/login');
-
-    await expectToShowSuccessAlert('auth.register.notifications.success');
+    expect(mockedSnackbarSuccess).toBeCalledWith(
+      'auth.register.notifications.success'
+    );
   });
 
-  it('shows an error alert, if request fails with status code other than 400', async () => {
+  it('calls an error alert and form values remain intact in case the registration request fails with a status code other than 400', async () => {
     render(<Register />);
-    user.setup();
 
-    mockedAxios.post.mockRejectedValue({
+    mockedRegister.mockRejectedValueOnce({
       response: {
         status: 500,
       },
     });
-    
-    await fillFormWithCorrectValues();
-    await user.click(getSubmitButton());
 
-    await expectToShowErrorAlert();
+    await fillUpForm(exampleData);
+    await userEvent.click(submitButton());
+
+    expect(mockedSnackbarError).toBeCalledWith(
+      'common.errors.unexpected.subTitle'
+    );
+
+    expect(firstNameInput()).toHaveValue(exampleData.firstName);
+    expect(lastNameInput()).toHaveValue(exampleData.lastName);
+    expect(emailInput()).toHaveValue(exampleData.email);
+    expect(passwordInput()).toHaveValue(exampleData.password);
+    expect(confirmationPasswordInput()).toHaveValue(
+      exampleData.confirmationPassword
+    );
   });
 
-  it('shows returned validations errors, if the request fails with status code 400', async () => {
+  it('displays server validations errors in case the registration request fails with status code 400', async () => {
     render(<Register />);
-    user.setup();
 
-    const emailServerError = 'E-mail address is already taken';
-    const passwordServerError = 'Password is too weak';
+    const emailError = 'E-mail address is already taken';
+    const passwordError = 'Password is too weak';
 
-    mockedAxios.post.mockRejectedValue({
+    mockedRegister.mockRejectedValueOnce({
       response: {
         status: 400,
         data: {
@@ -224,33 +248,26 @@ describe('Register page', () => {
             {
               path: 'email',
               value: 'taken@email.com',
-              message: emailServerError,
+              message: emailError,
               location: 'body',
-            } as ServerValidationError,
+            },
             {
               path: 'password',
               value: 'Password1',
-              message: passwordServerError,
+              message: passwordError,
               location: 'body',
-            } as ServerValidationError,
+            },
           ],
         },
       },
     });
 
-    const passwordField = getPasswordField();
-    const confirmationPasswordField = getConfirmationPasswordField();
-
-    if (!passwordField || !confirmationPasswordField) {
-      return;
-    }
-
-    await fillFormWithCorrectValues();
-    await user.click(getSubmitButton());
+    await fillUpForm(exampleData);
+    await userEvent.click(submitButton());
 
     await waitFor(() => {
-      expect(screen.getByText(emailServerError)).toBeInTheDocument();
+      expect(screen.getByText(emailError)).toBeInTheDocument();
     });
-    expect(screen.getByText(passwordServerError)).toBeInTheDocument();
+    expect(screen.getByText(passwordError)).toBeInTheDocument();
   });
 });

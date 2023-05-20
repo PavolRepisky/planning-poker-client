@@ -46,7 +46,7 @@ const Login = () => {
     try {
       const { email, password } = formData;
       await login(email, password);
-      navigate('/');
+      navigate('/home');
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
         const validationErrors = err.response.data
@@ -128,7 +128,7 @@ const Login = () => {
               fullWidth
               name="password"
               label={t('auth.login.form.password.label')}
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               disabled={isLoggingIn}

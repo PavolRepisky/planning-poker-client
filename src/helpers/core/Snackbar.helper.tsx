@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from 'test-utils';
 
-export const expectToShowSuccessAlert = async (message: string) => {
+export const expectToDisplaySuccessAlert = async (message: string) => {
   let alert;
   await waitFor(() => {
     alert = screen.getByRole('alert');
@@ -16,8 +16,9 @@ export const expectToShowSuccessAlert = async (message: string) => {
   }
 };
 
-export const expectToShowErrorAlert = async () => {
+export const expectToDisplayGeneralErrorAlert = async () => {
   let alert;
+
   await waitFor(() => {
     alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
