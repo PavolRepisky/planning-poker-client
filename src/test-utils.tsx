@@ -1,5 +1,4 @@
 import { RenderOptions, render } from '@testing-library/react';
-import 'core/config/i18n';
 import React, { ReactElement } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 

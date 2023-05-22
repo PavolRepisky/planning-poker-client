@@ -60,6 +60,7 @@ const SettingsDrawer = ({ onDrawerToggle, open }: SettingsDrawerProps) => {
         },
       }}
       variant="temporary"
+      data-testid="settings-drawer"
     >
       <Box
         sx={{

@@ -1,9 +1,9 @@
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import { render, screen } from 'test-utils';
 
-describe('Confirm Dialog', () => {
-  it('is in the document when open prop is true', () => {
+describe('Confirm dialog', () => {
+  it('is in the document, when prop argument open is truthy', () => {
     render(
       <ConfirmDialog
         open={true}
@@ -18,7 +18,7 @@ describe('Confirm Dialog', () => {
     expect(confirmDialog).toBeInTheDocument();
   });
 
-  it('is not be in the document when open prop is false', () => {
+  it('is not in the document, when prop argument open is falsy', () => {
     render(
       <ConfirmDialog
         open={false}
@@ -33,7 +33,7 @@ describe('Confirm Dialog', () => {
     expect(confirmDialog).not.toBeInTheDocument();
   });
 
-  it('contains a title and a description from props', () => {
+  it('renders a title and a description from props', () => {
     const titleProp = 'Test title';
     const descriptionProp = 'Test description';
 
@@ -57,7 +57,7 @@ describe('Confirm Dialog', () => {
     expect(description).toBeInTheDocument();
   });
 
-  it('contains a cancel and confirm button', () => {
+  it('renders a cancel and confirm button', () => {
     render(
       <ConfirmDialog
         open={true}
@@ -79,7 +79,7 @@ describe('Confirm Dialog', () => {
     expect(confirmButton).toBeInTheDocument();
   });
 
-  it('calls onClose function from props when cancel button is clicked', async () => {
+  it('calls onClose function from props, when cancel button is clicked', async () => {
     const onCloseHandler = jest.fn();
     render(
       <ConfirmDialog
@@ -90,17 +90,16 @@ describe('Confirm Dialog', () => {
         pending={false}
       />
     );
-    user.setup();
 
     const cancelButton = screen.getByRole('button', {
       name: 'common.cancel',
     });
-    await user.click(cancelButton);
+    await userEvent.click(cancelButton);
 
     expect(onCloseHandler).toBeCalledTimes(1);
   });
 
-  it('calls onConfirm function from props when confirm button is clicked', async () => {
+  it('calls onConfirm function from props, when confirm button is clicked', async () => {
     const onConfirmHandler = jest.fn();
     render(
       <ConfirmDialog
@@ -111,12 +110,11 @@ describe('Confirm Dialog', () => {
         pending={false}
       />
     );
-    user.setup();
 
     const confirmButton = screen.getByRole('button', {
       name: 'common.confirm',
     });
-    await user.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     expect(onConfirmHandler).toBeCalledTimes(1);
   });

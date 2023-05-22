@@ -1,8 +1,8 @@
 import NotFound from 'core/pages/NotFound';
 import { render, screen } from 'test-utils';
 
-describe('NotFound Page', () => {
-  it('contains a error title and a subtitle', () => {
+describe('Not found page', () => {
+  it('renders a title and a subtitle', () => {
     render(<NotFound />);
 
     const errorTitle = screen.getByRole('heading', {
@@ -14,13 +14,13 @@ describe('NotFound Page', () => {
     expect(errorSubtitle).toBeInTheDocument();
   });
 
-  it('contains a button, which navigates user to homepage', () => {
+  it('renders a back-home link', () => {
     render(<NotFound />);
 
-    const backHomeButton = screen.getByRole('link', {
+    const backHomeLink = screen.getByRole('link', {
       name: 'common.backHome',
     });
-    expect(backHomeButton).toBeInTheDocument();
-    expect(backHomeButton).toHaveAttribute('href', '/');
+    expect(backHomeLink).toBeInTheDocument();
+    expect(backHomeLink).toHaveAttribute('href', '/');
   });
 });
