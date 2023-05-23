@@ -11,7 +11,7 @@ const Toolbar = ({ children, title }: ToolbarProps) => {
   const { toggleDrawer } = useSettings();
 
   return (
-    <MuiToolbar sx={{ px: { xs: 3, sm: 6 } }}>
+    <MuiToolbar sx={{ px: { xs: 3, sm: 6 } }} role='toolbar'>
       <IconButton
         color="inherit"
         edge="start"
