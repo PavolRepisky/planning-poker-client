@@ -80,7 +80,19 @@ const MatrixDialog = ({
           }
           return true;
         }
-      ),
+      )
+      .test('max-value-length', t('common.validations.string.max'), (value) => {
+        if (Array.isArray(value)) {
+          return value.every(
+            (row) =>
+              Array.isArray(row) &&
+              row.every(
+                (item: string | undefined) =>
+                  item && item.trim().length <= config.maxNameLength
+              )
+          );
+        }
+      }),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;

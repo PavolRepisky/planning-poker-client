@@ -1,7 +1,7 @@
 interface ServerValidationError {
   path: string | undefined;
   location: string | undefined;
-  value: string;
+  value: string | string[][];
   message: string;
 }
 

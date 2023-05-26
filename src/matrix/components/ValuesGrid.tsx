@@ -27,7 +27,7 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
     column: number,
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    values[row][column] = event.target.value;
+    values[row][column] = event.target.value.trim();
     formik.setFieldValue('values', values);
   };
 
@@ -117,6 +117,7 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
                   borderBottomRightRadius: 0,
                   borderBottomLeftRadius: 0,
                 }}
+                data-testid="add-row-button"
               >
                 +
               </Button>
@@ -127,6 +128,7 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
                 onClick={handleRemoveRow}
                 disabled={values.length <= config.matrixMinRows}
                 sx={{ borderTopRightRadius: 0, borderTopLeftRadius: 0 }}
+                data-testid="remove-row-button"
               >
                 -
               </Button>
@@ -147,12 +149,14 @@ const ValuesGrid = ({ processing, formik }: ValuesGridProps) => {
             <Button
               onClick={handleAddColumn}
               disabled={values[0].length >= config.matrixMaxColumns}
+              data-testid="add-column-button"
             >
               +
             </Button>
             <Button
               onClick={handleRemoveColumn}
               disabled={values[0].length <= config.matrixMinColumns}
+              data-testid="remove-column-button"
             >
               -
             </Button>
