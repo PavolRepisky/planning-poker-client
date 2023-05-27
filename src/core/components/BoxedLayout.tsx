@@ -30,7 +30,7 @@ const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
   return (
     <Box height={'100vh'}>
       <AppBar color="transparent" position="relative">
-        <Toolbar>
+        <Toolbar role="toolbar">
           <IconButton
             component={RouterLink}
             to={'/'}
