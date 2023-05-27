@@ -27,7 +27,6 @@ export const exampleData = {
 };
 
 export const fillUpForm = async (data: {
-  name: string;
   matrixName: string;
 }) => {
   await userEvent.type(nameInput(), data.name);
