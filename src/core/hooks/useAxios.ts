@@ -1,9 +1,13 @@
+import { useAuth } from 'auth/contexts/AuthProvider';
 import axios from 'axios';
 import appConfig from 'core/config/config';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 const useAxios = () => {
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { resetAccessToken } = useAuth();
 
   const instance = axios.create({
     baseURL: appConfig.origin,
@@ -46,7 +50,8 @@ const useAxios = () => {
 
             return instance(originalConfig);
           } catch (error) {
-            localStorage.removeItem(appConfig.accessTokenKey);
+            resetAccessToken();
+            navigate('/login');
             return Promise.reject(error);
           }
         }

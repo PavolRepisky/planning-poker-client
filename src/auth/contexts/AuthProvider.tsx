@@ -9,6 +9,7 @@ import UserData from 'user/types/userData';
 interface AuthContextInterface {
   isLoggingIn: boolean;
   isLoggingOut: boolean;
+  resetAccessToken: () => void;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
   userData?: UserData;
@@ -40,10 +41,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const resetAccessToken = () => {
+    setAccessToken('');
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
-      setAccessToken('');
+      resetAccessToken();
     } catch (err) {
       throw err;
     }
@@ -54,6 +59,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         isLoggingIn,
         isLoggingOut,
+        resetAccessToken,
         login: handleLogin,
         logout: handleLogout,
         userData,
