@@ -29,7 +29,7 @@ export const exampleData = {
 export const fillUpForm = async (data: {
   matrixName: string;
 }) => {
-  await userEvent.type(nameInput(), data.name);
+  await userEvent.type(nameInput(), data.matrixName);
 
   await userEvent.click(matrixIdInput());
 

@@ -47,7 +47,6 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
-// Mock the useNavigate hook
 const mockedNavigate = jest.fn();
 beforeEach(() => {
   jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
