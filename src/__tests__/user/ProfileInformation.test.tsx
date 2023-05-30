@@ -3,23 +3,24 @@ import config from 'core/config/config';
 import {
   exampleData,
   fillUpForm,
-  firstNameInput,
-  lastNameInput,
-  resetButton,
-  submitButton,
+  getFirstNameInput,
+  getLastNameInput,
+  getResetButton,
+  getSubmitButton,
 } from 'helpers/user/ProfileInformation.helper';
 import { render, screen, waitFor } from 'test-utils';
 import ProfileInformation from 'user/pages/ProfileInformation';
 
-const mockedUserData = {
-  id: 1,
+const userData = {
+  id: 'mocked-user-id',
   firstName: 'Joe',
   lastName: 'Doe',
   email: 'joe@doe.com',
 };
+
 jest.mock('auth/contexts/AuthProvider', () => ({
   useAuth: () => ({
-    userData: mockedUserData,
+    userData: userData,
   }),
 }));
 
@@ -40,48 +41,51 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+  }),
+}));
+
 describe('Profile information page', () => {
-  it('renders form title correctly', async () => {
+  it('contains a profile information title', async () => {
     render(<ProfileInformation />);
 
     expect(screen.getByText('profile.info.title')).toBeInTheDocument();
   });
 
-  it('renders form correctly with default values', () => {
+  it('contains a profile information form, with default values and submit button', () => {
     render(<ProfileInformation />);
 
-    expect(firstNameInput()).toBeInTheDocument();
-    expect(firstNameInput()).toHaveValue(mockedUserData.firstName);
+    const firstNameInput = getFirstNameInput();
+    const lastNameInput = getLastNameInput();
 
-    expect(lastNameInput()).toBeInTheDocument();
-    expect(lastNameInput()).toHaveValue(mockedUserData.lastName);
+    expect(firstNameInput).toBeInTheDocument();
+    expect(firstNameInput).toHaveValue(userData.firstName);
 
-    expect(submitButton()).toBeInTheDocument();
-    expect(resetButton()).toBeInTheDocument();
+    expect(lastNameInput).toBeInTheDocument();
+    expect(lastNameInput).toHaveValue(userData.lastName);
+
+    expect(getSubmitButton()).toBeInTheDocument();
   });
 
   it('handles inputs changes', async () => {
     render(<ProfileInformation />);
 
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
+    await fillUpForm(exampleData);
 
-    await userEvent.type(firstNameInput(), exampleData.firstName);
-    expect(firstNameInput()).toHaveValue(exampleData.firstName);
-    await userEvent.type(lastNameInput(), exampleData.lastName);
-    expect(lastNameInput()).toHaveValue(exampleData.lastName);
+    expect(getFirstNameInput()).toHaveValue(exampleData.firstName);
+    expect(getLastNameInput()).toHaveValue(exampleData.lastName);
   });
 
   it('validates, that all inputs are filled and trims them', async () => {
     render(<ProfileInformation />);
 
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
-
-    await userEvent.type(firstNameInput(), ' ');
-    await userEvent.type(lastNameInput(), '   ');
-
-    await userEvent.click(submitButton());
+    await fillUpForm({
+      firstName: '  ',
+      lastName: '   ',
+    });
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(screen.queryAllByText('common.validations.required').length).toBe(
@@ -93,16 +97,11 @@ describe('Profile information page', () => {
   it('validates inputs max length', async () => {
     render(<ProfileInformation />);
 
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
-
-    await userEvent.type(
-      firstNameInput(),
-      'f'.repeat(config.maxNameLength + 1)
-    );
-    await userEvent.type(lastNameInput(), 'l'.repeat(config.maxNameLength + 1));
-
-    await userEvent.click(submitButton());
+    await fillUpForm({
+      firstName: 'f'.repeat(config.maxNameLength + 1),
+      lastName: 'l'.repeat(config.maxNameLength + 1),
+    });
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(
@@ -113,11 +112,9 @@ describe('Profile information page', () => {
 
   it('submits correct values', async () => {
     render(<ProfileInformation />);
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(mockedUpdateName).toHaveBeenCalledWith(exampleData);
@@ -127,27 +124,19 @@ describe('Profile information page', () => {
   it('calls a success alert in case of a successful update name request', async () => {
     render(<ProfileInformation />);
 
-    mockedUpdateName.mockResolvedValueOnce({
-      status: 200,
-      data: {
-        data: {
-          user: exampleData,
-        },
-      },
-    });
-
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
+    mockedUpdateName.mockResolvedValueOnce(userData);
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
-    expect(mockedSnackbarSuccess).toBeCalledWith(
-      'profile.info.notifications.success'
-    );
+    await waitFor(() => {
+      expect(mockedSnackbarSuccess).toBeCalledWith(
+        'profile.info.notifications.success'
+      );
+    });
   });
 
-  it('calls an error alert and form values remain intact in case the update name request fails with a status code other than 400', async () => {
+  it('calls an error alert and form values remain intact, in case the update name request fails with a status code other than 400', async () => {
     render(<ProfileInformation />);
 
     mockedUpdateName.mockRejectedValueOnce({
@@ -156,21 +145,20 @@ describe('Profile information page', () => {
       },
     });
 
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
-
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
-    expect(mockedSnackbarError).toBeCalledWith(
-      'common.errors.unexpected.subTitle'
-    );
+    await waitFor(() => {
+      expect(mockedSnackbarError).toBeCalledWith(
+        'common.errors.unexpected.subTitle'
+      );
+    });
 
-    expect(firstNameInput()).toHaveValue(exampleData.firstName);
-    expect(lastNameInput()).toHaveValue(exampleData.lastName);
+    expect(getFirstNameInput()).toHaveValue(exampleData.firstName);
+    expect(getLastNameInput()).toHaveValue(exampleData.lastName);
   });
 
-  it('displays server validations errors in case the update name request fails with status code 400', async () => {
+  it('displays server validations errors and form values remain intact, in case the update name request fails with status code 400', async () => {
     render(<ProfileInformation />);
 
     const firstNameError = 'Field is required';
@@ -198,31 +186,30 @@ describe('Profile information page', () => {
       },
     });
 
-    await userEvent.clear(firstNameInput());
-    await userEvent.clear(lastNameInput());
-
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(screen.getByText(firstNameError)).toBeInTheDocument();
     });
     expect(screen.getByText(lastNameError)).toBeInTheDocument();
+
+    expect(getFirstNameInput()).toHaveValue(exampleData.firstName);
+    expect(getLastNameInput()).toHaveValue(exampleData.lastName);
   });
 
-  it('resets form to previous values, after reset button is clicked', async () => {
+  it('contains a reset button, which resets form to previous values', async () => {
     render(<ProfileInformation />);
 
-    await userEvent.type(
-      firstNameInput(),
-      mockedUserData.firstName + '_Updated'
-    );
-    await userEvent.type(lastNameInput(), mockedUserData.lastName + '_Updated');
-    await userEvent.click(resetButton());
+    await fillUpForm({
+      firstName: userData.firstName + '_Changed',
+      lastName: userData.lastName + '_Changed',
+    });
+    await userEvent.click(getResetButton());
 
     await waitFor(() => {
-      expect(firstNameInput()).toHaveValue(mockedUserData.firstName);
+      expect(getFirstNameInput()).toHaveValue(userData.firstName);
     });
-    expect(lastNameInput()).toHaveValue(mockedUserData.lastName);
+    expect(getLastNameInput()).toHaveValue(userData.lastName);
   });
 });

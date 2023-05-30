@@ -8,12 +8,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'core/contexts/SnackbarProvider';
-import { ValidationError } from 'express-validator';
-import { t } from 'i18next';
+import ServerValidationError from 'core/types/ServerValidationError';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import CreateVotingDialog from 'session/components/CreateVotingDialog';
 import { useCreateVoting } from 'session/hooks/useCreateVoting';
 import SocketSessionVotingData from 'session/types/SocketSessionVotingData';
-import CreateVotingDialog from './CreateVotingDialog';
 
 interface VotingPanelProps {
   voting?: SocketSessionVotingData;
@@ -35,11 +35,12 @@ const VotingPanel = ({
   const snackbar = useSnackbar();
   const { isCreating, createVoting } = useCreateVoting();
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const { t } = useTranslation();
 
   const handleCreateVoting = async (votingData: {
     name: string;
     description?: string;
-  }): Promise<ValidationError[]> => {
+  }): Promise<ServerValidationError[]> => {
     try {
       const createdVoting = await createVoting({
         sessionHashId,
@@ -55,7 +56,7 @@ const VotingPanel = ({
       return [];
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
-        return err.response.data.errors as ValidationError[];
+        return err.response.data.errors as ServerValidationError[];
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
       setOpenCreateDialog(false);

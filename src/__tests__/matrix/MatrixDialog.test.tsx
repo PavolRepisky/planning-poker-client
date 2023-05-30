@@ -2,22 +2,22 @@ import userEvent from '@testing-library/user-event';
 import config from 'core/config/config';
 import ServerValidationError from 'core/types/ServerValidationError';
 import {
-  addButton,
-  addColumnButton,
-  addRowButton,
-  cancelButton,
-  editButton,
   exampleData,
   fillUpForm,
-  nameInput,
-  removeColumnButton,
-  removeRowButton,
-  valuesInputs,
+  getAddButton,
+  getAddColumnButton,
+  getAddRowButton,
+  getCancelButton,
+  getEditButton,
+  getNameInput,
+  getRemoveColumnButton,
+  getRemoveRowButton,
+  getValuesInputs,
 } from 'helpers/matrix/MatrixDialog.helper';
 import MatrixDialog from 'matrix/components/MatrixDialog';
 import { render, screen, waitFor } from 'test-utils';
 
-const mockedMatrixData = {
+const matrixData = {
   id: 1,
   name: 'Mocked Matrix',
   rows: 2,
@@ -26,14 +26,20 @@ const mockedMatrixData = {
     ['1', '2'],
     ['3', '4'],
   ],
-  createdAt: 123,
+  createdAt: 1685389767079,
 };
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+  }),
+}));
 
 const initialRowsCount = 2;
 const initialColumnsCount = 2;
 
 describe('Matrix dialog', () => {
-  it('is in the document, when prop argument open is truthy', () => {
+  it('is in the document, when props argument open is truthy', () => {
     render(
       <MatrixDialog
         open={true}
@@ -47,7 +53,7 @@ describe('Matrix dialog', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('is not in the document, when prop argument open is falsy', () => {
+  it('is not in the document, when props argument open is falsy', () => {
     render(
       <MatrixDialog
         open={false}
@@ -61,7 +67,7 @@ describe('Matrix dialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('renders add form title, if no matrix is provided', async () => {
+  it('contains an add form title, if no matrix is provided', async () => {
     render(
       <MatrixDialog
         open={true}
@@ -75,7 +81,7 @@ describe('Matrix dialog', () => {
     expect(screen.getByText('matrix.dialog.add.title')).toBeInTheDocument();
   });
 
-  it('renders edit form title, if a matrix is provided', async () => {
+  it('contains an edit form title, if a matrix is provided', async () => {
     render(
       <MatrixDialog
         open={true}
@@ -83,14 +89,14 @@ describe('Matrix dialog', () => {
         onCreate={(data: any) => Promise.resolve([])}
         onClose={() => {}}
         processing={false}
-        matrix={mockedMatrixData}
+        matrix={matrixData}
       />
     );
 
     expect(screen.getByText('matrix.dialog.edit.title')).toBeInTheDocument();
   });
 
-  it('renders form correctly without values, if no matrix is provided', () => {
+  it('contains a form without values and create button, if no matrix is provided', () => {
     render(
       <MatrixDialog
         open={true}
@@ -101,29 +107,30 @@ describe('Matrix dialog', () => {
       />
     );
 
-    expect(nameInput()).toBeInTheDocument();
-    expect(nameInput()).toHaveValue('');
+    expect(getNameInput()).toBeInTheDocument();
+    expect(getNameInput()).toHaveValue('');
 
     expect(screen.getByText(/^matrix.form.values.label/)).toBeInTheDocument();
 
-    expect(valuesInputs().length).toBe(initialRowsCount * initialColumnsCount);
+    expect(getValuesInputs().length).toBe(
+      initialRowsCount * initialColumnsCount
+    );
 
-    valuesInputs().forEach((input) => {
+    getValuesInputs().forEach((input) => {
       expect(input).toHaveValue('');
     });
 
-    expect(addRowButton()).toBeInTheDocument();
-    expect(removeRowButton()).toBeInTheDocument();
+    expect(getAddRowButton()).toBeInTheDocument();
+    expect(getRemoveRowButton()).toBeInTheDocument();
 
-    expect(addColumnButton()).toBeInTheDocument();
-    expect(removeColumnButton()).toBeInTheDocument();
+    expect(getAddColumnButton()).toBeInTheDocument();
+    expect(getRemoveColumnButton()).toBeInTheDocument();
 
-    expect(cancelButton()).toBeInTheDocument();
-    expect(addButton()).toBeInTheDocument();
-    expect(editButton()).not.toBeInTheDocument();
+    expect(getAddButton()).toBeInTheDocument();
+    expect(getEditButton()).not.toBeInTheDocument();
   });
 
-  it('renders form correctly with values, if a matrix is provided', () => {
+  it('contains a form with values and edit button, if a matrix is provided', () => {
     render(
       <MatrixDialog
         open={true}
@@ -131,30 +138,32 @@ describe('Matrix dialog', () => {
         onCreate={(data: any) => Promise.resolve([])}
         onClose={() => {}}
         processing={false}
-        matrix={mockedMatrixData}
+        matrix={matrixData}
       />
     );
 
-    expect(nameInput()).toBeInTheDocument();
-    expect(nameInput()).toHaveValue(mockedMatrixData.name);
+    expect(getNameInput()).toBeInTheDocument();
+    expect(getNameInput()).toHaveValue(matrixData.name);
 
     expect(screen.getByText(/^matrix.form.values.label/)).toBeInTheDocument();
 
-    expect(valuesInputs().length).toBe(initialRowsCount * initialColumnsCount);
+    expect(getValuesInputs().length).toBe(
+      initialRowsCount * initialColumnsCount
+    );
 
-    valuesInputs().forEach((input, i) => {
-      expect(input).toHaveValue(mockedMatrixData.values.flat()[i]);
+    const flattedValues = matrixData.values.flat();
+    getValuesInputs().forEach((input, i) => {
+      expect(input).toHaveValue(flattedValues[i]);
     });
 
-    expect(addRowButton()).toBeInTheDocument();
-    expect(removeRowButton()).toBeInTheDocument();
+    expect(getAddRowButton()).toBeInTheDocument();
+    expect(getRemoveRowButton()).toBeInTheDocument();
 
-    expect(addColumnButton()).toBeInTheDocument();
-    expect(removeColumnButton()).toBeInTheDocument();
+    expect(getAddColumnButton()).toBeInTheDocument();
+    expect(getRemoveColumnButton()).toBeInTheDocument();
 
-    expect(cancelButton()).toBeInTheDocument();
-    expect(addButton()).not.toBeInTheDocument();
-    expect(editButton()).toBeInTheDocument();
+    expect(getEditButton()).toBeInTheDocument();
+    expect(getAddButton()).not.toBeInTheDocument();
   });
 
   it('handles inputs changes', async () => {
@@ -171,12 +180,11 @@ describe('Matrix dialog', () => {
     await fillUpForm(exampleData);
 
     await waitFor(() => {
-      expect(nameInput()).toHaveValue(exampleData.name);
+      expect(getNameInput()).toHaveValue(exampleData.name);
     });
 
-    const inputs = valuesInputs();
+    const inputs = getValuesInputs();
     const flattedValues = exampleData.values.flat();
-
     for (let i = 0; i < inputs.length; i++) {
       expect(inputs[i]).toHaveValue(`${flattedValues[i]}`);
     }
@@ -193,19 +201,21 @@ describe('Matrix dialog', () => {
       />
     );
 
-    await userEvent.dblClick(addColumnButton());
+    await userEvent.dblClick(getAddColumnButton());
+    await waitFor(() => {
+      expect(getValuesInputs().length).toBe(
+        initialRowsCount * (initialColumnsCount + 2)
+      );
+    });
 
-    expect(valuesInputs().length).toBe(
-      initialRowsCount * (initialColumnsCount + 2)
-    );
+    await userEvent.tripleClick(getRemoveColumnButton());
+    await waitFor(() => {
+      expect(getValuesInputs().length).toBe(
+        initialRowsCount * (initialColumnsCount - 1)
+      );
+    });
 
-    await userEvent.tripleClick(removeColumnButton());
-
-    expect(valuesInputs().length).toBe(
-      initialRowsCount * (initialColumnsCount - 1)
-    );
-
-    valuesInputs().forEach((input) => {
+    getValuesInputs().forEach((input) => {
       expect(input).toHaveValue('');
     });
   });
@@ -221,19 +231,21 @@ describe('Matrix dialog', () => {
       />
     );
 
-    await userEvent.dblClick(addRowButton());
+    await userEvent.dblClick(getAddRowButton());
+    await waitFor(() => {
+      expect(getValuesInputs().length).toBe(
+        (initialRowsCount + 2) * initialColumnsCount
+      );
+    });
 
-    expect(valuesInputs().length).toBe(
-      (initialRowsCount + 2) * initialColumnsCount
-    );
+    await userEvent.tripleClick(getRemoveRowButton());
+    await waitFor(() => {
+      expect(getValuesInputs().length).toBe(
+        initialRowsCount * (initialColumnsCount - 1)
+      );
+    });
 
-    await userEvent.tripleClick(removeRowButton());
-
-    expect(valuesInputs().length).toBe(
-      initialRowsCount * (initialColumnsCount - 1)
-    );
-
-    valuesInputs().forEach((input) => {
+    getValuesInputs().forEach((input) => {
       expect(input).toHaveValue('');
     });
   });
@@ -252,12 +264,12 @@ describe('Matrix dialog', () => {
     await fillUpForm({
       name: '  ',
       values: [
-        [' ', '   '],
-        [' ', '  '],
+        ['1', '2'],
+        ['3', '  '],
       ],
     });
 
-    await userEvent.click(addButton()!);
+    await userEvent.click(getAddButton()!);
 
     await waitFor(() => {
       expect(screen.queryAllByText('common.validations.required').length).toBe(
@@ -285,16 +297,42 @@ describe('Matrix dialog', () => {
       ],
     });
 
-    await userEvent.click(addButton()!);
+    await userEvent.click(getAddButton()!);
 
     await waitFor(() => {
       expect(
         screen.queryAllByText('common.validations.string.max').length
       ).toBe(2);
     });
-  }, 20000);
+  });
 
-  it('calls onClose from props, when cancel button is clicked', async () => {
+  it('validates each values is unique', async () => {
+    render(
+      <MatrixDialog
+        open={true}
+        onUpdate={(data: any) => Promise.resolve([])}
+        onCreate={(data: any) => Promise.resolve([])}
+        onClose={() => {}}
+        processing={false}
+      />
+    );
+
+    await fillUpForm({
+      values: [
+        ['1', '2'],
+        ['2', '3'],
+      ],
+    });
+    await userEvent.click(getAddButton()!);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('common.validations.matrix.uniqueValues')
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('contains a cancel button, whixh calls the onClose function from props', async () => {
     const mockedOnClose = jest.fn();
 
     render(
@@ -307,7 +345,7 @@ describe('Matrix dialog', () => {
       />
     );
 
-    await userEvent.click(cancelButton());
+    await userEvent.click(getCancelButton());
     expect(mockedOnClose).toBeCalledTimes(1);
   });
 
@@ -325,7 +363,7 @@ describe('Matrix dialog', () => {
     );
 
     await fillUpForm(exampleData);
-    await userEvent.click(addButton()!);
+    await userEvent.click(getAddButton()!);
 
     expect(mockedOnCreate).toBeCalledWith(exampleData);
   });
@@ -340,15 +378,15 @@ describe('Matrix dialog', () => {
         onCreate={(data: any) => Promise.resolve([])}
         onClose={() => {}}
         processing={false}
-        matrix={mockedMatrixData}
+        matrix={matrixData}
       />
     );
 
     await fillUpForm(exampleData);
-    await userEvent.click(editButton()!);
+    await userEvent.click(getEditButton()!);
 
     expect(mockedOnUpdate).toBeCalledWith({
-      id: mockedMatrixData.id,
+      id: matrixData.id,
       ...exampleData,
     });
   });
@@ -386,7 +424,7 @@ describe('Matrix dialog', () => {
     );
 
     await fillUpForm(exampleData);
-    await userEvent.click(addButton()!);
+    await userEvent.click(getAddButton()!);
 
     await waitFor(() => {
       expect(screen.getByText(nameError)).toBeInTheDocument();
@@ -423,12 +461,12 @@ describe('Matrix dialog', () => {
         onCreate={(data: any) => Promise.resolve([])}
         onClose={() => {}}
         processing={false}
-        matrix={mockedMatrixData}
+        matrix={matrixData}
       />
     );
 
     await fillUpForm(exampleData);
-    await userEvent.click(editButton()!);
+    await userEvent.click(getEditButton()!);
 
     await waitFor(() => {
       expect(screen.getByText(nameError)).toBeInTheDocument();

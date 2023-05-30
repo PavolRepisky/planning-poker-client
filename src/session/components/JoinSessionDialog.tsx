@@ -34,7 +34,6 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
   const handleSubmit = async (formData: FormData): Promise<void> => {
     try {
       const data = await joinSession(formData.hashId);
-      console.log('ddata=', data)
       navigate(`/sessions/${data.session.hashId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {

@@ -65,10 +65,15 @@ describe('Join session dialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('renders a title and the form correctly', async () => {
+  it('contains a form title', async () => {
     render(<JoinSessionDialog open={true} onClose={() => {}} />);
 
     expect(screen.getByText('session.dialog.join.title')).toBeInTheDocument();
+  });
+
+  it('contains a form', async () => {
+    render(<JoinSessionDialog open={true} onClose={() => {}} />);
+
     expect(hashIdInput()).toBeInTheDocument();
     expect(cancelButton()).toBeInTheDocument();
     expect(joinButton()).toBeInTheDocument();

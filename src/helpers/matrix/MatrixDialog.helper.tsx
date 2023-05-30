@@ -1,34 +1,34 @@
 import userEvent from '@testing-library/user-event';
 import { screen } from 'test-utils';
 
-export const nameInput = () =>
+export const getNameInput = () =>
   screen.getByRole('textbox', {
     name: 'matrix.form.name.label',
   });
 
-export const valuesInputs = () =>
+export const getValuesInputs = () =>
   screen
     .queryAllByRole('textbox')
     .filter((input) => input.getAttribute('name') !== 'name');
 
-export const addRowButton = () => screen.getByTestId('add-row-button');
-export const removeRowButton = () => screen.getByTestId('remove-row-button');
+export const getAddRowButton = () => screen.getByTestId('add-row-button');
+export const getRemoveRowButton = () => screen.getByTestId('remove-row-button');
 
-export const addColumnButton = () => screen.getByTestId('add-column-button');
-export const removeColumnButton = () =>
+export const getAddColumnButton = () => screen.getByTestId('add-column-button');
+export const getRemoveColumnButton = () =>
   screen.getByTestId('remove-column-button');
 
-export const cancelButton = () =>
+export const getCancelButton = () =>
   screen.getByRole('button', {
     name: 'common.cancel',
   });
 
-export const editButton = () =>
+export const getEditButton = () =>
   screen.queryByRole('button', {
     name: 'matrix.dialog.edit.action',
   });
 
-export const addButton = () =>
+export const getAddButton = () =>
   screen.queryByRole('button', {
     name: 'matrix.dialog.add.action',
   });
@@ -44,17 +44,22 @@ export const exampleData = {
 };
 
 export const fillUpForm = async (data: {
-  name: string;
-  values: string[][];
+  name?: string;
+  values?: string[][];
 }) => {
-  await userEvent.clear(nameInput());
-  await userEvent.type(nameInput(), data.name);
+  const nameInput = getNameInput();
+  const valuesInputs = getValuesInputs();
 
-  const inputs = valuesInputs();
-  const flattedValues = data.values.flat();
+  await userEvent.clear(nameInput);
+  for (let i = 0; i < valuesInputs.length; i++) {
+    await userEvent.clear(valuesInputs[i]);
+  }
 
-  for (let i = 0; i < inputs.length; i++) {
-    await userEvent.clear(inputs[i]);
-    await userEvent.type(inputs[i], flattedValues[i]);
+  if (data.name) await userEvent.type(nameInput, data.name);
+  if (data.values) {
+    const flattedValues = data.values.flat();
+    for (let i = 0; i < valuesInputs.length && i < flattedValues.length; i++) {
+      await userEvent.type(valuesInputs[i], flattedValues[i]);
+    }
   }
 };

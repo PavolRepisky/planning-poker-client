@@ -32,7 +32,7 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
   return (
     <Paper square>
       <AppBar color="transparent" position="relative">
-        <Toolbar>
+        <Toolbar role="toolbar">
           <IconButton
             component={RouterLink}
             to={'/'}

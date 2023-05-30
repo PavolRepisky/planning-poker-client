@@ -1,19 +1,16 @@
 import userEvent from '@testing-library/user-event';
 import { screen } from 'test-utils';
 
-export const passwordInput = () => {
-  return document.querySelector("[name='password']")!;
-};
+export const getPasswordInput = () =>
+  document.querySelector("[name='password']")!;
 
-export const confirmationPasswordInput = () => {
-  return document.querySelector("[name='confirmationPassword']")!;
-};
+export const getConfirmPasswordInput = () =>
+  document.querySelector("[name='confirmationPassword']")!;
 
-export const submitButton = () => {
-  return screen.getByRole('button', {
+export const getSubmitButton = () =>
+  screen.getByRole('button', {
     name: 'auth.resetPassword.form.submit',
   });
-};
 
 export const exampleData = {
   password: 'Password1',
@@ -21,9 +18,16 @@ export const exampleData = {
 };
 
 export const fillUpForm = async (data: {
-  password: string;
-  confirmationPassword: string;
+  password?: string;
+  confirmationPassword?: string;
 }) => {
-  await userEvent.type(passwordInput(), data.password);
-  await userEvent.type(confirmationPasswordInput(), data.confirmationPassword);
+  const passwordInput = getPasswordInput();
+  const confirmPasswordInput = getConfirmPasswordInput();
+
+  await userEvent.clear(passwordInput);
+  await userEvent.clear(confirmPasswordInput);
+
+  if (data.password) await userEvent.type(passwordInput, data.password);
+  if (data.confirmationPassword)
+    await userEvent.type(confirmPasswordInput, data.confirmationPassword);
 };

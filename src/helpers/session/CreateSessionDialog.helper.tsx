@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { screen } from 'test-utils';
+import { screen, within } from 'test-utils';
 
 export const nameInput = () =>
   screen.getByRole('textbox', {
@@ -24,4 +24,23 @@ export const cancelButton = () =>
 export const exampleData = {
   name: 'Example Session',
   matrixId: 1,
+};
+
+export const fillUpForm = async (data: {
+  name: string;
+  matrixName: string;
+}) => {
+  await userEvent.type(nameInput(), data.name);
+
+  await userEvent.click(matrixIdInput());
+
+  const optionsList = screen.getByRole('listbox', {
+    name: /session.dialog.create.form.matrixId.label/i,
+  });
+
+  const option = within(optionsList).getByRole('option', {
+    name: data.matrixName,
+  });
+
+  await userEvent.click(option);
 };

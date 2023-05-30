@@ -1,15 +1,19 @@
 import userEvent from '@testing-library/user-event';
 import ForgotPassword from 'auth/pages/ForgotPassword';
 import {
-  emailInput,
   exampleData,
   fillUpForm,
-  submitButton,
+  getEmailInput,
+  getSubmitButton,
 } from 'helpers/auth/ForgotPassword.helper';
+import {
+  getLogo,
+  getSettingsButton,
+  getToolbar,
+} from 'helpers/core/Toolbar.helper';
 import * as router from 'react-router';
 import { render, screen, waitFor } from 'test-utils';
 
-// Mock the useForgotPassword hook
 const mockedForgotPassword = jest.fn();
 jest.mock('auth/hooks/useForgotPassword', () => ({
   useForgotPassword: () => ({
@@ -18,7 +22,17 @@ jest.mock('auth/hooks/useForgotPassword', () => ({
   }),
 }));
 
-// Mock the useSnackbar hook
+jest.mock('core/components/SettingsDrawer', () => {
+  return (props: any) =>
+    props.open ? <div data-testid="settings-drawer" /> : <></>;
+});
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+  }),
+}));
+
 const mockedSnackbarSuccess = jest.fn();
 const mockedSnackbarError = jest.fn();
 jest.mock('core/contexts/SnackbarProvider', () => ({
@@ -28,14 +42,46 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
-// Mock the useNavigate hook
 const mockedNavigate = jest.fn();
 beforeEach(() => {
   jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
 });
 
 describe('Forgot password page', () => {
-  it('renders title and subtitle correctly', () => {
+  describe('Toolbar', () => {
+    it('is in the document', () => {
+      render(<ForgotPassword />);
+
+      expect(getToolbar()).toBeInTheDocument();
+    });
+
+    it('contains a logo, which navigates to the landing page', async () => {
+      render(<ForgotPassword />);
+
+      const logo = getLogo();
+      expect(logo).toBeInTheDocument();
+
+      await userEvent.click(logo);
+      expect(mockedNavigate).toBeCalledWith('/', expect.anything());
+    });
+
+    it('contains a settings button, which the opens settings drawer', async () => {
+      render(<ForgotPassword />);
+
+      const settingsButton = getSettingsButton();
+      expect(settingsButton).toBeInTheDocument();
+
+      expect(screen.queryByTestId('settings-drawer')).not.toBeInTheDocument();
+
+      await userEvent.click(settingsButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('settings-drawer')).toBeInTheDocument();
+      });
+    });
+  });
+
+  it('contains a forgot password title and a message', () => {
     render(<ForgotPassword />);
 
     expect(
@@ -49,34 +95,37 @@ describe('Forgot password page', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders form correctly', () => {
+  it('contains a email form with submit button', () => {
     render(<ForgotPassword />);
 
-    expect(emailInput()).toBeInTheDocument();
+    expect(getEmailInput()).toBeInTheDocument();
+    expect(getSubmitButton()).toBeInTheDocument();
   });
 
-  it('renders back to login link correctly', async () => {
+  it('contains back-to-login link, which navigates to the login page', async () => {
     render(<ForgotPassword />);
 
     const backToLoginLink = screen.getByRole('link', {
       name: 'auth.forgotPassword.backToLogin',
     });
     expect(backToLoginLink).toBeInTheDocument();
-    expect(backToLoginLink).toHaveAttribute('href', '/login');
+
+    await userEvent.click(backToLoginLink);
+    expect(mockedNavigate).toBeCalledWith('/login', expect.anything());
   });
 
   it('handles inputs changes', async () => {
     render(<ForgotPassword />);
 
-    await userEvent.type(emailInput(), exampleData.email);
-    expect(emailInput()).toHaveValue(exampleData.email);
+    await fillUpForm(exampleData);
+    expect(getEmailInput()).toHaveValue(exampleData.email);
   });
 
-  it('validates and trims the required inputs', async () => {
+  it('validates email is filled and trims it', async () => {
     render(<ForgotPassword />);
 
-    await userEvent.type(emailInput(), '    ');
-    await userEvent.click(submitButton());
+    await fillUpForm({ email: '    ' });
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(screen.queryAllByText('common.validations.required').length).toBe(
@@ -88,8 +137,8 @@ describe('Forgot password page', () => {
   it('validates e-mail format', async () => {
     render(<ForgotPassword />);
 
-    await userEvent.type(emailInput(), 'invalid-email');
-    await userEvent.click(submitButton());
+    await fillUpForm({ email: 'invalid-email' });
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(
@@ -102,7 +151,7 @@ describe('Forgot password page', () => {
     render(<ForgotPassword />);
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(mockedForgotPassword).toHaveBeenCalledWith(exampleData);
@@ -117,12 +166,17 @@ describe('Forgot password page', () => {
     });
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
+    await waitFor(() => {
+      expect(mockedSnackbarSuccess).toBeCalledWith(
+        'auth.forgotPassword.notifications.success'
+      );
+    });
     expect(mockedNavigate).toHaveBeenCalledWith('/login');
   });
 
-  it('calls an error alert and form values remain intact in case the forgot password request fails with a status code other than 400', async () => {
+  it('calls an error alert and form values remain intact, in case the forgot password request fails with a status code other than 400', async () => {
     render(<ForgotPassword />);
 
     mockedForgotPassword.mockRejectedValueOnce({
@@ -132,16 +186,17 @@ describe('Forgot password page', () => {
     });
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
-    expect(mockedSnackbarError).toBeCalledWith(
-      'common.errors.unexpected.subTitle'
-    );
-
-    expect(emailInput()).toHaveValue(exampleData.email);
+    await waitFor(() => {
+      expect(mockedSnackbarError).toBeCalledWith(
+        'common.errors.unexpected.subTitle'
+      );
+    });
+    expect(getEmailInput()).toHaveValue(exampleData.email);
   });
 
-  it('displays server validations errors in case the forgot password request fails with status code 400', async () => {
+  it('displays server validations errors and form values remain intact, in case the forgot password request fails with status code 400', async () => {
     render(<ForgotPassword />);
 
     const emailError = 'E-mail address is invalid';
@@ -163,10 +218,12 @@ describe('Forgot password page', () => {
     });
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(screen.getByText(emailError)).toBeInTheDocument();
     });
+
+    expect(getEmailInput()).toHaveValue(exampleData.email);
   });
 });

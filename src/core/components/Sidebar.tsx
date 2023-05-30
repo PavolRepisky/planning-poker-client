@@ -197,6 +197,7 @@ const Sidebar = ({
       </Drawer>
 
       <Drawer
+        data-testid="sidebar"
         variant="permanent"
         open
         sx={{

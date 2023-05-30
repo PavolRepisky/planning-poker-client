@@ -1,16 +1,20 @@
 import userEvent from '@testing-library/user-event';
 import ResetPassword from 'auth/pages/ResetPassword';
 import {
-  confirmationPasswordInput,
   exampleData,
   fillUpForm,
-  passwordInput,
-  submitButton,
+  getConfirmPasswordInput,
+  getPasswordInput,
+  getSubmitButton,
 } from 'helpers/auth/ResetPassword.helper';
+import {
+  getLogo,
+  getSettingsButton,
+  getToolbar,
+} from 'helpers/core/Toolbar.helper';
 import * as router from 'react-router';
 import { render, screen, waitFor } from 'test-utils';
 
-// Mock the useResetPassword hook
 const mockedResetPassword = jest.fn();
 jest.mock('auth/hooks/useResetPassword', () => ({
   useResetPassword: () => ({
@@ -19,7 +23,17 @@ jest.mock('auth/hooks/useResetPassword', () => ({
   }),
 }));
 
-// Mock the useSnackbar hook
+jest.mock('core/components/SettingsDrawer', () => {
+  return (props: any) =>
+    props.open ? <div data-testid="settings-drawer" /> : <></>;
+});
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+  }),
+}));
+
 const mockedSnackbarSuccess = jest.fn();
 const mockedSnackbarError = jest.fn();
 jest.mock('core/contexts/SnackbarProvider', () => ({
@@ -29,14 +43,46 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
-// Mock the useNavigate hook
 const mockedNavigate = jest.fn();
 beforeEach(() => {
   jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
 });
 
 describe('Reset password page', () => {
-  it('renders title correctly', () => {
+  describe('Toolbar', () => {
+    it('is in the document', () => {
+      render(<ResetPassword />);
+
+      expect(getToolbar()).toBeInTheDocument();
+    });
+
+    it('contains a logo, which navigates to the landing page', async () => {
+      render(<ResetPassword />);
+
+      const logo = getLogo();
+      expect(logo).toBeInTheDocument();
+
+      await userEvent.click(logo);
+      expect(mockedNavigate).toBeCalledWith('/', expect.anything());
+    });
+
+    it('contains a settings button, which the opens settings drawer', async () => {
+      render(<ResetPassword />);
+
+      const settingsButton = getSettingsButton();
+      expect(settingsButton).toBeInTheDocument();
+
+      expect(screen.queryByTestId('settings-drawer')).not.toBeInTheDocument();
+
+      await userEvent.click(settingsButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('settings-drawer')).toBeInTheDocument();
+      });
+    });
+  });
+
+  it('contains a reset password title', () => {
     render(<ResetPassword />);
 
     expect(
@@ -46,34 +92,45 @@ describe('Reset password page', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders form correctly', () => {
+  it('conatins a reset password form with submit button', () => {
     render(<ResetPassword />);
 
-    expect(passwordInput()).toBeInTheDocument();
-    expect(confirmationPasswordInput()).toBeInTheDocument();
+    expect(getPasswordInput()).toBeInTheDocument();
+    expect(getConfirmPasswordInput()).toBeInTheDocument();
+    expect(getSubmitButton()).toBeInTheDocument();
   });
 
-  it('renders back-home link correctly', async () => {
+  it('contains a back-home link, which navigates to the landing page', async () => {
     render(<ResetPassword />);
 
     const backHomeLink = screen.getByRole('link', {
       name: 'common.backHome',
     });
     expect(backHomeLink).toBeInTheDocument();
-    expect(backHomeLink).toHaveAttribute('href', '/');
+
+    await userEvent.click(backHomeLink);
+    expect(mockedNavigate).toBeCalledWith('/', expect.anything());
+  });
+
+  it('validates, that all fields are filled', async () => {
+    render(<ResetPassword />);
+
+    await userEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(screen.queryAllByText('common.validations.required').length).toBe(
+        2
+      );
+    });
   });
 
   it('handles inputs changes', async () => {
     render(<ResetPassword />);
 
-    await userEvent.type(passwordInput(), exampleData.password);
-    expect(passwordInput()).toHaveValue(exampleData.password);
+    await fillUpForm(exampleData);
 
-    await userEvent.type(
-      confirmationPasswordInput(),
-      exampleData.confirmationPassword
-    );
-    expect(confirmationPasswordInput()).toHaveValue(
+    expect(getPasswordInput()).toHaveValue(exampleData.password);
+    expect(getConfirmPasswordInput()).toHaveValue(
       exampleData.confirmationPassword
     );
   });
@@ -81,8 +138,10 @@ describe('Reset password page', () => {
   it('validates password strength', async () => {
     render(<ResetPassword />);
 
-    await userEvent.type(passwordInput(), 'weak-password');
-    await userEvent.click(submitButton());
+    await fillUpForm({ password: 'weak-password' });
+
+    await userEvent.type(getPasswordInput(), 'weak-password');
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(
@@ -94,12 +153,11 @@ describe('Reset password page', () => {
   it('validates passwords match', async () => {
     render(<ResetPassword />);
 
-    await userEvent.type(passwordInput(), exampleData.password);
-    await userEvent.type(
-      confirmationPasswordInput(),
-      exampleData.password + 'mismatch'
-    );
-    await userEvent.click(submitButton());
+    await fillUpForm({
+      password: exampleData.password,
+      confirmationPassword: exampleData.confirmationPassword + 'mismatch',
+    });
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(
@@ -111,40 +169,44 @@ describe('Reset password page', () => {
   it('submits correct values', async () => {
     render(<ResetPassword />);
 
-    await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
-
-    expect(mockedResetPassword.mock.calls).toEqual([
-      [
-        {
-          password: '',
-          confirmationPassword: '',
-          resetToken: '',
-        },
-      ],
-      [
-        {
-          ...exampleData,
-          resetToken: '',
-        },
-      ],
-    ]);
-  });
-
-  it('calls a success alert and redirects to the logged user homepage in case of a successful reset password request', async () => {
-    render(<ResetPassword />);
-
-    mockedResetPassword.mockResolvedValueOnce({
-      status: 200,
+    await waitFor(() => {
+      expect(mockedResetPassword).toBeCalledWith({
+        password: '',
+        confirmationPassword: '',
+        resetToken: '',
+      });
     });
 
-    await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    mockedResetPassword.mockClear();
 
+    await fillUpForm(exampleData);
+    await userEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(mockedResetPassword).toBeCalledWith({
+        ...exampleData,
+        resetToken: '',
+      });
+    });
+  });
+
+  it('calls a success alert and redirects to the login page in case of a successful reset password request', async () => {
+    render(<ResetPassword />);
+
+    mockedResetPassword.mockResolvedValueOnce({});
+
+    await fillUpForm(exampleData);
+    await userEvent.click(getSubmitButton());
+
+    await waitFor(() => {
+      expect(mockedSnackbarSuccess).toBeCalledWith(
+        'auth.resetPassword.notifications.success'
+      );
+    });
     expect(mockedNavigate).toHaveBeenCalledWith('/login');
   });
 
-  it('calls an error alert and form values remain intact in case the reset password request fails with a status code other than 400', async () => {
+  it('calls an error alert and form values remain intact, in case the reset password request fails with a status code other than 400', async () => {
     render(<ResetPassword />);
 
     mockedResetPassword.mockRejectedValueOnce({
@@ -154,19 +216,21 @@ describe('Reset password page', () => {
     });
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
-    expect(mockedSnackbarError).toBeCalledWith(
-      'common.errors.unexpected.subTitle'
-    );
+    await waitFor(() => {
+      expect(mockedSnackbarError).toBeCalledWith(
+        'common.errors.unexpected.subTitle'
+      );
+    });
 
-    expect(passwordInput()).toHaveValue(exampleData.password);
-    expect(confirmationPasswordInput()).toHaveValue(
+    expect(getPasswordInput()).toHaveValue(exampleData.password);
+    expect(getConfirmPasswordInput()).toHaveValue(
       exampleData.confirmationPassword
     );
   });
 
-  it('displays server validations errors in case the reset password request fails with status code 400', async () => {
+  it('displays server validations errors and form values remain intact, in case the reset password request fails with status code 400', async () => {
     render(<ResetPassword />);
 
     const passwordError1 = 'Password is too weak';
@@ -195,15 +259,20 @@ describe('Reset password page', () => {
     });
 
     await fillUpForm(exampleData);
-    await userEvent.click(submitButton());
+    await userEvent.click(getSubmitButton());
 
     await waitFor(() => {
       expect(screen.getByText(passwordError1)).toBeInTheDocument();
     });
     expect(screen.getByText(passwordError2)).toBeInTheDocument();
+
+    expect(getPasswordInput()).toHaveValue(exampleData.password);
+    expect(getConfirmPasswordInput()).toHaveValue(
+      exampleData.confirmationPassword
+    );
   });
 
-  it('redirects to 404 page in case of invalid reset token', async () => {
+  it('redirects to 404 page, in case of invalid reset token', async () => {
     mockedResetPassword.mockRejectedValueOnce({
       response: {
         status: 404,

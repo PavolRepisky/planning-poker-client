@@ -1,14 +1,22 @@
 import userEvent from '@testing-library/user-event';
 import SettingsDrawer from 'core/components/SettingsDrawer';
 import { render, screen, within } from 'test-utils';
+import UserData from 'user/types/userData';
+
+const userData = {
+  id: 'example-user-id',
+  firstName: 'joe',
+  lastName: 'doe',
+  email: 'joe@doe.com',
+};
 
 const mockedChangeLanguage = jest.fn();
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
+    t: (value: string) => value,
     i18n: {
       changeLanguage: mockedChangeLanguage,
     },
-    t: (value: string) => value,
   }),
 }));
 
@@ -23,57 +31,49 @@ jest.mock('core/contexts/SettingsProvider', () => ({
   }),
 }));
 
+let mockedUserData: UserData | undefined = userData;
 jest.mock('auth/contexts/AuthProvider', () => ({
   useAuth: () => ({
-    userData: {
-      id: 1,
-      firstName: 'joe',
-      lastName: 'doe',
-      email: 'joe@doe.com',
-    },
+    userData: mockedUserData,
   }),
 }));
 
 describe('Settings drawer', () => {
-  it('is in the document, when prop argument open is truthy', () => {
+  it('is in the document, when props argument open is truthy', () => {
     render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
 
     expect(screen.getByTestId('settings-drawer')).toBeInTheDocument();
   });
 
-  it('is not in the document, when prop argument open is falsy', () => {
+  it('is not in the document, when props argument open is falsy', () => {
     render(<SettingsDrawer open={false} onDrawerToggle={() => {}} />);
 
     expect(screen.queryByTestId('settings-drawer')).not.toBeInTheDocument();
   });
 
-  it('renders a title', () => {
+  it('contains a title', () => {
     render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
 
-    const settingsDrawer = screen.getByTestId('settings-drawer');
-
     expect(
-      within(settingsDrawer).getByRole('heading', {
+      screen.getByRole('heading', {
         name: 'settings.drawer.title',
       })
     ).toBeInTheDocument();
   });
 
-  it('renders a close button and calls onDrawerTogle from props, when clicked', async () => {
+  it('contains a close button, which calls onDrawerTogle from the props', async () => {
     const mockedOnDrawerToggle = jest.fn();
+
     render(
       <SettingsDrawer open={true} onDrawerToggle={mockedOnDrawerToggle} />
     );
 
-    const settingsDrawer = screen.getByTestId('settings-drawer');
-    const closeButton = within(settingsDrawer).getByTestId('CloseIcon');
-
+    const closeButton = screen.getByTestId('CloseIcon');
     await userEvent.click(closeButton);
-
     expect(mockedOnDrawerToggle).toBeCalledTimes(1);
   });
 
-  it('renders a language title and radio buttons, when one of them is clicked language is changed', async () => {
+  it('conatins a language title and radio buttons, when one of them is clicked language is changed', async () => {
     render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
 
     expect(
@@ -99,21 +99,23 @@ describe('Settings drawer', () => {
     expect(mockedChangeLanguage).toBeCalledWith('en');
   });
 
-  it('renders a theme mode title and toggle buttons, when one of them is clicked theme is changed', async () => {
+  it('contains a theme mode title and toggle buttons, when one of them is clicked theme is changed', async () => {
     render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
 
+    const settingsDrawer = screen.getByTestId('settings-drawer');
+
     expect(
-      screen.getByRole('heading', {
+      within(settingsDrawer).getByRole('heading', {
         name: 'settings.drawer.mode.label',
       })
     ).toBeInTheDocument();
 
-    const lightOption = screen.getByRole('button', {
+    const lightOption = within(settingsDrawer).getByRole('button', {
       name: 'settings.drawer.mode.options.light',
     });
     expect(lightOption).toBeInTheDocument();
 
-    const darkOption = screen.getByRole('button', {
+    const darkOption = within(settingsDrawer).getByRole('button', {
       name: 'settings.drawer.mode.options.dark',
     });
     expect(darkOption).toBeInTheDocument();
@@ -151,7 +153,8 @@ describe('Settings drawer', () => {
     expect(mockedChangeDirection).toBeCalledWith('rtl');
   });
 
-  it('renders a sidebar title and toggle buttons, if user is logged in, when one of them is clicked sidebar mode is changed', async () => {
+  it('contains a sidebar title and toggle buttons, if user is logged in, when one of them is clicked sidebar mode is changed', async () => {
+    mockedUserData = userData;
 
     render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
 
@@ -176,5 +179,31 @@ describe('Settings drawer', () => {
 
     await userEvent.click(fullOption);
     expect(mockedChangeCollapsed).toBeCalledWith(false);
+  });
+
+  it('does not contains a sidebar title nor toggle buttons, if user is not logged in,', async () => {
+    mockedUserData = undefined;
+
+    render(<SettingsDrawer open={true} onDrawerToggle={() => {}} />);
+
+    const settingsDrawer = screen.getByTestId('settings-drawer');
+
+    expect(
+      within(settingsDrawer).queryByRole('heading', {
+        name: 'settings.drawer.sidebar.label',
+      })
+    ).not.toBeInTheDocument();
+
+    expect(
+      within(settingsDrawer).queryByRole('button', {
+        name: 'settings.drawer.sidebar.options.collapsed',
+      })
+    ).not.toBeInTheDocument();
+
+    expect(
+      within(settingsDrawer).queryByRole('button', {
+        name: 'settings.drawer.sidebar.options.full',
+      })
+    ).not.toBeInTheDocument();
   });
 });

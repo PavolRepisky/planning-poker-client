@@ -1,37 +1,31 @@
 import userEvent from '@testing-library/user-event';
 import { screen } from 'test-utils';
 
-export const firstNameInput = () => {
-  return screen.getByRole('textbox', {
+export const getFirstNameInput = () =>
+  screen.getByRole('textbox', {
     name: 'auth.register.form.firstName.label',
   });
-};
 
-export const lastNameInput = () => {
-  return screen.getByRole('textbox', {
+export const getLastNameInput = () =>
+  screen.getByRole('textbox', {
     name: 'auth.register.form.lastName.label',
   });
-};
 
-export const emailInput = () => {
-  return screen.getByRole('textbox', {
+export const getEmailInput = () =>
+  screen.getByRole('textbox', {
     name: 'auth.register.form.email.label',
   });
-};
 
-export const passwordInput = () => {
-  return document.querySelector("[name='password']")!;
-};
+export const getPasswordInput = () =>
+  document.querySelector("[name='password']")!;
 
-export const confirmationPasswordInput = () => {
-  return document.querySelector("[name='confirmationPassword']")!;
-};
+export const getConfirmPasswordInput = () =>
+  document.querySelector("[name='confirmationPassword']")!;
 
-export const submitButton = () => {
-  return screen.getByRole('button', {
+export const getSubmitButton = () =>
+  screen.getByRole('button', {
     name: 'auth.register.form.submit',
   });
-};
 
 export const exampleData = {
   firstName: 'John',
@@ -42,15 +36,28 @@ export const exampleData = {
 };
 
 export const fillUpForm = async (data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmationPassword: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  confirmationPassword?: string;
 }) => {
-  await userEvent.type(firstNameInput(), data.firstName);
-  await userEvent.type(lastNameInput(), data.lastName);
-  await userEvent.type(emailInput(), data.email);
-  await userEvent.type(passwordInput(), data.password);
-  await userEvent.type(confirmationPasswordInput(), data.confirmationPassword);
+  const firstNameInput = getFirstNameInput();
+  const lastNameInput = getLastNameInput();
+  const emailInput = getEmailInput();
+  const passwordInput = getPasswordInput();
+  const confirmationPassword = getConfirmPasswordInput();
+
+  await userEvent.clear(firstNameInput);
+  await userEvent.clear(lastNameInput);
+  await userEvent.clear(emailInput);
+  await userEvent.clear(passwordInput);
+  await userEvent.clear(confirmationPassword);
+
+  if (data.firstName) await userEvent.type(firstNameInput, data.firstName);
+  if (data.lastName) await userEvent.type(lastNameInput, data.lastName);
+  if (data.email) await userEvent.type(emailInput, data.email);
+  if (data.password) await userEvent.type(passwordInput, data.password);
+  if (data.confirmationPassword)
+    await userEvent.type(confirmationPassword, data.confirmationPassword);
 };

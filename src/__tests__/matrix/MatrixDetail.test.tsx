@@ -1,5 +1,15 @@
 import userEvent from '@testing-library/user-event';
-import { editButton as dialogEditButton } from 'helpers/matrix/MatrixDialog.helper';
+import { getConfirmButton } from 'helpers/core/ConfirmDialog.helper';
+import { getToolbar } from 'helpers/core/Toolbar.helper';
+import {
+  getDeleteButton,
+  getEditButton,
+} from 'helpers/matrix/MatrixDetail.helper';
+import {
+  getEditButton as getDialogEditButton,
+  getNameInput,
+  getValuesInputs,
+} from 'helpers/matrix/MatrixDialog.helper';
 import MatrixDetail from 'matrix/pages/MatrixDetail';
 import * as router from 'react-router';
 import { render, screen, waitFor, within } from 'test-utils';
@@ -10,13 +20,8 @@ const matrixData = {
   rows: 2,
   columns: 2,
   values: [['1', '2'], ['3, 4']],
-  createdAt: 123,
+  createdAt: 1685389767079,
 };
-
-const mockedNavigate = jest.fn();
-beforeEach(() => {
-  jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
-});
 
 let mockedMatrixData: any = matrixData;
 jest.mock('matrix/hooks/useGetMatrix', () => ({
@@ -41,6 +46,12 @@ jest.mock('matrix/hooks/useDeleteMatrix', () => ({
   }),
 }));
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+  }),
+}));
+
 const mockedSnackbarSuccess = jest.fn();
 const mockedSnackbarError = jest.fn();
 jest.mock('core/contexts/SnackbarProvider', () => ({
@@ -50,8 +61,13 @@ jest.mock('core/contexts/SnackbarProvider', () => ({
   }),
 }));
 
+const mockedNavigate = jest.fn();
+beforeEach(() => {
+  jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
+});
+
 describe('Matrix detail page', () => {
-  it('redirects to not found page, in case of no matrix data', () => {
+  it('redirects to the not found page, in case of no matrix data', () => {
     mockedMatrixData = undefined;
 
     render(<MatrixDetail />);
@@ -59,12 +75,12 @@ describe('Matrix detail page', () => {
     expect(mockedNavigate).toHaveBeenCalledWith('/404');
   });
 
-  it('renders a toolbar correctly', () => {
+  it('contains a toolbar with matrix name', () => {
     mockedMatrixData = matrixData;
 
     render(<MatrixDetail />);
 
-    const toolbar = screen.getByRole('toolbar');
+    const toolbar = getToolbar();
     expect(toolbar).toBeInTheDocument();
 
     expect(
@@ -74,14 +90,12 @@ describe('Matrix detail page', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders edit button correctly', async () => {
+  it('contains an edit button, which opens matrix dialog', async () => {
     mockedMatrixData = matrixData;
 
     render(<MatrixDetail />);
 
-    const editButton = screen.getByRole('button', {
-      name: 'common.edit',
-    });
+    const editButton = getEditButton();
     expect(editButton).toBeInTheDocument();
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -89,14 +103,12 @@ describe('Matrix detail page', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('renders delete button correctly', async () => {
+  it('contains a delete button, which opens confirmation dialog', async () => {
     mockedMatrixData = matrixData;
 
     render(<MatrixDetail />);
 
-    const deleteButton = screen.getByRole('button', {
-      name: 'common.delete',
-    });
+    const deleteButton = getDeleteButton();
     expect(deleteButton).toBeInTheDocument();
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -120,16 +132,13 @@ describe('Matrix detail page', () => {
     });
   });
 
-  it('submits correct edit values', async () => {
+  it('submits correct values', async () => {
     mockedMatrixData = matrixData;
 
     render(<MatrixDetail />);
 
-    const editButton = screen.getByRole('button', {
-      name: 'common.edit',
-    });
-    await userEvent.click(editButton);
-    await userEvent.click(dialogEditButton()!);
+    await userEvent.click(getEditButton());
+    await userEvent.click(getDialogEditButton()!);
 
     await waitFor(() => {
       expect(mockedUpdateMatrix).toBeCalledWith({
@@ -144,15 +153,8 @@ describe('Matrix detail page', () => {
 
     render(<MatrixDetail />);
 
-    const deleteButton = screen.getByRole('button', {
-      name: 'common.delete',
-    });
-    await userEvent.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', {
-      name: 'common.confirm',
-    });
-    await userEvent.click(confirmButton);
+    await userEvent.click(getDeleteButton());
+    await userEvent.click(getConfirmButton());
 
     await waitFor(() => {
       expect(mockedDeleteMatrix).toBeCalledWith(matrixData.id);
@@ -162,23 +164,12 @@ describe('Matrix detail page', () => {
   it('calls a success alert and closes dialog in case of a successful update matrix request', async () => {
     mockedMatrixData = matrixData;
 
-    mockedUpdateMatrix.mockResolvedValueOnce({
-      status: 200,
-      data: {
-        data: {
-          matrix: matrixData,
-        },
-      },
-    });
+    mockedUpdateMatrix.mockResolvedValueOnce(matrixData);
 
     render(<MatrixDetail />);
 
-    const editButton = screen.getByRole('button', {
-      name: 'common.edit',
-    });
-    await userEvent.click(editButton);
-
-    await userEvent.click(dialogEditButton()!);
+    await userEvent.click(getEditButton());
+    await userEvent.click(getDialogEditButton()!);
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -189,7 +180,7 @@ describe('Matrix detail page', () => {
     );
   });
 
-  it('calls an error alert and keeps dialog open in case update matrix request failed with status code other than 400', async () => {
+  it('calls an error alert and dialog remains intact, in case update matrix request failed with status code other than 400', async () => {
     mockedMatrixData = matrixData;
 
     mockedUpdateMatrix.mockRejectedValueOnce({
@@ -200,21 +191,26 @@ describe('Matrix detail page', () => {
 
     render(<MatrixDetail />);
 
-    const editButton = screen.getByRole('button', {
-      name: 'common.edit',
-    });
-    await userEvent.click(editButton);
-    await userEvent.click(dialogEditButton()!);
+    await userEvent.click(getEditButton());
+    await userEvent.click(getDialogEditButton()!);
 
     await waitFor(() => {
       expect(mockedSnackbarError).toBeCalledWith(
         'common.errors.unexpected.subTitle'
       );
     });
+
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(getNameInput()).toHaveValue(matrixData.name);
+
+    const valuesInputs = getValuesInputs();
+    const flattedValues = matrixData.values.flat();
+    for (let i = 0; i < valuesInputs.length; i++) {
+      expect(valuesInputs[i]).toHaveValue(flattedValues[i]);
+    }
   });
 
-  it('displays server validations errors in case of a failed update matrix request', async () => {
+  it('displays server validations errors and dialog remains intact, in case of a failed update matrix request', async () => {
     mockedMatrixData = matrixData;
 
     const nameError = 'Field is required';
@@ -247,11 +243,8 @@ describe('Matrix detail page', () => {
 
     render(<MatrixDetail />);
 
-    const editButton = screen.getByRole('button', {
-      name: 'common.edit',
-    });
-    await userEvent.click(editButton);
-    await userEvent.click(dialogEditButton()!);
+    await userEvent.click(getEditButton());
+    await userEvent.click(getDialogEditButton()!);
 
     await waitFor(() => {
       expect(screen.getByText(nameError)).toBeInTheDocument();
@@ -259,6 +252,13 @@ describe('Matrix detail page', () => {
     expect(screen.getByText(valuesError)).toBeInTheDocument();
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(getNameInput()).toHaveValue(matrixData.name);
+
+    const valuesInputs = getValuesInputs();
+    const flattedValues = matrixData.values.flat();
+    for (let i = 0; i < valuesInputs.length; i++) {
+      expect(valuesInputs[i]).toHaveValue(flattedValues[i]);
+    }
   });
 
   it('calls a success alert and redirects to matrix homepage, in case of a successful delete matrix request', async () => {
@@ -270,15 +270,8 @@ describe('Matrix detail page', () => {
 
     render(<MatrixDetail />);
 
-    const deleteButton = screen.getByRole('button', {
-      name: 'common.delete',
-    });
-    await userEvent.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', {
-      name: 'common.confirm',
-    });
-    await userEvent.click(confirmButton);
+    await userEvent.click(getDeleteButton());
+    await userEvent.click(getConfirmButton());
 
     await waitFor(() => {
       expect(mockedSnackbarSuccess).toBeCalledWith(
@@ -300,15 +293,8 @@ describe('Matrix detail page', () => {
 
     render(<MatrixDetail />);
 
-    const deleteButton = screen.getByRole('button', {
-      name: 'common.delete',
-    });
-    await userEvent.click(deleteButton);
-
-    const confirmButton = screen.getByRole('button', {
-      name: 'common.confirm',
-    });
-    await userEvent.click(confirmButton);
+    await userEvent.click(getDeleteButton());
+    await userEvent.click(getConfirmButton());
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
