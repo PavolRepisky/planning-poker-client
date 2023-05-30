@@ -26,7 +26,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
   const { isJoining, joinSession } = useJoinSession();
 
   const validationSchema = yup.object({
-    hashId: yup.string().required(t('common.validations.required')),
+    hashId: yup.string().trim().required(t('common.validations.required')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;

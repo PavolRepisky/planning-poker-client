@@ -1,145 +1,177 @@
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import Landing from 'core/pages/Landing';
-import { render, screen, within } from 'test-utils';
+import {
+  getLogo,
+  getSettingsButton,
+  getToolbar,
+} from 'helpers/core/Toolbar.helper';
+import * as router from 'react-router';
+import { render, screen, waitFor, within } from 'test-utils';
+
+jest.mock('core/components/SettingsDrawer', () => {
+  return (props: any) =>
+    props.open ? <div data-testid="settings-drawer" /> : <></>;
+});
+
+jest.mock('session/components/JoinSessionDialog', () => {
+  return (props: any) =>
+    props.open ? <div data-testid="join-session-dialog" /> : <></>;
+});
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+    i18n: {
+      language: 'en',
+    },
+  }),
+}));
+
+const mockedNavigate = jest.fn();
+beforeEach(() => {
+  jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
+});
 
 describe('Landing page', () => {
   describe('Toolbar', () => {
-    it('renders correctly', () => {
+    it('is in the document', () => {
       render(<Landing />);
 
-      const toolbar = screen.getByRole('toolbar');
-      expect(toolbar).toBeInTheDocument();
+      expect(getToolbar()).toBeInTheDocument();
     });
 
-    it('contains a logo image, which navigates to landing route', () => {
+    it('contains a logo, which navigates to the landing page', async () => {
       render(<Landing />);
 
-      const toolbar = screen.getByRole('toolbar');
-      expect(toolbar).toBeInTheDocument();
+      const logo = getLogo();
+      expect(logo).toBeInTheDocument();
 
-      const logoLink = within(toolbar).getByRole('img', {
-        name: /logo/i,
-      });
-      expect(logoLink).toBeInTheDocument();
-      expect(logoLink).toHaveAttribute('href', '/');
+      await userEvent.click(logo);
+      expect(mockedNavigate).toBeCalledWith('/', expect.anything());
     });
 
-    it('contains a register link, which navigates to register route', () => {
+    it('contains a register link, which navigates to the registration page', async () => {
       render(<Landing />);
 
-      const toolbar = screen.getByRole('toolbar');
-      expect(toolbar).toBeInTheDocument();
-
-      const registerLink = within(toolbar).getByRole('link', {
+      const registerLink = within(getToolbar()).getByRole('link', {
         name: 'common.register',
       });
       expect(registerLink).toBeInTheDocument();
-      expect(registerLink).toHaveAttribute('href', '/register');
+
+      await userEvent.click(registerLink);
+      expect(mockedNavigate).toBeCalledWith('/register', expect.anything());
     });
 
-    it('contains a login link, which navigates to login route', () => {
+    it('contains a login link, which navigates to the login page', async () => {
       render(<Landing />);
 
-      const toolbar = screen.getByRole('toolbar');
-      expect(toolbar).toBeInTheDocument();
-
-      const loginLink = within(toolbar).getByRole('link', {
+      const loginLink = within(getToolbar()).getByRole('link', {
         name: 'common.login',
       });
       expect(loginLink).toBeInTheDocument();
-      expect(loginLink).toHaveAttribute('href', '/login');
+
+      await userEvent.click(loginLink);
+      expect(mockedNavigate).toBeCalledWith('/login', expect.anything());
     });
 
-    it('contains a settings button', async () => {
+    it('contains a settings button, which the opens settings drawer', async () => {
       render(<Landing />);
-      user.setup();
 
-      const toolbar = screen.getByRole('toolbar');
-      expect(toolbar).toBeInTheDocument();
-
-      let settingsButton = within(toolbar).getByRole('button', {
-        name: 'common.settings',
-      });
+      const settingsButton = getSettingsButton();
       expect(settingsButton).toBeInTheDocument();
 
-      let settingsDrawerTitle = screen.queryByRole('heading', {
-        name: 'settings.drawer.title',
-      });
-      expect(settingsDrawerTitle).not.toBeInTheDocument();
-      user.click(settingsButton);
+      expect(screen.queryByTestId('settings-drawer')).not.toBeInTheDocument();
 
-      settingsDrawerTitle = await screen.findByRole('heading', {
-        name: 'settings.drawer.title',
-      });
+      await userEvent.click(settingsButton);
 
-      expect(settingsDrawerTitle).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('settings-drawer')).toBeInTheDocument();
+      });
     });
   });
 
-  describe('Content', () => {
-    it('contains title and app demo', () => {
-      render(<Landing />);
+  it('contains a page title', () => {
+    render(<Landing />);
 
-      const demoImage = screen.getByRole('img', {
-        name: 'landing.altDemo',
-      });
-      expect(demoImage).toBeInTheDocument();
-
-      const title = screen.getByRole('heading', {
-        level: 1,
+    expect(
+      screen.getByRole('heading', {
         name: 'landing.title',
-      });
-      expect(title).toBeInTheDocument();
+        level: 1,
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('renders an app demo image', () => {
+    render(<Landing />);
+
+    expect(
+      screen.getByRole('img', {
+        name: 'landing.altDemo',
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('contains a join session button, which opens the join session dialog', async () => {
+    render(<Landing />);
+
+    const joinButton = screen.getByRole('button', {
+      name: 'landing.join',
     });
 
-    it('contains a button, to join a session', async () => {
-      render(<Landing />);
-      user.setup();
+    expect(joinButton).toBeInTheDocument();
+    expect(screen.queryByTestId('joinSessionDialog')).not.toBeInTheDocument();
 
-      const joinButton = screen.getByRole('button', {
-        name: 'landing.join',
-      });
-      expect(joinButton).toBeInTheDocument();
+    await userEvent.click(joinButton);
 
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      user.click(joinButton);
-      const joinSessionDialog = await screen.findByRole('dialog');
-      expect(joinSessionDialog).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('join-session-dialog')).toBeInTheDocument();
     });
+  });
 
-    it('contains showcase examples', () => {
-      render(<Landing />);
+  it('renders showcase examples', () => {
+    render(<Landing />);
 
-      const showcaseImages = screen.getAllByRole('img');
-      expect(showcaseImages.length).toBeGreaterThan(4);
-      const showcaseSubtitles = screen.getAllByRole('heading', { level: 2 });
-      expect(showcaseSubtitles.length).toBeGreaterThan(3);
-      const showcaseDescriptions = screen.getAllByRole('heading', { level: 4 });
-      expect(showcaseDescriptions.length).toBeGreaterThan(3);
-    });
+    expect(screen.getAllByRole('img').length).toBeGreaterThan(3);
+    expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(
+      3
+    );
+    expect(screen.getAllByRole('heading', { level: 4 }).length).toBeGreaterThan(
+      3
+    );
+  });
 
-    it('conatins list of features', () => {
-      render(<Landing />);
+  it('contains a list of features', () => {
+    render(<Landing />);
 
-      const listOfFeatures = screen.getByRole('list');
-      expect(listOfFeatures).toBeInTheDocument();
+    const listOfFeatures = screen.getByRole('list');
+    expect(listOfFeatures).toBeInTheDocument();
 
-      const listFeatureItems = screen.getAllByRole('listitem');
-      expect(listFeatureItems.length).toBeGreaterThan(3);
-    });
+    expect(
+      within(listOfFeatures).getAllByRole('listitem').length
+    ).toBeGreaterThan(3);
+  });
 
-    it('conatins link to repos', () => {
-      render(<Landing />);
+  it('contains links to the project repositories', () => {
+    render(<Landing />);
 
-      const apiLink = screen.getByRole('link', {
+    expect(
+      screen.getByRole('link', {
         name: 'landing.links.api',
-      });
-      expect(apiLink).toBeInTheDocument();
+      })
+    ).toBeInTheDocument();
 
-      const clientLink = screen.getByRole('link', {
+    expect(
+      screen.getByRole('link', {
         name: 'landing.links.client',
-      });
-      expect(clientLink).toBeInTheDocument();
-    });
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('contains a copyright footer', () => {
+    render(<Landing />);
+
+    expect(
+      screen.getByText(new RegExp(`^©.* ${new Date().getFullYear()}$`))
+    ).toBeInTheDocument();
   });
 });

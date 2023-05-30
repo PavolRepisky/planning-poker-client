@@ -30,7 +30,7 @@ const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
   return (
     <Box height={'100vh'}>
       <AppBar color="transparent" position="relative">
-        <Toolbar>
+        <Toolbar role="toolbar">
           <IconButton
             component={RouterLink}
             to={'/'}
@@ -38,6 +38,8 @@ const BoxedLayout = ({ children, maxWidth }: BoxedLayoutProps) => {
               '&:hover': { background: 'transparent' },
               color: theme.palette.text.primary,
             }}
+            role="img"
+            aria-label="Logo"
           >
             <Logo size={24} sx={{ mr: 1 }} />
             <Typography variant="h5" color="inherit" noWrap sx={{ mb: 1 }}>

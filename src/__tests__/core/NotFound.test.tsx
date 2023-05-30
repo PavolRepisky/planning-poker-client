@@ -1,26 +1,46 @@
+import userEvent from '@testing-library/user-event';
 import NotFound from 'core/pages/NotFound';
+import * as router from 'react-router';
 import { render, screen } from 'test-utils';
 
-describe('NotFound Page', () => {
-  it('contains a error title and a subtitle', () => {
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (value: string) => value,
+    i18n: {
+      language: 'en',
+    },
+  }),
+}));
+
+const mockedNavigate = jest.fn();
+beforeEach(() => {
+  jest.spyOn(router, 'useNavigate').mockImplementation(() => mockedNavigate);
+});
+
+describe('Not found page', () => {
+  it('contains a title and a message', () => {
     render(<NotFound />);
 
-    const errorTitle = screen.getByRole('heading', {
-      name: 'common.errors.notFound.title',
-    });
-    expect(errorTitle).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: 'common.errors.notFound.title',
+      })
+    ).toBeInTheDocument();
 
-    const errorSubtitle = screen.getByText('common.errors.notFound.subTitle');
-    expect(errorSubtitle).toBeInTheDocument();
+    expect(
+      screen.getByText('common.errors.notFound.subTitle')
+    ).toBeInTheDocument();
   });
 
-  it('contains a button, which navigates user to homepage', () => {
+  it('contains a back-home link, which navigates to the landing page', async () => {
     render(<NotFound />);
 
-    const backHomeButton = screen.getByRole('link', {
-      name: 'common.backHome',
+    const backHomeLink = screen.getByRole('link', {
+      name: /common.backHome/i,
     });
-    expect(backHomeButton).toBeInTheDocument();
-    expect(backHomeButton).toHaveAttribute('href', '/');
+    expect(backHomeLink).toBeInTheDocument();
+
+    await userEvent.click(backHomeLink);
+    expect(mockedNavigate).toBeCalledWith('/', expect.anything());
   });
 });

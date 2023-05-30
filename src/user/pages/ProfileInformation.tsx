@@ -15,7 +15,7 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useUpdateName } from 'user/hooks/useUpdateName';
 import * as yup from 'yup';
-import { useSnackbar } from '../../core/contexts/SnackbarProvider';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
 
 const ProfileInformation = () => {
   const snackbar = useSnackbar();

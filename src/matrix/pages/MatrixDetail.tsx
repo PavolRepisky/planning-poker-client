@@ -61,7 +61,6 @@ const MatrixDetail = () => {
     }
     try {
       await deleteMatrix(data.id);
-      setOpenConfirmDeleteDialog(false);
       snackbar.success(
         t('matrix.notifications.deleted', {
           matrixName: data.name,
@@ -69,6 +68,7 @@ const MatrixDetail = () => {
       );
       navigate('/matrices');
     } catch {
+      setOpenConfirmDeleteDialog(false);
       snackbar.error(t('common.errors.unexpected.subTitle'));
     }
   };

@@ -8,14 +8,15 @@ import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import SvgContainer from 'core/components/SvgContainer';
 import Toolbar from 'core/components/Toolbar';
-import { t } from 'i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import HomeWidget from 'user/components/HomeWidget';
 
 const Home = () => {
   const { userData } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>

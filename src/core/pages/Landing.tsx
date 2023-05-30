@@ -67,12 +67,10 @@ const Landing = () => {
           </Container>
         </Box>
 
-        {openJoinDialog && (
-          <JoinSessionDialog
-            onClose={() => setOpenJoinDialog(false)}
-            open={openJoinDialog}
-          />
-        )}
+        <JoinSessionDialog
+          onClose={() => setOpenJoinDialog(false)}
+          open={openJoinDialog}
+        />
 
         <Container sx={{ py: 6 }} maxWidth="md">
           <img
