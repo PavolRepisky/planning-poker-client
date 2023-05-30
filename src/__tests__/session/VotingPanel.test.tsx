@@ -323,7 +323,7 @@ describe('Voting panel', () => {
       expect(mockedOnShowVotes).toBeCalledTimes(1);
     });
 
-    it('show votes button is disabled if votes are shown', async () => {
+    it('show votes button is disabled if votes are already shown', async () => {
       render(
         <VotingPanel
           isAdmin={true}
@@ -332,6 +332,24 @@ describe('Voting panel', () => {
           onShowVotes={() => {}}
           sessionHashId="mocked-session-id"
           voting={exampleData}
+        />
+      );
+
+      expect(
+        screen.getByRole('button', {
+          name: 'session.showVotes',
+        })
+      ).toBeDisabled();
+    });
+
+    it('show votes button is disabled if no voting is active', async () => {
+      render(
+        <VotingPanel
+          isAdmin={true}
+          showVotes={false}
+          onCreateSuccess={() => {}}
+          onShowVotes={() => {}}
+          sessionHashId="mocked-session-id"
         />
       );
 

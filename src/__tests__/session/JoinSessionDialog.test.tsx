@@ -186,7 +186,7 @@ describe('Join session dialog', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/common.validations.session.id/i)
+        screen.getByText('common.validations.session.matrixId')
       ).toBeInTheDocument();
     });
   });

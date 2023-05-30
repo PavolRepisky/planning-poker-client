@@ -97,7 +97,7 @@ const SessionJoinManager = () => {
   const InviteButton = () => {
     return (
       <Fab
-        aria-label={t('matrix.dialog.add.action')}
+        aria-label={t('session.invite.title')}
         color="primary"
         variant="extended"
         onClick={handleInvitePlayers}
