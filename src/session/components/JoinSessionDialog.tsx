@@ -37,7 +37,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
       navigate(`/sessions/${data.session.hashId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {
-        formik.setFieldError('hashId', t('common.validations.session.id'));
+        formik.setFieldError('hashId', t('common.validations.session.matrixId'));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));

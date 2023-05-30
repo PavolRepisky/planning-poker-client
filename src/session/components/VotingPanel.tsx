@@ -96,7 +96,7 @@ const VotingPanel = ({
               <Button
                 variant="outlined"
                 onClick={onShowVotes}
-                disabled={showVotes}
+                disabled={showVotes || !voting}
               >
                 {t('session.showVotes')}
               </Button>
