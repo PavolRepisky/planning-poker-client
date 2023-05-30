@@ -1,8 +1,10 @@
-import { Box, Typography } from '@mui/material';
+import { PersonAddAlt1 as PresonAddIcon } from '@mui/icons-material';
+import { Box, Fab, Typography } from '@mui/material';
 import { useAuth } from 'auth/contexts/AuthProvider';
 import AppBar from 'core/components/AppBar';
 import BoxedLayout from 'core/components/BoxedLayout';
 import Toolbar from 'core/components/Toolbar';
+import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import MatrixData from 'matrix/types/MatrixData';
 import React, { useEffect, useState } from 'react';
@@ -23,6 +25,7 @@ const SessionJoinManager = () => {
   const navigate = useNavigate();
   const { joinSession } = useJoinSession();
   const socketClient = SocketClient.getInstance();
+  const snackbar = useSnackbar();
 
   const [connectionId, setSocketConnectionId] = useLocalStorage<string>(
     'connectionId',
@@ -54,6 +57,15 @@ const SessionJoinManager = () => {
     socketClient.disconnect();
   };
 
+  const handleInvitePlayers = () => {
+    if (hashId) {
+      navigator.clipboard.writeText(hashId);
+      snackbar.success(t('session.invite.notifications.success'));
+      return;
+    }
+    snackbar.error(t('common.errors.unexpected.subTitle'));
+  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -82,6 +94,24 @@ const SessionJoinManager = () => {
     return null;
   }
 
+  const InviteButton = () => {
+    return (
+      <Fab
+        aria-label={t('session.invite.title')}
+        color="primary"
+        variant="extended"
+        onClick={handleInvitePlayers}
+        size="medium"
+      >
+        <Typography variant="h6" sx={{ ml: 0.5 }}>
+          {t('session.invite.title')}
+        </Typography>
+
+        <PresonAddIcon sx={{ ml: 1 }} />
+      </Fab>
+    );
+  };
+
   if (!userLoggedIn) {
     if (!guestUserData) {
       return (
@@ -101,6 +131,15 @@ const SessionJoinManager = () => {
     }
     return (
       <BoxedLayout>
+        <Box
+          sx={{ width: '100%', display: 'flex', alignItem: 'center', mb: 3 }}
+          textAlign="left"
+        >
+          <Typography variant="h2" component="h1" sx={{ flexGrow: 1 }}>
+            {data.session.name}
+          </Typography>
+          <InviteButton />
+        </Box>
         <Box sx={{ width: '100%' }}>
           <VotingSession
             session={data.session}
@@ -128,7 +167,9 @@ const SessionJoinManager = () => {
   return (
     <React.Fragment>
       <AppBar>
-        <Toolbar title={data.session.name}></Toolbar>
+        <Toolbar title={data.session.name}>
+          <InviteButton />
+        </Toolbar>
       </AppBar>
       <VotingSession session={data.session} matrix={data.matrix} user={user} />
     </React.Fragment>

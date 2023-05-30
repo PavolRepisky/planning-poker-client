@@ -13,7 +13,7 @@ interface VoteCardProps {
   row: number;
   column: number;
   selected: boolean;
-  onClick: (vote: SocketSessionUserVoteData) => void;
+  onClick?: (vote: SocketSessionUserVoteData) => void;
 }
 
 const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
@@ -22,7 +22,7 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
   return (
     <Tooltip title={value}>
       <Card
-        onClick={() => onClick({ row, column })}
+        onClick={onClick ? () => onClick({ row, column }) : undefined}
         component={Button}
         sx={{
           minWidth: 'none',
@@ -30,48 +30,46 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
           width: { xs: '2.5rem', sm: '4.85rem', lg: '6rem', xl: '7rem' },
           height: { xs: '6.5em', sm: '7rem', lg: '8.5rem', xl: '10rem' },
           display: 'flex',
-          flexDirection: 'row',
-          p: '3% 6%',
-          border: selected ? `6px solid ${theme.palette.divider}` : 'none',
+          flexDirection: 'column',
+          p: '2% 4%',
+          border:
+            selected && onClick
+              ? `7px solid ${theme.palette.primary.light}`
+              : 'none',
           '&:hover': {
             background: theme.palette.background.paper,
-            border: `6px solid ${theme.palette.divider}`,
+            border: onClick ? `7px solid ${theme.palette.divider}` : 'none',
           },
         }}
       >
-        <Box
+        <Typography
+          variant="body2"
+          textAlign="left"
           sx={{
             alignSelf: 'start',
+            fontWeight: 'bold',
+            fontSize: {
+              xs: '0.75rem',
+              sm: '1rem',
+              lg: '1.25rem',
+              xl: '1.5rem',
+            },
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            width: '25%',
+            overflow: 'clip',
+            width: '50%',
           }}
         >
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: 'bold',
-              fontSize: {
-                xs: '0.75rem',
-                sm: '1rem',
-                lg: '1.25rem',
-                xl: '1.5rem',
-              },
-            }}
-          >
-            {value}
-          </Typography>
-        </Box>
+          {value}
+        </Typography>
 
         <Box
           sx={{
-            alignSelf: 'center',
-            justifySelf: 'center',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             flex: 1,
-            height: '60%',
+            maxWidth: '100%',
+            width: '100%',
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: '0.5rem',
           }}
@@ -97,14 +95,11 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
         </Box>
 
         <Typography
-          variant="body1"
-          textAlign={'right'}
+          variant="body2"
+          textAlign="right"
           sx={{
             alignSelf: 'end',
             ml: 'auto',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            width: '25%',
             fontWeight: 'bold',
             fontSize: {
               xs: '0.75rem',
@@ -112,6 +107,9 @@ const VoteCard = ({ value, row, column, selected, onClick }: VoteCardProps) => {
               lg: '1.25rem',
               xl: '1.5rem',
             },
+            whiteSpace: 'nowrap',
+            overflow: 'clip',
+            width: '50%',
           }}
         >
           {value}

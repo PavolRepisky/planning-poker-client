@@ -159,7 +159,6 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                   row={idx}
                   column={0}
                   selected={false}
-                  onClick={() => {}}
                 ></VoteCard>
 
                 <LinearProgress
@@ -210,7 +209,7 @@ const VotingSession = ({ user, matrix, session }: VotingSessionProps) => {
                             columnIdx === selectedCard.column
                           }
                           onClick={handleVote}
-                        ></VoteCard>
+                        />
                       </Grid>
                     );
                   })}

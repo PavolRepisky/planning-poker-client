@@ -90,7 +90,7 @@
         "description": "Spravujte svoje hodnotiace matice, ako si želáte. Zoraďte, upravte, prezerajte alebo odstráňte ich kedykoľvek len pár kliknutiami.",
         "imgAlt": "Ukážka správy balíčka kariet"
       },
-      "noLimits": "Navždy zadarmo a bez obmedzení",
+      "noLimits": "Zadarmo a bez obmedzení",
       "unlimitedSessions": "Neobmedzený počet hlasovacích relácií na používateľa",
       "unlimitedUsers": "Neobmedzený počet účastníkov v hlasovacích reláciach",
       "unlimitedVotings": "Neobmedzený počet hlasovovaní v hlasovacích reláciach",
@@ -343,7 +343,8 @@
             "label": "Meno"
           },
           "matrixId": {
-            "label": "ID Hodnotiacej Matice"
+            "label": "ID Hodnotiacej Matice",
+            "warning": "Najprv vytvor hodnotiacu maticu"
           },
           "submit": "Vytvoriť"
         },
@@ -388,6 +389,12 @@
     "toStart": "Začni vytvorením nového hlasovania",
     "createVoting": "Vytvoriť nové hlasovanie",
     "showVotes": "Zobraziť hlasy hráčov",
-    "players": "Hráči"
+    "players": "Hráči",
+    "invite": {
+      "title": "Pozvať hráčov",
+      "notifications": {
+        "success": "ID hlasovacej relácie bolo skopírované do schránky. Zdieľajte ho so svojimi spoluhráčmi a začnite hrať!"
+      }
+    }
   }
 }

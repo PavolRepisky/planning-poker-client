@@ -1,7 +1,10 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
+  IconButton,
+  InputAdornment,
   Link as MuiLink,
   TextField,
   Typography,
@@ -14,6 +17,7 @@ import { useSnackbar } from 'core/contexts/SnackbarProvider';
 import ServerValidationError from 'core/types/ServerValidationError';
 import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { Link, Link as RouterLink } from 'react-router-dom';
@@ -24,6 +28,8 @@ const Register = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const { isRegistering, register } = useRegister();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validationSchema = yup.object({
     firstName: yup
@@ -142,13 +148,25 @@ const Register = () => {
           id="password"
           label={t('auth.register.form.password.label')}
           name="password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           autoComplete="new-password"
           disabled={isRegistering}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           required
@@ -156,7 +174,7 @@ const Register = () => {
           id="confirmationPassword"
           label={t('auth.register.form.confirmationPassword.label')}
           name="confirmationPassword"
-          type="password"
+          type={showConfirmPassword ? "text" : "password"}
           disabled={isRegistering}
           value={formik.values.confirmationPassword}
           onChange={formik.handleChange}
@@ -168,6 +186,18 @@ const Register = () => {
             formik.touched.confirmationPassword &&
             formik.errors.confirmationPassword
           }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle confirmation password visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         <LoadingButton

@@ -54,7 +54,6 @@ const CreateSessionDialog = ({
     try {
       const createdSession = await createSession(formData);
       snackbar.success(t('session.dialog.create.notifications.success'));
-      onClose();
       navigate(`/sessions/${createdSession.hashId}`);
     } catch (err: any) {
       if (err.response && err.response.status === 400) {
@@ -64,7 +63,6 @@ const CreateSessionDialog = ({
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));
-      onClose();
     }
   };
 
@@ -125,12 +123,16 @@ const CreateSessionDialog = ({
                 {matrix.name}
               </MenuItem>
             ))}
+            {matrices.length === 0 && (
+              <MenuItem disabled={true}>
+                {t('session.dialog.create.form.matrixId.warning')}
+              </MenuItem>
+            )}
           </TextField>
         </DialogContent>
 
         <DialogActions>
           <Button onClick={onClose}>{t('common.cancel')}</Button>
-
           <LoadingButton loading={isCreating} type="submit" variant="contained">
             {t('session.dialog.create.form.submit')}
           </LoadingButton>

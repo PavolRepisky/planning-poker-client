@@ -1,6 +1,5 @@
 import { Add as AddIcon } from '@mui/icons-material';
-import { Fab } from '@mui/material';
-import { useAuth } from 'auth/contexts/AuthProvider';
+import { Fab, Typography } from '@mui/material';
 import AppBar from 'core/components/AppBar';
 import ConfirmDialog from 'core/components/ConfirmDialog';
 import Toolbar from 'core/components/Toolbar';
@@ -21,7 +20,6 @@ const MatrixHomepage = () => {
   const snackbar = useSnackbar();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userData } = useAuth();
 
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [openMatrixDialog, setOpenMatrixDialog] = useState(false);
@@ -62,10 +60,10 @@ const MatrixHomepage = () => {
     if (!matrixDeleted) {
       return;
     }
+    setOpenConfirmDeleteDialog(false);
+    setMatrixDeleted(undefined);
     try {
       await deleteMatrix(matrixDeleted.id);
-      setMatrixDeleted(undefined);
-      setOpenConfirmDeleteDialog(false);
       snackbar.success(
         t('matrix.notifications.deleted', {
           matrixName: matrixDeleted.name,
@@ -121,13 +119,18 @@ const MatrixHomepage = () => {
       <AppBar>
         <Toolbar title={t('matrix.toolbar.title')}>
           <Fab
-            aria-label="logout"
+            aria-label={t('matrix.dialog.add.action')}
             color="primary"
+            variant="extended"
             disabled={processing}
             onClick={() => handleOpenMatrixDialog()}
-            size="small"
+            size="medium"
           >
-            <AddIcon />
+            <Typography variant="h6" sx={{ ml: 0.75 }}>
+              {t('matrix.dialog.add.action')}
+            </Typography>
+
+            <AddIcon sx={{ ml: 0.55 }} />
           </Fab>
         </Toolbar>
       </AppBar>

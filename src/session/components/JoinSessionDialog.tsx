@@ -26,7 +26,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
   const { isJoining, joinSession } = useJoinSession();
 
   const validationSchema = yup.object({
-    hashId: yup.string().required(t('common.validations.required')),
+    hashId: yup.string().trim().required(t('common.validations.required')),
   });
 
   type FormData = yup.InferType<typeof validationSchema>;
@@ -37,7 +37,7 @@ const JoinSessionDialog = ({ onClose, open }: JoinSessionDialogProps) => {
       navigate(`/sessions/${data.session.hashId}`);
     } catch (err: any) {
       if (err.response?.status === 404) {
-        formik.setFieldError('hashId', t('common.validations.session.id'));
+        formik.setFieldError('hashId', t('common.validations.session.matrixId'));
         return;
       }
       snackbar.error(t('common.errors.unexpected.subTitle'));

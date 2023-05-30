@@ -8,8 +8,8 @@ import {
   TextField,
 } from '@mui/material';
 import config from 'core/config/config';
-import { transformToFormikErrorsObj } from 'core/utils/transform';
-import { ValidationError } from 'express-validator';
+import ServerValidationError from 'core/types/ServerValidationError';
+import { parseValidationErrors } from 'core/utils/parseValidationErrors';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -18,7 +18,7 @@ type CreateVotingDialogProps = {
   onCreate: (votingData: {
     name: string;
     description?: string;
-  }) => Promise<ValidationError[]>;
+  }) => Promise<ServerValidationError[]>;
   onClose: () => void;
   open: boolean;
   processing: boolean;
@@ -43,8 +43,8 @@ const CreateVotingDialog = ({
   type FormData = yup.InferType<typeof validationSchema>;
 
   const handleSubmit = async (formData: FormData) => {
-    const serverErrors = await onCreate(formData);
-    formik.setErrors(transformToFormikErrorsObj(serverErrors));
+    const serverValidationErrors = await onCreate(formData);
+    formik.setErrors(parseValidationErrors(serverValidationErrors));
   };
 
   const formik = useFormik({
@@ -87,7 +87,6 @@ const CreateVotingDialog = ({
           />
           <TextField
             margin="normal"
-            required
             fullWidth
             id="description"
             label={t('session.dialog.createVoting.form.description.label')}
