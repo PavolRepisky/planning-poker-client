@@ -57,13 +57,40 @@ const SessionJoinManager = () => {
     socketClient.disconnect();
   };
 
-  const handleInvitePlayers = () => {
-    if (hashId) {
-      navigator.clipboard.writeText(hashId);
-      snackbar.success(t('session.invite.notifications.success'));
-      return;
+  const copyToClipboard = async (textToCopy: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(textToCopy);
+    } else {
+      console.log('else run');
+      const textArea = document.createElement('textarea');
+      textArea.value = textToCopy;
+
+      textArea.style.position = 'absolute';
+      textArea.style.left = '-999999px';
+
+      document.body.prepend(textArea);
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        textArea.remove();
+      }
     }
-    snackbar.error(t('common.errors.unexpected.subTitle'));
+  };
+
+  const handleInvitePlayers = async () => {
+    try {
+      if (!hashId) {
+        throw Error('No hash id found');
+      }
+      await copyToClipboard(hashId);
+      snackbar.success(t('session.invite.notifications.success'));
+    } catch {
+      snackbar.error(t('common.errors.unexpected.subTitle'));
+    }
   };
 
   useEffect(() => {
