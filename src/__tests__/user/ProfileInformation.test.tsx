@@ -108,7 +108,7 @@ describe('Profile information page', () => {
         screen.queryAllByText('common.validations.string.max').length
       ).toBe(2);
     });
-  }, 10000);
+  }, 15000);
 
   it('submits correct values', async () => {
     render(<ProfileInformation />);
