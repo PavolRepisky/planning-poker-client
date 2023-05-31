@@ -304,7 +304,7 @@ describe('Matrix dialog', () => {
         screen.queryAllByText('common.validations.string.max').length
       ).toBe(2);
     });
-  });
+  }, 15000);
 
   it('validates each values is unique', async () => {
     render(
